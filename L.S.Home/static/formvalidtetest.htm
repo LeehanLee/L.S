@@ -1,0 +1,40 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>表单验证测试页面</title>
+</head>
+
+<body>
+    <form action="" method="post" id="formValidate">
+        数值：<input name="" type="text" validate="number" /><span></span><br />
+        浮点型：<input name="" type="text" validate="decimal" /><span></span><br />
+        英文：<input name="" type="text" validate="english" /><span></span><br />
+        大写英文：<input name="" type="text" validate="upper_english" /><span></span><br />
+        小写英文：<input name="" type="text" validate="lower_english" /><span></span><br />
+        邮件格式：<input name="" type="text" validate="email" /><span></span><br />
+        是否包含中文：<input name="" type="text" validate="chinese" /><span></span><br />
+        URL：<input name="" type="text" validate="url" /><span></span><br />
+        电话号码：<input name="" type="text" validate="mobile" /><span></span><br />
+        IP地址：<input name="" type="text" validate="ip" /><span></span><br />
+        金额：<input name="" type="text" validate="money" /><span></span><br />
+        数值或者英文或者_：<input name="" type="text" validate="number_letter" /><span></span><br />
+        邮政编码：<input name="" type="text" validate="zip_code" /><span></span><br />
+        可用账号：<input name="" type="text" validate="account" /><span></span><br />
+        QQ：<input name="" type="text" validate="qq" /><span></span><br />
+        身份证:<input name="" type="text" validate="card" /><span></span><br />
+        数值 允许为空：<input name="" type="text" validate="number" empty='yes' /><span></span><br />
+        数值 长度 1-3：<input name="" type="text" validate="number" min=1 max=3 /><span></span><br />
+        数值 长度 1-3 允许为空：<input name="" type="text" validate="number" min=1 max=3 empty='yes' /><span></span><br />
+        非空检验：<input name="" type="text" empty='no' /><span></span><br />
+        <input name="" type="submit" />
+    </form>
+    <script src="../Scripts/jquery-1.12.0.js"></script>
+    <script src="../Content/JS/outjs/formValidate.js"></script>
+    <script type="text/javascript">
+        //var formValidate = new formValidate();
+        //formValidate.init('#formValidate');
+        formValidate.validateForm("#formValidate");
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+﻿@model SysRight
+@{
+    ViewBag.Title = "添加权限";
+}
+<div>
+    <ul class="breadcrumb admin-bread-ul">
+        <li><a href="@Url.Action("Index","Sys")">系统管理</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("Index","SysRights")">权限管理</a> <span class="divider">/</span></li>
+        <li class="active">添加权限</li>
+    </ul>
+</div>
+@using (Ajax.BeginForm("Create", null, new AjaxOptions() { HttpMethod = "Post", OnBegin = "LS.admin.myfn.AjaxBegin('#form0')", OnSuccess = "LS.admin.myfn.AjaxSuccess", OnFailure = "LS.admin.myfn.AjaxFailure" }, new { @class = "form-horizontal admin-form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="control-group">
+            <label for="ID" class="control-label">权限ID</label>
+            <div class="controls">
+                @Html.EditorFor(model => model.ID, new { htmlAttributes = new { @class = "form-control" , @validate = "", @empty = "no" } })
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="Name" class="control-label">权限名称</label>
+            <div class="controls">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @validate = "", @empty = "no" } })
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>
+        @*<div class="control-group">
+            <label for="ParentID" class="control-label">上级权限ID</label>
+            <div class="controls">
+                @Html.EditorFor(model => model.ParentID, new { htmlAttributes = new { @class = "form-control", @validate = "" } })
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>*@
+        <div class="control-group">
+            <label class="control-label">上级权限</label>
+            <div class="controls">
+                <span class="treetext" id="ParentName"></span>
+                <a class="btn" onclick="LS.admin.myfn.dialogeopenrighttree({id:'ParentID',name:'ParentName',toggledisplay:true,multiple:false},'@Url.Action("GetRightTree", "Index", new { Area = "" })');">请选择</a>
+                <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
+                <input class="treevalue" type="hidden" name="ParentID" id="ParentID" value=""  />
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="ParentID" class="control-label">访问地址</label>
+            <div class="controls">                
+                <input name="MenuUrl" type="text" max="100"/>
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" name="IsAvailable" value="true" checked="checked">启用
+                </label>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit" data-loading-text="提交中" data-complete-text="完成"><i class="icon-ok icon-white"></i>保存</button>
+            <button class="btn" type="button" onclick="history.go(-1);">返回</button>
+        </div>
+    </div>
+}
+

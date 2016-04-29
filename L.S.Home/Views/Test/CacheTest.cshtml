@@ -1,0 +1,19 @@
+﻿
+@{
+    Layout = null;
+    var cache = ViewBag.cache as L.Study.Common.Cache.ICacheMgr;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CacheTest</title>
+</head>
+<body>
+    <div> 
+        @(cache.Get<string>("username"))
+    </div>
+</body>
+</html>

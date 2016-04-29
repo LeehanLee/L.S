@@ -1,0 +1,8 @@
+﻿.bootboxalert.fade{width:360px;margin-left:0;}
+.bootboxalert.fade.in{top:30%;width:360px;margin-left:0;left:0;}
+.bootboxalert .modal-footer{text-align: center;}
+.bootboxconfirm.fade{width:360px;margin-left:0;}
+.bootboxconfirm.fade.in{top:30%;width:360px;margin-left:0;left:0;}
+.bootboxconfirm .modal-footer{text-align: center;}
+.bootbox .modal-header h3{font-family: 微软雅黑;}
+.bootbox .modal-body{font-size: 16px;}

@@ -1,0 +1,28 @@
+﻿
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_admin_LayoutPage1.cshtml";
+    ViewBag.Title = "系统管理";
+}
+@model PagedList.IPagedList<SysUser>
+<div>
+    <ul class="breadcrumb admin-bread-ul">
+        <li><a href="@Url.Action("Index","Sys")">系统管理</a> <span class="divider">/</span></li>
+        <li class="active">用户管理</li>
+    </ul>
+</div>
+@foreach (SysRight r in ViewBag.pageTopRightList)
+{
+    if (r.ActionType == "View")
+    {
+        <a class="btn btn-primary" href="@r.MenuUrl" )>@r.Name</a>
+    }
+    else
+    {
+        <a class="btn btn-primary ls-table-@r.ActionType.ToLower()" url="@r.MenuUrl" )>@r.Name</a>
+    }
+}
+@if (Model != null && Model.Count > 0)
+{
+    Html.RenderPartial("Index_Pa");
+}
+else { Html.RenderPartial("_NoData"); }

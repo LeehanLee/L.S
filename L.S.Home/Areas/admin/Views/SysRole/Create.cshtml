@@ -1,0 +1,65 @@
+﻿@model SysRole
+@{
+    ViewBag.Title = "角色添加";
+}
+<div>
+    <ul class="breadcrumb admin-bread-ul">
+        <li><a href="@Url.Action("Index","Sys")">系统管理</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("Index","SysRoles")">角色管理</a> <span class="divider">/</span></li>
+        <li class="active">角色添加</li>
+    </ul>
+</div>
+@using (Ajax.BeginForm("Create", null, new AjaxOptions() { HttpMethod = "Post", OnBegin = "LS.admin.myfn.AjaxBegin('#form0')", OnSuccess = "LS.admin.myfn.AjaxSuccess", OnFailure = "LS.admin.myfn.AjaxFailure" }, new { @class = "form-horizontal admin-form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="control-group">
+            <label for="Name" class="control-label">角色名称</label>
+            <div class="controls">
+                <input class="" type="text" name="Name" id="Name" value="@Model.Name" validate min="2" max="10"/>
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="Type" class="control-label">上级角色</label>
+            <div class="controls">
+                <span class="treetext" id="ParentRoleName"></span>
+                <a class="btn" onclick="LS.admin.myfn.dialogeopenroletree({id:'ParentID',name:'ParentRoleName',toggledisplay:true,toggleselect:false,multiple:false},'@Url.Action("GetRoleTree", "Index", new { Area = "" ,thisid=Model.ID})');">请选择</a>
+                <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
+                <input class="treevalue" type="hidden" name="ParentID" id="ParentID" value="" validate min="2" max="36" msg="请选择上级角色" />
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">角色权限</label>
+            <div class="controls">
+                <span class="treetext" id="SysRightsName">@ViewBag.rightNameStr</span>
+                <a class="btn" onclick="LS.admin.myfn.dialogeopenrighttree({id:'SysRightsID',name:'SysRightsName',toggledisplay:true,toggleselect:true},'@Url.Action("GetRightTree", "Index", new { Area = "" })');">请选择</a>
+                <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
+                <input class="treevalue" type="hidden" name="SysRightsID" id="SysRightsID" value="@ViewBag.rightIDStr" validate min="2" msg="请为角色选择相应的权限"/>
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="Name" class="control-label">默认主页</label>
+            <div class="controls">
+                <input class="" type="text" name="DefaultHomePath" id="DefaultHomePath" validate max="10" />
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" name="IsAvailable" value="true" checked="checked">启用
+                </label>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit" data-loading-text="提交中" data-complete-text="完成"><i class="icon-ok icon-white"></i>保存</button>
+            <button class="btn" type="button" onclick="history.go(-1);">返回</button>
+        </div>
+    </div>
+}
+

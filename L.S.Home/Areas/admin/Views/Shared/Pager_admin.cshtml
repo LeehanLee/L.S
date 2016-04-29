@@ -1,0 +1,36 @@
+﻿
+@using PagedList.Mvc;
+@model PagedList.IPagedList
+@{
+    string actionName = "/" + ViewContext.RouteData.Values["action"].ToString();
+    string controllerName = "/" + ViewContext.RouteData.Values["controller"].ToString();
+    PagedListRenderOptions normalOption = new PagedListRenderOptions()
+    {
+        LinkToNextPageFormat = "下一页",
+        LinkToPreviousPageFormat = "上一页"
+    };
+
+    List<int> optionsForPerPageDataCount = ViewBag.optionsForPerPageDataCount as List<int>;
+}
+<div class="normalpager">
+    @Html.PagedListPager(Model, page => Url.Action(actionName, new {page= page,pagesize=Model.PageSize }), normalOption)
+
+    @Html.PagedListGoToPageForm(Model, Url.Action(actionName, controllerName), new GoToFormRenderOptions { LabelFormat = "跳转到",PageSize=Model.PageSize.ToString() })
+
+    <div class="perpagecount pull-right">
+        <span class="pull-right">条数据</span>
+        @foreach (int option in optionsForPerPageDataCount)
+        {
+            if ((Request["pagesize"] == option.ToString()) || (string.IsNullOrEmpty(Request["pagesize"]) && option == 10))
+            {
+                <a class="btn ls-active pull-right">@option</a>
+            }
+            else
+            {
+                <a href="@Url.Action(actionName, controllerName, new { page=1,pageSize=option})" class="btn pull-right">@option</a>
+            }
+        }
+        <span class="pull-right">每页显示</span>
+        <div class="clear"></div>
+    </div>
+</div>

@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CD0068FA-9DE4-4146-95EA-F16209822CCA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>L.S.DAL</RootNamespace>
+    <AssemblyName>L.S.DAL</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\openLib\PagedList.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="Interface\IBaseDBService.cs" />
+    <Compile Include="Model\DBModels\DbEnitty.cs" />
+    <Compile Include="Model\DBModels\Dep.cs">
+      <DependentUpon>L.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DBModels\DepUser.cs">
+      <DependentUpon>L.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DBModels\L.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>L.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DBModels\L.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>L.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DBModels\L.S.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>L.S.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DBModels\Menu.cs">
+      <DependentUpon>L.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DBModels\MenuDep.cs">
+      <DependentUpon>L.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DBModels\MenuRole.cs">
+      <DependentUpon>L.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DBModels\MenuUser.cs">
+      <DependentUpon>L.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DBModels\Role.cs">
+      <DependentUpon>L.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DBModels\RoleUser.cs">
+      <DependentUpon>L.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DBModels\SysUser.cs">
+      <DependentUpon>L.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\BaseDBService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Model\DBModels\L.S.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>L.S.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="Model\DBModels\L.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>L.S.edmx</DependentUpon>
+      <LastGenOutput>L.Context.cs</LastGenOutput>
+    </None>
+    <None Include="Model\DBModels\L.S.edmx.diagram">
+      <DependentUpon>L.S.edmx</DependentUpon>
+    </None>
+    <None Include="Model\DBModels\L.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>L.S.edmx</DependentUpon>
+      <LastGenOutput>L.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\NormalModels\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,31 @@
+﻿@model PagedList.IPagedList<SysDep>
+
+@{
+    ViewBag.Title = "部门管理";
+}
+<div>
+    <ul class="breadcrumb admin-bread-ul">
+        <li><a href="@Url.Action("Index","Sys")">系统管理</a> <span class="divider">/</span></li>
+        <li class="active">部门管理</li>
+    </ul>
+</div>
+@foreach (SysRight r in ViewBag.pageTopRightList)
+{
+    if (r.ActionType == "View")
+    {
+        <a class="btn btn-primary" href="@r.MenuUrl" )>@r.Name</a>
+    }
+    else
+    {
+        <a class="btn btn-primary ls-table-@r.ActionType.ToLower()" url="@r.MenuUrl" )>@r.Name</a>
+    }
+}
+@*<a class="btn btn-primary" href="@Url.Action("Create","SysDeps")" )>添加</a>
+<a class="btn btn-primary ls-table-available" url="@Url.Action("Available", "SysDeps")")>启用</a>
+<a class="btn btn-primary ls-table-available" url="@Url.Action("UnAvailable", "SysDeps")" )>禁用</a>
+<a class="btn btn-primary ls-table-del" url="@Url.Action("Delete", "SysDeps",new { area="admin"})" )>删除</a>*@
+@if (Model != null && Model.Count > 0)
+{
+    Html.RenderPartial("DepList_Pa");
+}
+else { Html.RenderPartial("_NoData"); }

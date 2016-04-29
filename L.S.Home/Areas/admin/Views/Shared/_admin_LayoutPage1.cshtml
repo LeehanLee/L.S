@@ -1,0 +1,163 @@
+﻿@{ 
+    CurrentUser cuser = ViewBag.cuser as CurrentUser;
+    string RightCode = ViewBag.RightCode as string;
+    string CurrentActiveTopMenuCode = ViewBag.CurrentActiveTopMenuCode as string;
+    string CurrentActiveLeftMenuCode = ViewBag.CurrentActiveLeftMenuCode as string;
+    var userRightList = ViewBag.UserRightList as List<SysRight>;
+    var nowRight = userRightList.Single(ur => ur.ID == RightCode);
+    var currentTopRight = userRightList.Single(ur => ur.ID == CurrentActiveTopMenuCode);
+    var currentLeftRight = userRightList.Single(ur => ur.ID == CurrentActiveLeftMenuCode);
+    List<SysRight> topRightList= userRightList.Where(r=>r.ParentID== currentTopRight.ParentID).OrderBy(r=>r.SortNo).ToList();
+    List<SysRight> leftRightList = userRightList.Where(r => r.ParentID == currentLeftRight.ParentID).OrderBy(r => r.SortNo).ToList();
+    }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
+
+    <script src="~/Scripts/jquery-1.12.0.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>    
+   
+    <script src="~/Content/JS/outjs/bootbox.js"></script>
+
+    <link href="~/datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <script src="~/datetimepicker/js/bootstrap-datetimepicker.js"></script>
+    <script src="~/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>@*此JS需要在datetimepicker后面引入*@
+
+    <script src="~/Scripts/jsTree3/jstree.js"></script>
+    <link href="~/Content/jsTree/themes/default/style.css" rel="stylesheet" />
+    
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Content/JS/admin.js"></script>
+    <link href="~/Content/CSS/admin.css" rel="stylesheet" />    
+
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner ls-top">
+                <div class="container-fluid">                    
+                    <div class="row-fluid">
+                        <div class="span1"></div>
+                        <div class="span11">
+                        <button type="button" class="btn btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="brand proj-name" target="_blank" href="http://www.bootcss.com/">Bootstrap</a>
+                        <div class="nav-collapse collapse" style="height: 0px;">
+                            <ul class="nav level1-menu-container">
+                                @foreach (var top in topRightList)
+                                {
+                                <li class="@if (top.ID == currentTopRight.ID) { <text>active</text>} ">
+                                    <a target="_blank" href="@top.MenuUrl">@top.Name</a>
+                                </li>
+                                }
+                                <li class="">
+                                    <a target="_blank" href="http://www.baidu.com">百度</a>
+                                </li>
+                                <li class="">
+                                    <a target="_blank" href="http://www.qq.com">腾讯</a>
+                                </li>
+                                <li class="">
+                                    <a target="_blank" href="http://v.qq.com">腾讯视频</a>
+                                </li>
+                                <li class="">
+                                    <a target="_blank" href="http://www.iqiyi.com/">爱奇艺</a>
+                                </li>
+                                <li class="">
+                                    <a target="_blank" href="http://www.youku.com/">优酷</a>
+                                </li>
+                                <li class="">
+                                    <a target="_blank" href="https://www.tmall.com/">天猫</a>
+                                </li>
+                                <li class="">
+                                    <a target="_blank" href="https://www.nuget.org/">nuget</a>
+                                </li>
+                                <li class="">
+                                    <a target="_blank" href="https://github.com/">github</a>
+                                </li>
+                                <li class="">
+                                    <a target="_blank" href="http://www.imooc.com/">慕课</a>
+                                </li>
+                                <li class="">
+                                    <a target="_blank" href="https://www.jstree.com/">jsTree</a>
+                                </li>                                
+                            </ul>
+                            <ul class="nav pull-right level1-menu-container">
+                                <li class="">
+                                    <a >@ViewBag.cuser.LoginName</a>
+                                </li>
+                                <li class="">
+                                    <a href="@Url.Action("signout","index",new { area = "" })">注销</a>
+                                </li>
+                            </ul>
+                        </div>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+        <div class="jumbotron subhead" id="overview">
+            <div class="container">
+                <div class="row">
+                    <div class="span3">
+                        <img remark="270*120" class="admin-logo" src="~/Content/Images/Admin/logo.png" />
+                    </div>
+                    <div class="span9">
+                        <h2>基础功能页面</h2>
+                        <p class="lead">对基本功能进行定义并其展示效果。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid admin-main-container">
+            <div class="row-fluid">
+                <div class="span2 bs-docs-sidebar">
+                    <ul class="navigation-container">
+                        @foreach (var left in leftRightList)
+                        {
+                            <li class="navigation-item @if (left.ID == CurrentActiveLeftMenuCode) { <text>active</text>} "><a href="@left.MenuUrl">@left.Name<i>></i></a></li>
+                        }
+                        <li class="navigation-item"><a target="_blank" href="@Url.Action("ajaxdemo", "jstree3", new { area=""})">jstree3 ajax demo<i>></i></a></li>
+                        <li class="navigation-item"><a target="_blank" href="@Url.Action("demo", "jstree3", new { area=""})">jstree3 demo<i>></i></a></li>
+                        <li class="navigation-item"><a target="_blank" href="@Url.Action("jstree", "test", new { area=""})">my jstree<i>></i></a></li>
+                        <li class="navigation-item"><a target="_blank" href="/datetimepicker/samplev2/index.html">时间控件<i>></i></a></li>
+                        <li class="navigation-item"><a target="_blank" href="/static/formvalidtetest.htm">简单表单验证<i>></i></a></li>                        
+                    </ul>
+                </div>
+                <div class="span10 admin-list-container">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+        <div class="footer ">
+            <div class="container-fluid-fluid">
+                <p>Designed and built with all the love in the world by <a href="http://v2.bootcss.com/" target="_blank">bootstrap</a>.</p>
+                <p>Thanks to the community of bootstrap.</p>
+                <p>@@Copyright Lee 2016/01/10</p>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div id="ModalDialoge" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">Modal header</h3>
+            </div>
+            <div class="modal-body">
+                <p>One fine body…</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                <button class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,180 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/jsTree/docs.css" rel="stylesheet" />
+    <link href="~/Content/jsTree/themes/default/style.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.12.0.js"></script>
+    <script src="~/Scripts/jsTree3/jstree.js"></script>
+
+    <script src="~/bootstrap/js/bootstrap.js"></script>
+    <link href="~/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/bootstrap/css/bootstrap-responsive.css" rel="stylesheet" />
+    <script src="~/Content/JS/outjs/bootbox.js"></script>
+
+    <script src="~/Content/JS/fn.js"></script>
+
+    <link href="~/Content/CSS/admin.css" rel="stylesheet" />
+    <title>jsTree</title>
+    <script>
+        $(function () {
+            $("#plugins1").jstree({
+                "checkbox": {
+                    "keep_selected_style": true,
+                    "three_state": false,
+                },
+                "plugins": ["checkbox","search","state"]
+            });
+            $("#plugins1").jstree().toggle_icons();
+            var to = false;
+            $('#plugins1_q').keyup(function () {
+                if (to) { clearTimeout(to); }
+                to = setTimeout(function () {
+                    var v = $('#plugins1_q').val();
+                    $('#plugins1').jstree(true).search(v);
+                }, 250);
+            });
+
+            $("#plugins2").jstree({
+                "core" : {
+                    "multiple": false,//不允许多选
+                    'data': {
+                        'url': "@Url.Action("GetJsTree3Data", "jstree3")",
+                        'data': function (node) {
+                            return { 'id': node.id, text: node.text};
+                        }
+                    }
+                },
+                "plugins": ["search", "state"]
+            });
+            $("#plugins2").jstree().toggle_icons(); 
+            
+            var to = false;
+            $('#plugins2_q').keyup(function () {
+                if (to) { clearTimeout(to); }
+                to = setTimeout(function () {
+                    var v = $('#plugins2_q').val();
+                    $('#plugins2').jstree(true).search(v);
+                }, 250);
+            });
+        });
+        function getSelectedValue(obj,treeid) {
+            var allselected = $("#" + treeid).jstree().get_selected(true);
+            var names = [];
+            $(allselected).each(function (i) {
+                names.push(allselected[i].text);
+            });
+            $(obj).parent().siblings(".selectedValue").text(names.join(','));
+        }
+        function openTree(treeid) {
+            $("#" + treeid).jstree().open_all();
+        }
+        function closeTree(treeid) {
+            $("#" + treeid).jstree().close_all();
+        }
+        function selectAll(treeid) {
+            $("#" + treeid).jstree().select_all();
+        }
+        function deselectAll(treeid) {
+            $("#" + treeid).jstree().deselect_all();
+        }
+    </script>
+    <style>
+        .tree-area{width:310px;float:left;box-shadow: 0px 0px 5px #888888;margin:5px;padding:5px;overflow:auto;}
+    </style>
+</head>
+<body>
+    <div>
+        <div class="tree-area">
+            <div>多选</div>
+            <div>
+                <input type="button" onclick="openTree('plugins1');" value="展开" style="width:50px;height:30px;" />
+                <input type="button" onclick="closeTree('plugins1');" value="折叠" style="width:50px;height:30px;" />
+                <input type="button" onclick="selectAll('plugins1');" value="全选" style="width:50px;height:30px;" />
+                <input type="button" onclick="deselectAll('plugins1');" value="取消全选" style="width:70px;height:30px;" />
+                <input type="button" onclick="getSelectedValue(this,'plugins1');" value="确定" style="width:50px;height:30px;" />
+            </div>
+            <input type="text" id="plugins1_q" value="" class="input" style="padding:4px; border-radius:4px; border:1px solid silver;">
+            <span class="selectedValue"></span>
+            <div id="plugins1">
+                <ul>
+                    <li>
+                        企业版
+                        <ul>
+                            <li>管理中心</li>
+                            <li>人事部</li>
+                            <li>
+                                互联网部
+                                <ul>
+                                    <li>
+                                        开发组
+                                        <ul>
+                                            <li>C#</li>
+                                            <li>java一</li>
+                                            <li>python</li>
+                                            <li>ruby</li>
+                                        </ul>
+                                    </li>
+                                    <li>测试组</li>
+                                    <li>方案组</li>
+                                </ul>
+                            </li>
+                            <li>
+                                销售部
+                                <ul>
+                                    <li>销售三部</li>
+                                    <li>销售一部</li>
+                                    <li>销售二部</li>
+                                </ul>
+                            </li>
+                            <li>
+                                市场部
+                                <ul>
+                                    <li>360推广</li>
+                                    <li>百度推广</li>
+                                    <li>搜狗推广</li>
+                                    <li>陌陌推广</li>
+                                    <li>网盟</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>Root 2</li>
+                </ul>
+            </div>
+        </div>
+        <div class="tree-area">
+            <div>单选</div>
+            <div>
+                <input type="button" onclick="openTree('plugins2');" value="展开" style="width:50px;height:30px;" />
+                <input type="button" onclick="closeTree('plugins2');" value="折叠" style="width:50px;height:30px;" />                
+                <input type="button" onclick="getSelectedValue(this,'plugins2');" value="确定" style="width:50px;height:30px;" />
+            </div>
+            <input type="text" id="plugins2_q" value="" class="input" style="padding:4px; border-radius:4px; border:1px solid silver;">
+            <span class="selectedValue"></span>
+            <div id="plugins2">
+               
+            </div>
+        </div>
+        <div class="tree-area" style="width:600px;">
+            <form class="form-horizontal">
+                <div class="control-group">
+                    <label class="control-label">部门</label>
+                    <div class="controls">
+                        <input type="text" readonly name="depname" id="depname" maxlength="30"
+                               onclick="LS.admin.myfn.dialogeopendeptree('dep','@Url.Action("GetJsTree3Data", "jstree3")');" />
+                        <input type="hidden" name="dep" id="dep" />
+                        <span class="ls-msg help-inline"></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+</body>
+</html>

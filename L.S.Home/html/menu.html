@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title></title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+            background: #ededed;
+        }
+
+
+        .relative {
+            position: relative;
+        }
+
+
+        .absolute {
+            position: absolute;
+        }
+
+
+        .hide {
+            display: none;
+        }
+
+
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+        }
+
+
+        .navigation-title {
+            width: 212px;
+            height: 46px;
+            background: #B1191A;
+        }
+
+
+            .navigation-title a {
+                display: block;
+                background: #B1191A;
+                line-height: 46px;
+                color: white;
+                font: 400 15px/44px "microsoft yahei";
+                margin: 0 10px;
+                text-decoration: none;
+            }
+
+
+        .navigation-container {
+            width: 212px;
+            list-style: none;
+            background: #0088e3 !important; /*border-left:1px solid #0088e3;border-bottom:1px solid #0088e3;*/
+        }
+
+
+            .navigation-container .navigation-item {
+                height: 31px;
+                line-height: 30px;
+                color: white;
+                position: relative;
+                transition: background .3s;
+                -moz-transition: background .3s;
+                -webkit-transition: background .3s;
+                -o-transition: background .3s;
+            }
+
+
+                .navigation-container .navigation-item:hover {
+                    background: white;
+                    box-shadow: 0 0 8px 0;
+                }
+
+
+                    .navigation-container .navigation-item:hover .child-navigation-container {
+                        display: block;
+                        box-shadow: 0 0 8px 0;
+                    }
+
+
+                    .navigation-container .navigation-item:hover > a {
+                        color: #c81623;
+                    }
+
+
+                .navigation-container .navigation-item > a {
+                    color: white;
+                    font-size: 14px;
+                    margin: 0 10px;
+                    font-family: "microsoft yahei";
+                    text-decoration: none;
+                }
+
+
+                    .navigation-container .navigation-item > a:hover {
+                        text-decoration: underline;
+                    }
+
+
+                .navigation-container .navigation-item i {
+                    position: absolute;
+                    z-index: 1;
+                    top: 9px;
+                    right: 14px;
+                    width: 4px;
+                    height: 14px;
+                    font: 400 9px/14px consolas;
+                }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="navigation-title"><a href="#">全部商品分类</a></div>
+
+        <ul class="navigation-container">
+
+            <li class="navigation-item"><a href="#">家用电器</a><i>></i></li>
+
+            <li class="navigation-item"><a href="#">手机、数码、通信设备</a><i>></i></li>
+
+            <li class="navigation-item"><a href="#">电脑、办公</a><i>></i></li>
+
+            <li class="navigation-item"><a href="#">家居、家具、家装、厨具</a><i>></i></li>
+
+            <li class="navigation-item"><a href="#">男装、女装、珠宝</a><i>></i></li>
+
+            <li class="navigation-item"><a href="#">个护化妆、清洁用品</a><i>></i></li>
+
+            <li class="navigation-item"><a href="#">鞋靴、箱包、钟表、奢侈品</a><i>></i></li>
+
+            <li class="navigation-item"><a href="#">运动户外</a><i>></i></li>
+
+            <li class="navigation-item"><a href="#">汽车、汽车用品</a><i>></i></li>
+
+            <li class="navigation-item"><a href="#">母婴、玩具乐器</a><i>></i></li>
+
+            <li class="navigation-item"><a href="#">食品、酒类、生鲜、特产</a><i>></i></li>
+
+            <li class="navigation-item"><a href="#">图书、音像、电子书</a><i>></i></li>
+
+            <li class="navigation-item"><a href="#">彩票、旅行、充值、票务</a><i>></i></li>
+
+            <li class="navigation-item"><a href="#">理财、众筹、白条、保险</a><i>></i></li>
+
+            <li class="navigation-item"><a href="#">营养保健</a><i>></i></li>
+
+        </ul>
+
+    </div>
+</body>
+
+</html>

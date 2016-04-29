@@ -1,0 +1,381 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8F5B9765-5C4C-431F-A30D-3B28528CCAB6}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>L.S.Home</RootNamespace>
+    <AssemblyName>L.S.Home</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Configuration, Version=3.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.Configuration.3.3.0\lib\net40\Autofac.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc">
+      <HintPath>..\packages\Autofac.Mvc5.3.3.4\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\openLib\PagedList.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.30506.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.30506.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Areas\admin\adminAreaRegistration.cs" />
+    <Compile Include="Areas\admin\Controllers\SysController.cs" />
+    <Compile Include="Areas\admin\Controllers\SysDepController.cs" />
+    <Compile Include="Areas\admin\Controllers\SysRightController.cs" />
+    <Compile Include="Areas\admin\Controllers\SysRoleController.cs" />
+    <Compile Include="Areas\admin\Controllers\SysUserController.cs" />
+    <Compile Include="BLL\RoleBLL.cs" />
+    <Compile Include="BLL\UserBLL.cs" />
+    <Compile Include="Controllers\IndexController.cs" />
+    <Compile Include="Controllers\jsTree3Controller.cs" />
+    <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AjaxResult.cs" />
+    <Compile Include="Models\CacheData.cs" />
+    <Compile Include="Models\CurrentUser.cs" />
+    <Compile Include="Models\HtmlHelper.cs" />
+    <Compile Include="Models\IocConfig.cs" />
+    <Compile Include="Models\jsTree3Node.cs" />
+    <Compile Include="Models\LSAuthorizeAttribute.cs" />
+    <Compile Include="Models\LsBaseController.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="Content\CSS\login.css" />
+    <Content Include="Content\JS\fn.js" />
+    <Content Include="Content\JS\outjs\formValidate.js" />
+    <Content Include="Content\Site.css" />
+    <Content Include="datetimepicker\css\bootstrap-datetimepicker.css" />
+    <Content Include="datetimepicker\css\bootstrap-datetimepicker.min.css" />
+    <Content Include="datetimepicker\js\bootstrap-datetimepicker.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.ar.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.bg.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.ca.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.cs.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.da.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.de.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.ee.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.el.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.es.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.fi.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.fr.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.he.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.hr.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.hu.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.hy.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.id.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.is.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.it.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.ja.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.ka.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.ko.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.lt.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.lv.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.ms.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.nb.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.nl.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.no.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.pl.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.pt-BR.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.pt.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.ro.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.rs-latin.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.rs.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.ru.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.sk.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.sl.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.sv.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.sw.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.th.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.tr.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.ua.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.uk.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.zh-CN.js" />
+    <Content Include="datetimepicker\js\locales\bootstrap-datetimepicker.zh-TW.js" />
+    <Content Include="datetimepicker\samplev2\bootstrap\css\bootstrap.css" />
+    <Content Include="datetimepicker\samplev2\bootstrap\css\bootstrap.min.css" />
+    <Content Include="datetimepicker\samplev2\bootstrap\img\glyphicons-halflings-white.png" />
+    <Content Include="datetimepicker\samplev2\bootstrap\img\glyphicons-halflings.png" />
+    <Content Include="datetimepicker\samplev2\bootstrap\js\bootstrap.js" />
+    <Content Include="datetimepicker\samplev2\bootstrap\js\bootstrap.min.js" />
+    <Content Include="datetimepicker\samplev2\index.html" />
+    <Content Include="datetimepicker\samplev2\jquery\jquery-1.8.3.min.js" />
+    <Content Include="bootstrap\css\bootstrap-responsive.css" />
+    <Content Include="bootstrap\css\bootstrap-responsive.min.css" />
+    <Content Include="bootstrap\css\bootstrap.css" />
+    <Content Include="bootstrap\css\bootstrap.min.css" />
+    <Content Include="bootstrap\img\glyphicons-halflings-white.png" />
+    <Content Include="bootstrap\img\glyphicons-halflings.png" />
+    <Content Include="bootstrap\js\bootstrap.js" />
+    <Content Include="bootstrap\js\bootstrap.min.js" />
+    <Content Include="Content\CSS\admin.css" />
+    <Content Include="Content\Images\Admin\level2bg.jpg" />
+    <Content Include="Content\Images\Admin\nodata.png" />
+    <Content Include="Content\Images\Admin\win_logo.jpg" />
+    <Content Include="Content\Images\Admin\bs-docs-masthead-pattern.png" />
+    <Content Include="Content\Images\Admin\logo.png" />
+    <Content Include="Content\jsTree\docs.css" />
+    <Content Include="Content\jsTree\themes\default-dark\32px.png" />
+    <Content Include="Content\jsTree\themes\default-dark\40px.png" />
+    <Content Include="Content\jsTree\themes\default-dark\style.css" />
+    <Content Include="Content\jsTree\themes\default-dark\style.min.css" />
+    <Content Include="Content\jsTree\themes\default-dark\throbber.gif" />
+    <Content Include="Content\jsTree\themes\default\32px.png" />
+    <Content Include="Content\jsTree\themes\default\40px.png" />
+    <Content Include="Content\jsTree\themes\default\style.css" />
+    <Content Include="Content\jsTree\themes\default\style.min.css" />
+    <Content Include="Content\jsTree\themes\default\throbber.gif" />
+    <Content Include="Content\JS\admin.js" />
+    <Content Include="Content\JS\outjs\bootbox.js" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Areas\admin\Views\web.config" />
+    <Content Include="Areas\admin\Views\Sys\Index.cshtml" />
+    <Content Include="Areas\admin\Views\Shared\_admin_LayoutPage1.cshtml" />
+    <Content Include="Areas\admin\Views\Shared\_NoData.cshtml" />
+    <Content Include="Areas\admin\Views\Shared\Pager_admin.cshtml" />
+    <Content Include="Areas\admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\admin\Views\Shared\_NoDataInLayout.cshtml" />
+    <Content Include="Areas\admin\Views\SysDep\Create.cshtml" />
+    <Content Include="Areas\admin\Views\SysDep\Delete.cshtml" />
+    <Content Include="Areas\admin\Views\SysDep\Details.cshtml" />
+    <Content Include="Areas\admin\Views\SysDep\Edit.cshtml" />
+    <Content Include="Areas\admin\Views\SysDep\Index.cshtml" />
+    <Content Include="Areas\admin\Views\SysDep\DepList_Pa.cshtml" />
+    <Content Include="Areas\admin\Views\SysRole\Create.cshtml" />
+    <Content Include="Areas\admin\Views\SysRole\Delete.cshtml" />
+    <Content Include="Areas\admin\Views\SysRole\Details.cshtml" />
+    <Content Include="Areas\admin\Views\SysRole\Edit.cshtml" />
+    <Content Include="Areas\admin\Views\SysRole\Index.cshtml" />
+    <Content Include="Areas\admin\Views\SysRole\RoleList_Pa.cshtml" />
+    <Content Include="Areas\admin\Views\SysRight\Index.cshtml" />
+    <Content Include="Areas\admin\Views\SysRight\RightList_Pa.cshtml" />
+    <Content Include="Areas\admin\Views\SysRight\Create.cshtml" />
+    <Content Include="Areas\admin\Views\SysRight\Edit.cshtml" />
+    <Content Include="Areas\admin\Views\SysUser\Index.cshtml" />
+    <Content Include="Areas\admin\Views\SysUser\Index_Pa.cshtml" />
+    <Content Include="Areas\admin\Views\SysUser\Create.cshtml" />
+    <Content Include="Areas\admin\Views\SysUser\Edit.cshtml" />
+    <None Include="Scripts\jquery-1.12.0.intellisense.js" />
+    <Content Include="login\css\form-elements.css" />
+    <Content Include="login\css\style.css" />
+    <Content Include="login\img\keys.jpg" />
+    <Content Include="login\js\jquery.backstretch.js" />
+    <Content Include="login\js\jquery.backstretch.min.js" />
+    <Content Include="login\js\placeholder.js" />
+    <Content Include="login\js\scripts.js" />
+    <Content Include="notfound.html" />
+    <Content Include="Scripts\jquery-1.12.0.js" />
+    <Content Include="Scripts\jquery-1.12.0.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jsTree3\jstree.js" />
+    <Content Include="Scripts\jsTree3\jstree.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Scripts\jquery-1.12.0.min.map" />
+    <Content Include="Views\Shared\_jsTreeDemo.cshtml" />
+    <Content Include="Views\jsTree3\Demo.cshtml" />
+    <Content Include="Views\jsTree3\AJAXDemo.cshtml" />
+    <Content Include="Views\Test\jsTree.cshtml" />
+    <Content Include="Views\Test\FormUrlTest.cshtml" />
+    <Content Include="Views\Test\CacheTest.cshtml" />
+    <Content Include="Views\Index\Login.cshtml" />
+    <Content Include="Views\Index\NoPermission.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Areas\admin\Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\L.S.Interface\L.S.Interface.csproj">
+      <Project>{ee597fb5-1b10-45d8-839c-7860c96427c4}</Project>
+      <Name>L.S.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\L.S.Model\L.S.Model.csproj">
+      <Project>{6a855b5f-f0ab-4219-8d97-2a043d0e39c8}</Project>
+      <Name>L.S.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\L.S.Service\L.S.Service.csproj">
+      <Project>{aa0956c1-a1f1-472f-bf46-f7a10cdeb5ea}</Project>
+      <Name>L.S.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\L.Study.Common\L.Study.Common.csproj">
+      <Project>{9c7fea9a-57b4-407c-887c-5e00cecc782f}</Project>
+      <Name>L.Study.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>2119</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://www.l.s.cn/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://www.l.s.cn/</IISAppRootUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

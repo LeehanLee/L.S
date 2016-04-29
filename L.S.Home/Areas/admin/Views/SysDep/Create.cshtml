@@ -1,0 +1,48 @@
+﻿@model SysDep
+@{
+    ViewBag.Title = "部门添加";
+}
+<div>
+    <ul class="breadcrumb admin-bread-ul">
+        <li><a href="@Url.Action("Index","Sys")">系统管理</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("Index","SysDeps")">部门管理</a> <span class="divider">/</span></li>
+        <li class="active">部门添加</li>
+    </ul>
+</div>
+@using (Ajax.BeginForm("Create", null, new AjaxOptions() { HttpMethod = "Post", OnBegin = "LS.admin.myfn.AjaxBegin('#form0')", OnSuccess = "LS.admin.myfn.AjaxSuccess" }, new { @class = "form-horizontal admin-form" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">                
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="control-group">
+            <label for="Name" class="control-label">部门名称</label>
+            <div class="controls">
+                <input type="text" maxlength="16" name="Name" placeholder="名称" validate min="2" max="10">
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">上级部门</label>
+            <div class="controls">
+                <span class="treetext" id="ParentName"></span>
+                <a class="btn" onclick="LS.admin.myfn.dialogeopendeptree({id:'ParentID',name:'ParentName'},'@Url.Action("GetDepTree", "Index", new { Area = ""})');">请选择</a>
+                <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
+                <input class="treevalue" type="hidden" name="ParentID" id="ParentID" validate min="2" max="36" msg="请选择上级部门"/>
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" name="IsAvailable" value="true" checked="checked">启用
+                </label>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit" data-loading-text="提交中" data-complete-text="完成"><i class="icon-ok icon-white"></i>保存</button>
+            <button class="btn" type="button" onclick="history.go(-1);">返回</button>
+        </div>
+    </div>
+}
+

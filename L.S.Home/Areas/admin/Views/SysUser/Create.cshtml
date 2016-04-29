@@ -1,0 +1,97 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_admin_LayoutPage1.cshtml";
+    ViewBag.Title = "用户添加";
+}
+
+<div>
+    <ul class="breadcrumb admin-bread-ul">
+        <li><a href="@Url.Action("Index","Sys")">系统管理</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("Index","SysUser")">用户管理</a> <span class="divider">/</span></li>
+        <li class="active">用户添加</li>
+    </ul>
+</div>
+@using (Ajax.BeginForm("Create", null, new AjaxOptions() { HttpMethod = "Post", OnBegin = "LS.admin.myfn.AjaxBegin('#form0')", OnSuccess = "LS.admin.myfn.AjaxSuccess" }, new { @class = "form-horizontal admin-form" }))
+{
+    <div class="control-group">
+        <label class="control-label">登录名</label>
+        <div class="controls">
+            <input type="text" maxlength="10" name="LoginName" placeholder="登录名" validate min=2 max=10>
+            <span class="ls-msg help-inline"></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">姓名</label>
+        <div class="controls">
+            <input type="text" maxlength="10" name="Name" placeholder="姓名" validate min=2 max=10>
+            <span class="ls-msg help-inline"></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">密码</label>
+        <div class="controls">
+            <input type="password" maxlength="16" name="Password" placeholder="密码" validate min="6" max="16">
+            <span class="ls-msg help-inline"></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">电话</label>
+        <div class="controls">
+            <input type="text" maxlength="14" name="Mobile" placeholder="电话" validate='mobile' empty="yes">
+            <span class="ls-msg help-inline"></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">部门</label>
+        <div class="controls">
+            <span class="treetext" id="SysDepName"></span>
+            <a class="btn" onclick="LS.admin.myfn.dialogeopendeptree({id:'SysDepID',name:'SysDepName'},'@Url.Action("GetDepTree", "Index", new { Area = "" })');">请选择</a>
+            <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
+            <input class="treevalue" type="hidden" name="SysDepID" id="SysDepID" validate min="2" max="36" msg="请选择部门"/>
+            <span class="ls-msg help-inline"></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">角色</label>
+        <div class="controls">
+            <span class="treetext" id="SysRolesName">普通用户</span>
+            <a class="btn" onclick="LS.admin.myfn.dialogeopenroletree({id:'SysRolesID',name:'SysRolesName',toggledisplay:true,toggleselect:true},'@Url.Action("GetRoleTree", "Index", new { Area = "" })');">请选择</a>
+            <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
+            <input class="treevalue" type="hidden" name="SysRolesID" id="SysRolesID" value="normaluser" validate min="2" max="36" msg="请选择角色"/>
+            <span class="ls-msg help-inline"></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">生日</label>
+        <div class="controls input-append date form_datetime" data-date="1997-09-16T05:25:07Z" data-link-field="dtp_input1">
+            <input size="16" type="text" value="" readonly name="Birthday" placeholder="生日" validate='datetime'>
+            <span class="add-on"><i class="icon-remove"></i></span>
+            <span class="add-on"><i class="icon-th"></i></span>
+            <span class="ls-msg help-inline"></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">地址</label>
+        <div class="controls">
+            <input type="text" class="" name="Address" placeholder="地址" validate max="50" maxlength="50">
+            <span class="ls-msg"></span>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" name="IsAvailable" value="true" checked="checked">启用
+            </label>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">备注</label>
+        <div class="controls">
+            <textarea name="Remark" validate max="50" maxlength="50"></textarea>
+            <span class="ls-msg"></span>
+        </div>
+    </div>
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit" data-loading-text="提交中" data-complete-text="完成"><i class="icon-ok icon-white"></i>保存</button>
+        <button class="btn" type="button" onclick="history.go(-1);">返回</button>
+    </div>
+}

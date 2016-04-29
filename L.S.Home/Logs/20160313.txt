@@ -1,0 +1,6 @@
+message: 
+更新条目时出错。有关详细信息，请参阅内部异常。
+   在 System.Data.Entity.Internal.InternalContext.SaveChanges()
+   在 L.S.Model.DatabaseModel.Context.LSInitializer.Seed(LSContext context) 位置 F:\MySolution\L.Study\L.S.Model\DatabaseModel\Context\LSInitializer.cs:行号 65
+2016/3/13 19:34:38
+
