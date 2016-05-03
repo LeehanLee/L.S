@@ -9,9 +9,11 @@ namespace L.S.Service
 {
     using L.S.Interface;
     using Model.DatabaseModel.Entity;
+    using System.Data.Entity;
     using System.Data.SqlClient;
     public class RoleService: BaseService<SysRole>, IRoleService
     {
+        public RoleService(DbContext context) : base(context) { }
         public int RoleDelete(string ids,out string msg)
         {
             msg = "";

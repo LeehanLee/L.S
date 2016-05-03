@@ -7,11 +7,9 @@ using System.Web.Mvc;
 namespace L.S.Home.Models
 {
     using Interface;
+    using Model.DomainModel;
     using L.Study.Common.Config;
     using Model.DatabaseModel.Entity;
-    using Newtonsoft.Json;
-    using Service;
-    using Study.Common.Cache;
     public class LsBaseController : Controller
     {
         public CurrentUser cuser { get; set; }

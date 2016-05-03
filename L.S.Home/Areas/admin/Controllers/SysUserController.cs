@@ -1,7 +1,7 @@
 ﻿using Autofac;
-using L.S.Home.BLL;
 using L.S.Home.Models;
 using L.S.Interface;
+using L.S.Interface.BLL;
 using L.S.Model.DatabaseModel.Entity;
 using L.Study.Common;
 using System;
@@ -17,12 +17,13 @@ namespace L.S.Home.Areas.admin.Controllers
     {
         public IUserService userService;
         public IDepService depService;
-        private RoleBLL roleBll;
-        public SysUserController(IUserService _userService, IDepService _depService)
+        private IRoleBLL roleBll;
+        public SysUserController(IUserService _userService, IDepService _depService,IRoleBLL _roleBLL)
         {
             userService = _userService;
             depService = _depService;
-            roleBll = IocConfig.Container.Resolve<RoleBLL>();
+            //roleBll = IocConfig.Container.Resolve<RoleBLL>();
+            roleBll = _roleBLL;
         }
         protected override void Dispose(bool disposing)
         {

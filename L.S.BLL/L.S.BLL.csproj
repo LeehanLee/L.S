@@ -1,16 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6A855B5F-F0AB-4219-8D97-2A043D0E39C8}</ProjectGuid>
+    <ProjectGuid>{2E36B75F-39D0-4F88-AC23-C746153C4F8A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>L.S.Model</RootNamespace>
-    <AssemblyName>L.S.Model</AssemblyName>
+    <RootNamespace>L.S.BLL</RootNamespace>
+    <AssemblyName>L.S.BLL</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,44 +31,39 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DatabaseModel\Context\LSContext.cs" />
-    <Compile Include="DatabaseModel\Context\LSInitializer.cs" />
-    <Compile Include="DatabaseModel\Entity\BaseEntity.cs" />
-    <Compile Include="DatabaseModel\Entity\Identifiable.cs" />
-    <Compile Include="DatabaseModel\Entity\NamedEntity.cs" />
-    <Compile Include="DatabaseModel\Entity\SysDep.cs" />
-    <Compile Include="DatabaseModel\Entity\SysRight.cs" />
-    <Compile Include="DatabaseModel\Entity\SysRole.cs" />
-    <Compile Include="DatabaseModel\Entity\SysRoleRight.cs" />
-    <Compile Include="DatabaseModel\Entity\SysUser.cs" />
-    <Compile Include="DatabaseModel\Entity\SysUserRole.cs" />
-    <Compile Include="DomainModel\CurrentUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SysManage\RoleBLL.cs" />
+    <Compile Include="SysManage\UserBLL.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\L.S.Interface\L.S.Interface.csproj">
+      <Project>{ee597fb5-1b10-45d8-839c-7860c96427c4}</Project>
+      <Name>L.S.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\L.S.Model\L.S.Model.csproj">
+      <Project>{6a855b5f-f0ab-4219-8d97-2a043d0e39c8}</Project>
+      <Name>L.S.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\L.S.Service\L.S.Service.csproj">
+      <Project>{aa0956c1-a1f1-472f-bf46-f7a10cdeb5ea}</Project>
+      <Name>L.S.Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\L.Study.Common\L.Study.Common.csproj">
       <Project>{9c7fea9a-57b4-407c-887c-5e00cecc782f}</Project>
       <Name>L.Study.Common</Name>

@@ -59,7 +59,7 @@ namespace L.Study.Common.FTP
                 stream.Close();
                 stream.Dispose();
             }
-            catch (Exception e)
+            catch
             {
                 return false;
             }

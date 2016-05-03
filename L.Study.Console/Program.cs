@@ -15,7 +15,7 @@ namespace L.Study.Console
     {
         static string key = "key1";
         static string value1 = "lihanhan";
-        static string value2 = "lihanhan_Set_result";
+        //static string value2 = "lihanhan_Set_result";
         static void Main(string[] args)
         {
             //MemcachedTest();

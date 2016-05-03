@@ -2,6 +2,7 @@
 using L.S.Model.DatabaseModel.Entity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,7 @@ namespace L.S.Service
     /// </summary>
     public class RightService: BaseService<SysRight>, IRightService
     {
+        public RightService(DbContext context) : base(context) { }
         public int RightsDelete(string ids, out string msg)
         {
             msg = "";

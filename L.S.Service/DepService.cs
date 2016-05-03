@@ -2,6 +2,7 @@
 using L.S.Model.DatabaseModel.Entity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace L.S.Service
 {
     public class DepService : BaseService<SysDep>, IDepService
     {
+        public DepService(DbContext context) : base(context) { }
         public int DepsDelete(string ids,out string msg)
         {
             msg = "";

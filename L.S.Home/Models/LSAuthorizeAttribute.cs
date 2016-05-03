@@ -1,5 +1,4 @@
-﻿using L.S.Home.BLL;
-using L.S.Model.DatabaseModel.Entity;
+﻿using L.S.Model.DatabaseModel.Entity;
 using L.Study.Common.Cache;
 using L.Study.Common.Config;
 using L.Study.Common.Cookie;
@@ -11,6 +10,8 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Linq;
+using L.S.Model.DomainModel;
+using L.S.BLL.SysManage;
 
 namespace L.S.Home.Models
 {

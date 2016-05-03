@@ -147,8 +147,6 @@
     <Compile Include="Areas\admin\Controllers\SysRightController.cs" />
     <Compile Include="Areas\admin\Controllers\SysRoleController.cs" />
     <Compile Include="Areas\admin\Controllers\SysUserController.cs" />
-    <Compile Include="BLL\RoleBLL.cs" />
-    <Compile Include="BLL\UserBLL.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Controllers\jsTree3Controller.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -157,7 +155,6 @@
     </Compile>
     <Compile Include="Models\AjaxResult.cs" />
     <Compile Include="Models\CacheData.cs" />
-    <Compile Include="Models\CurrentUser.cs" />
     <Compile Include="Models\HtmlHelper.cs" />
     <Compile Include="Models\IocConfig.cs" />
     <Compile Include="Models\jsTree3Node.cs" />
@@ -170,6 +167,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Content\CSS\login.css" />
+    <Content Include="Content\Images\Admin\logo.png" />
     <Content Include="Content\JS\fn.js" />
     <Content Include="Content\JS\outjs\formValidate.js" />
     <Content Include="Content\Site.css" />
@@ -241,7 +239,7 @@
     <Content Include="Content\Images\Admin\nodata.png" />
     <Content Include="Content\Images\Admin\win_logo.jpg" />
     <Content Include="Content\Images\Admin\bs-docs-masthead-pattern.png" />
-    <Content Include="Content\Images\Admin\logo.png" />
+    <Content Include="Content\Images\Admin\logo2.png" />
     <Content Include="Content\jsTree\docs.css" />
     <Content Include="Content\jsTree\themes\default-dark\32px.png" />
     <Content Include="Content\jsTree\themes\default-dark\40px.png" />
@@ -257,7 +255,9 @@
     <Content Include="Content\JS\outjs\bootbox.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Areas\admin\Views\web.config" />
+    <Content Include="Areas\admin\Views\web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Areas\admin\Views\Sys\Index.cshtml" />
     <Content Include="Areas\admin\Views\Shared\_admin_LayoutPage1.cshtml" />
     <Content Include="Areas\admin\Views\Shared\_NoData.cshtml" />
@@ -300,7 +300,9 @@
     <Content Include="Scripts\jsTree3\jstree.js" />
     <Content Include="Scripts\jsTree3\jstree.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -325,6 +327,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\L.S.BLL\L.S.BLL.csproj">
+      <Project>{2e36b75f-39d0-4f88-ac23-c746153c4f8a}</Project>
+      <Name>L.S.BLL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\L.S.Interface\L.S.Interface.csproj">
       <Project>{ee597fb5-1b10-45d8-839c-7860c96427c4}</Project>
       <Name>L.S.Interface</Name>

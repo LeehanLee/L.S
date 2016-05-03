@@ -1,7 +1,7 @@
 ﻿using jsTree3.Models;
-using L.S.Home.BLL;
 using L.S.Home.Models;
 using L.S.Interface;
+using L.S.Interface.BLL;
 using L.S.Model.DatabaseModel.Entity;
 using L.Study.Common.Cache;
 using L.Study.Common.Config;
@@ -22,15 +22,18 @@ namespace L.S.Home.Controllers
         private IUserService userService;
         private IRightService rightService;
         private IDepService depService;
-        private IRoleService roleService; 
+        private IRoleService roleService;
+        private IUserBLL userBLL;
         #endregion
 
-        public IndexController(IUserService _userService, IRightService _rightService, IDepService _depService,IRoleService _roleService)
+        public IndexController(IUserService _userService, IRightService _rightService, IDepService _depService,
+            IRoleService _roleService, IUserBLL _userBLL)
         {
             userService = _userService;
             rightService = _rightService;
             depService = _depService;
             roleService = _roleService;
+            userBLL = _userBLL;
         }
         protected override void Dispose(bool disposing)
         {
@@ -55,7 +58,7 @@ namespace L.S.Home.Controllers
             if (VerifyUser(model, out verifiedUser))
             {
                 var homePath = "";
-                if (UserBLL.SignIn(verifiedUser,out homePath))
+                if (userBLL.SignIn(verifiedUser,out homePath))
                 {
                     string url = Url.Action("index","sysuser","admin");//再次取一个硬代码规定的的主页
                     if (!string.IsNullOrEmpty(homePath)) { url = homePath; }//其次取数据库内为角色设置的默认主页
@@ -74,7 +77,7 @@ namespace L.S.Home.Controllers
         }
         public ActionResult SignOut()
         {
-            UserBLL.SignOut();
+            userBLL.SignOut();
             return RedirectToAction("Login");
         }
         public ActionResult NoPermission()
@@ -183,7 +186,7 @@ namespace L.S.Home.Controllers
         #region 获取角色树
         public ActionResult GetRoleTree(string selectNodeID ="",string thisid="")
         {
-            var cuser = CurrentUser.GetCurrentUser();
+            var cuser = userBLL.GetCurrentUser();
             Expression<Func<SysRole, bool>> exp = sr => !sr.IsDel && sr.IsAvailable /*&& sr.RoleIDPath.Contains("/" + cuser.RoleID)*/;
             var roles = roleService.GetList(exp);
             var level1 = roles.FirstOrDefault(d => d.Parent == null);            

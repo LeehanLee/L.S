@@ -13,6 +13,7 @@ namespace L.S.Service
 {
     public class UserService : BaseService<SysUser>,IUserService
     {
+        public UserService(DbContext context) : base(context) { }
         public int UsersDelete(string ids, out string msg)
         {
             msg = "";

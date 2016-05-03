@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BLL\IRoleBLL.cs" />
+    <Compile Include="BLL\IUserBLL.cs" />
     <Compile Include="IBaseService.cs" />
     <Compile Include="IDepService.cs" />
     <Compile Include="IRightService.cs" />

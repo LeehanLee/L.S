@@ -11,8 +11,8 @@ using L.S.Model.DatabaseModel.Entity;
 using L.S.Interface;
 using L.S.Home.Models;
 using L.Study.Common;
-using L.S.Home.BLL;
 using Autofac;
+using L.S.Interface.BLL;
 
 namespace L.S.Home.Areas.admin.Controllers
 {
@@ -20,12 +20,13 @@ namespace L.S.Home.Areas.admin.Controllers
     public class SysRoleController : LsBaseController
     {
         private IRoleService roleService;
-        private RoleBLL roleBll;
+        private IRoleBLL roleBll;
 
-        public SysRoleController(IRoleService _roleService)
+        public SysRoleController(IRoleService _roleService,IRoleBLL _roleBLL)
         {
             roleService = _roleService;
-            roleBll = IocConfig.Container.Resolve<RoleBLL>();
+            //roleBll = IocConfig.Container.Resolve<RoleBLL>();
+            roleBll = _roleBLL;
         }
 
         [LSAuthorize("RolesManage", "SysManage", "RolesManage")]
