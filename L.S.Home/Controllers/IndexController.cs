@@ -35,14 +35,6 @@ namespace L.S.Home.Controllers
             roleService = _roleService;
             userBLL = _userBLL;
         }
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                userService.Dispose();
-            }
-            base.Dispose(disposing);
-        }
 
         #region 页面与页面中可访问的接口
 

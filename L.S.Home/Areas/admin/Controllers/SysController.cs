@@ -12,14 +12,6 @@ namespace L.S.Home.Areas.admin.Controllers
         {
             userService = _userService;
         }
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                userService.Dispose();
-            }
-            base.Dispose(disposing);
-        }
 
         [LSAuthorize("SysManage")]
         public ActionResult Index()

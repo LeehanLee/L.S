@@ -56,7 +56,7 @@
             <span class="treetext" id="SysRolesName">普通用户</span>
             <a class="btn" onclick="LS.admin.myfn.dialogeopenroletree({id:'SysRolesID',name:'SysRolesName',toggledisplay:true,toggleselect:true},'@Url.Action("GetRoleTree", "Index", new { Area = "" })');">请选择</a>
             <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
-            <input class="treevalue" type="hidden" name="SysRolesID" id="SysRolesID" value="normaluser" validate min="2" max="36" msg="请选择角色"/>
+            <input class="treevalue" type="hidden" name="SysRolesID" id="SysRolesID" value="normaluser" validate min="2" max="360" msg="请选择角色"/>
             <span class="ls-msg help-inline"></span>
         </div>
     </div>

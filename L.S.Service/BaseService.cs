@@ -26,43 +26,42 @@ namespace L.S.Service
         }
 
         #region 针对数据库实体集LSContext中表的通用增删改查的泛型实现
-        public T Add(T t)
+        public virtual T Add(T t)
         {
-
             return context.Set<T>().Add(t);
 
         }
-        public IEnumerable<T> AddRange(List<T> list)
+        public virtual IEnumerable<T> AddRange(List<T> list)
         {
             return context.Set<T>().AddRange(list);
         }
-        public T Remove(T t)
+        public virtual T Remove(T t)
         {
             return context.Set<T>().Remove(t);
         }
-        public IEnumerable<T> RemoveRange(List<T> list)
+        public virtual IEnumerable<T> RemoveRange(List<T> list)
         {
             return context.Set<T>().RemoveRange(list);
 
         }
-        public void Update(T entity)
+        public virtual void Update(T entity)
         {
             context.Set<T>().Attach(entity);
             context.Entry<T>(entity).State = EntityState.Modified;
         }
-        public bool Exist(Expression<Func<T, bool>> exp)
+        public virtual bool Exist(Expression<Func<T, bool>> exp)
         {
             var result = context.Set<T>().Any(exp);
             string result_str = result.ToString();
             return result;
         }
-        public List<T> GetList(Expression<Func<T, bool>> exp)
+        public virtual List<T> GetList(Expression<Func<T, bool>> exp)
         {
             var result = context.Set<T>().Where(exp);
             var result_list = result.ToList();
             return result_list;
         }
-        public List<T> GetListForPaging(Expression<Func<T, bool>> exp, int page, int pagesize, out int totalcount, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy)
+        public virtual List<T> GetListForPaging(Expression<Func<T, bool>> exp, int page, int pagesize, out int totalcount, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy)
         {
             if (page <= 0 || pagesize <= 0) { page = 1; pagesize = 10; }
             totalcount = 0;
@@ -73,7 +72,7 @@ namespace L.S.Service
             var result_list = result.ToList();
             return result_list;
         }
-        public IPagedList<T> GetPagedList(Expression<Func<T, bool>> exp, int page, int pagesize, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy)
+        public virtual IPagedList<T> GetPagedList(Expression<Func<T, bool>> exp, int page, int pagesize, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy)
         {
             if (page <= 0 || pagesize <= 0) { page = 1; pagesize = 10; }
 
@@ -81,19 +80,19 @@ namespace L.S.Service
             var result = orderBy(iquerableresult).ToPagedList<T>(page, pagesize);
             return result;
         }
-        public T Find(Expression<Func<T, bool>> exp)
+        public virtual T Find(Expression<Func<T, bool>> exp)
         {
             var result = context.Set<T>().FirstOrDefault(exp);
             return result;
         }
-        public T Find(string id)
+        public virtual T Find(string id)
         {
 
             var result = context.Set<T>().Find(id);
             return result;
 
         }
-        public List<T> GetListWithSql(string sql, out string msg, params SqlParameter[] param)
+        public virtual List<T> GetListWithSql(string sql, out string msg, params SqlParameter[] param)
         {
             msg = string.Empty;
             try
@@ -107,7 +106,7 @@ namespace L.S.Service
                 return null;
             }
         }
-        public int ExecuteSql(string sql, out string msg, params SqlParameter[] param)
+        public virtual int ExecuteSql(string sql, out string msg, params SqlParameter[] param)
         {
             msg = string.Empty;
             try
@@ -121,7 +120,7 @@ namespace L.S.Service
                 return 0;
             }
         }
-        public int SaveChanges(out string msg)
+        public virtual int SaveChanges(out string msg)
         {
             msg = string.Empty;
             try

@@ -185,17 +185,6 @@ namespace L.S.Home.Areas.admin.Controllers
             {
                 return Json(new AjaxResult() { success = false, msg = didnotchoosedata });
             }
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                depService.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        
+        }        
     }
 }

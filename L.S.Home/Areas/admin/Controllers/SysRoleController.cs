@@ -78,9 +78,9 @@ namespace L.S.Home.Areas.admin.Controllers
                     }
                 }
                 roleService.Add(sysRole);
-                if (roleService.SaveChanges(out msg) > 0)
-                {
-                    if (roleBll.SetRoleRights(sysRole.ID, SysRightsID, out msg))
+                //if (roleService.SaveChanges(out msg) > 0)//这里不提交，把提交放到下面的SetRoleRights方法（方法里有调用SaveChange）里看是否可行，事实证明是可行的
+                //{
+                if (roleBll.SetRoleRights(sysRole.ID, SysRightsID, out msg))
                     {
                         return Json(new AjaxResult() { success = true, msg = updateSuccess, url = Url.Action("index", "sysrole", new { area = "admin" }), moremsg = msg });
                     }
@@ -88,11 +88,11 @@ namespace L.S.Home.Areas.admin.Controllers
                     {
                         return Json(new AjaxResult() { success = false, msg = insertFailure, moremsg = msg });
                     }
-                }
-                else
-                {
-                    return Json(new AjaxResult() { success = false, msg = insertFailure, moremsg = msg });
-                }
+                //}
+                //else
+                //{
+                //    return Json(new AjaxResult() { success = false, msg = insertFailure, moremsg = msg });
+                //}
             }
             else
             {
@@ -252,15 +252,6 @@ namespace L.S.Home.Areas.admin.Controllers
             {
                 return Json(new AjaxResult() { success = false, msg = didnotchoosedata });
             }
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                roleService.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

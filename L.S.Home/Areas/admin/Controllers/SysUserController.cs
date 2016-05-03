@@ -15,6 +15,7 @@ namespace L.S.Home.Areas.admin.Controllers
     
     public class SysUserController : LsBaseController
     {
+        //userService中有DbContext，然而都是autofac注入的，似乎不需要在每一个controller里写dispose方法来调用BaseService的dispose方法，因为我怎么看，也不是每刷新一下页面sqlserver的实时连接数就加1
         public IUserService userService;
         public IDepService depService;
         private IRoleBLL roleBll;
@@ -24,14 +25,6 @@ namespace L.S.Home.Areas.admin.Controllers
             depService = _depService;
             //roleBll = IocConfig.Container.Resolve<RoleBLL>();
             roleBll = _roleBLL;
-        }
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                userService.Dispose();
-            }
-            base.Dispose(disposing);
         }
 
         #region 用户管理

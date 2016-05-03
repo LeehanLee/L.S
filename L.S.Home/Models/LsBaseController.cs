@@ -10,8 +10,10 @@ namespace L.S.Home.Models
     using Model.DomainModel;
     using L.Study.Common.Config;
     using Model.DatabaseModel.Entity;
+    using Service;
+
     public class LsBaseController : Controller
-    {
+    {        
         public CurrentUser cuser { get; set; }
         public int page = 1;
         public int pageSize = 10;

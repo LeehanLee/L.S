@@ -26,9 +26,9 @@ namespace L.S.Home.Models
         {
             var ContainerBuilder = new ContainerBuilder();
             ContainerBuilder.RegisterControllers(typeof(MvcApplication).Assembly);
-            ContainerBuilder.RegisterType(typeof(LSContext)).As(typeof(DbContext)).InstancePerLifetimeScope();            
+            ContainerBuilder.RegisterType(typeof(LSContext)).As(typeof(DbContext)).InstancePerLifetimeScope();//所谓的一个生命周期中是同一个DbContext的实例，
 
-            //ContainerBuilder.RegisterType<RoleBLL>();//原来直接把RoleBll写在web层，没有用接口与实现分离所以这里要这样注册
+            //ContainerBuilder.RegisterType<RoleBLL>();//原来直接把RoleBll写在web层，没有用接口与实现分离所以这里要这样注册；现在是分离了接口与实现，映射关系写到配置文件里去了
             //builder.Register(us => new UserService()).As<IUserService>();
             //builder.Register(us => new DepService()).As<IDepService>();
             //builder.Register(us => new RoleService()).As<IRoleService>();
