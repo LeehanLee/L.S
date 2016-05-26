@@ -1,5 +1,6 @@
 ﻿using L.S.Interface;
 using L.S.Model.DatabaseModel.Entity;
+using L.Study.Common.Cache;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -15,7 +16,7 @@ namespace L.S.Service
     /// </summary>
     public class RightService: BaseService<SysRight>, IRightService
     {
-        public RightService(DbContext context) : base(context) { }
+        //public RightService(DbContext context) : base(context) { }
         public int RightsDelete(string ids, out string msg)
         {
             msg = "";
@@ -60,6 +61,16 @@ namespace L.S.Service
                 return 0;
             }
 
+        }
+
+        public IList<SysRight> GetAllSysRights()
+        {
+            //var list = CacheMaker.IISCache.GetOrSetThenGet("all_sys_right", () =>
+            //{                
+                var result = GetList(r => r.IsAvailable && !r.IsDel);                
+                return result;
+            //});
+            //return list;
         }
 
     }

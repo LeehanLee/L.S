@@ -1,0 +1,300 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>    
+    <title>@ViewBag.Title</title>
+    <meta charset=utf-8>
+
+    <meta name="robots" content="index, follow">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <!-- CSS begin -->
+
+
+    <link rel="stylesheet" type="text/css" href="/demo/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/demo/css/skeleton.css">
+
+    <link rel="stylesheet" type="text/css" href="/demo/css/jquery.fancybox-1.3.4.css">
+    <link rel="stylesheet" href="/demo/css/switcher/style.css">
+    <link rel="stylesheet" href="/demo/css/layout/wide.css" id="layout">
+    <link rel="stylesheet" href="/demo/css/colors/yellow.css" id="colors">
+
+    <script type="text/javascript" src="/demo/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="/demo/js/jquery.easing.1.3.js"></script>
+    <script type="text/javascript" src="/demo/js/superfish.js"></script>
+    <script type="text/javascript" src="/demo/js/jquery-ui.min.js"></script>
+
+    <script type="text/javascript" src="/demo/js/jquery.jcarousel.js"></script>
+    <script type="text/javascript" src="/demo/js/jquery.fancybox-1.3.4.pack.js"></script>
+    <script type="text/javascript" src="/demo/js/jQuery.BlackAndWhite.min.js"></script>
+    <script type="text/javascript" src="/demo/js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="/demo/js/jflickrfeed.min.js"></script>
+    <script type="text/javascript" src="/demo/js/jquery.quicksand.js"></script>
+    <script type="text/javascript" src="/demo/js/main.js"></script>
+    <script type="text/javascript" src="/demo/js/jquery-cookie.js"></script>
+    <script src="/demo/js/styleswitcher.js"></script>
+</head>
+<body>
+    <div id="wrap" class="boxed">
+        <div class="grey-bg">
+            <header id="header">
+                <div class="container clearfix">
+                    <div class="sixteen columns">
+                        <div class="header-container m-top-30 clearfix">
+
+                            <div class="header-logo-container ">
+                                <div class="logo-container">
+                                    <a href="index.html" class="logo" rel="home" title="Home">
+                                        <img src="/demo/images/logo-retina.png" alt="solana">
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="header-menu-container right">
+                                <!-- TOP MENU -->
+                                <nav id="main-nav">
+                                    <ul class="sf-menu clearfix">
+                                        <li>
+                                            <a href="index.html">Home</a>
+                                            <ul>
+                                                <li><a href="index2.html">Home 2</a></li>
+                                                <li><a href="index3.html">Home 3</a></li>
+                                                <li><a href="index4.html">Home 4</a></li>
+                                                <li><a href="index5.html">Home 5</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="elements.html">Features</a>
+                                            <ul>
+                                                <li><a href="about-us.html">About Us</a></li>
+                                                <li><a href="services.html">Services</a></li>
+                                                <li><a href="elements.html">Elements</a></li>
+                                                <li><a href="icons.html">Icons</a></li>
+                                                <li><a href="pricing-tables.html">Pricing tables</a></li>
+                                                <li><a href="404.html">404 Error</a></li>
+
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="portfolio.html">Portfolio</a>
+                                            <ul>
+                                                <li><a href="portfolio.html">2 column</a></li>
+                                                <li><a href="portfolio3.html">3 column</a></li>
+                                                <li><a href="portfolio4.html">4 column</a></li>
+                                                <li><a href="portfolio-single.html">Portfolio single</a></li>
+                                                <li>
+                                                    <a href="#">3D level menu</a>
+                                                    <ul>
+                                                        <li><a href="#">Menu item</a></li>
+                                                        <li><a href="#">Menu item</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="current">
+                                            <a href="blog.html">Blog</a>
+                                            <ul>
+                                                <li><a href="blog-single.html">Blog-single</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="contact.html">Contact</a></li>
+
+                                    </ul>
+                                </nav>
+
+                                <div class="search-container ">
+                                    <form action="#" class="search-form">
+                                        <input type="text" name="search-form-txt" class="search-text">
+                                        <input type="submit" value="" class="search-submit" name="submit">
+                                    </form>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </header>
+
+            <!-- PAGE TITLE -->
+            <div class="container m-bot-35 clearfix">
+                <div class="sixteen columns">
+                    <div class="page-title-container clearfix">
+                        <h1 class="page-title">BLOG</h1>
+                    </div>
+                </div>
+            </div>
+
+        </div>	<!-- Grey bg end -->
+        @RenderBody()
+        <div class="dark-grey-bg">
+            <div class="container m-bot-20 clearfix">
+                <div class="sixteen columns">
+                    <div class="newsletter-container clearfix">
+                        <div class="nl-img-container">
+                            <img src="/demo/images/icon-mail.png" alt="mail">
+                        </div>
+                        <div class="nl-text-container clearfix">
+                            <div class="caption">
+                                <span class="bold">NEWS</span> LETTER
+                            </div>
+                            <div class="nl-text">Stay up-to date with the latest news and other stuffs, Sign Up today!</div>
+                            <div class="nl-form-container">
+                                <form class="newsletterform" method="post" action="#">
+                                    <input type="text" onblur="if(this.value=='')this.value='Your email here...';" onfocus="if(this.value=='Your email here...')this.value='';" value="Your email here..." name="email"><button class="nl-button">SIGN UP</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container clearfix">
+            <div class="sixteen columns m-bot-20">
+                <ul class="our-clients-container clearfix ">
+                    <li class="">
+                        <a href="">
+                            <div class="bw-wrapper">
+                                <img src="/demo/images/logo1.png" alt="client">
+                            </div>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="">
+                            <div class="bw-wrapper">
+                                <img src="/demo/images/logo2.png" alt="client">
+                            </div>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="">
+                            <div class="bw-wrapper">
+                                <img src="/demo/images/logo3.png" alt="client">
+                            </div>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="">
+                            <div class="bw-wrapper">
+                                <img src="/demo/images/logo4.png" alt="client">
+                            </div>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="">
+                            <div class="bw-wrapper">
+                                <img src="/demo/images/logo5.png" alt="client">
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <footer>
+            <div class="footer-content-bg">
+                <div class="container clearfix">
+                    <div class="one-third-footer-spec column omega">
+
+                        <div class="logo-footer-container">
+                            <a href="index.html" class="logo" rel="home" title="Home">
+                                <img src="/demo/images/logo-retina.png" alt="solana">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="two-thirds-footer-spec column alpha">
+
+
+                        <p class="footer-content-container m-none">WE PROVIDE AWESOME DIGITAL <strong>SERVICES</strong></p>
+
+                    </div>
+                </div>
+                <div class="container clearfix">
+                    <div class="one-third column">
+                        <div class="footer-social-text-container">
+                            <p class="title-font-24">SAY <strong>HELLO</strong></p>
+                            <p class="title-font-12">WE'D LOVE HEARING FROM YOU</p>
+                        </div>
+                        <div class="footer-social-links-container">
+                            <ul class="social-links clearfix">
+                                <li><a class="facebook-link" target="_blank" title="Facebook" href="#item/solana-responsive-html5-template/5590059?ref=abcgomel"></a></li>
+                                <li><a class="skype-link" target="_blank" title="Skype" href="#item/solana-responsive-html5-template/5590059?ref=abcgomel"></a></li>
+                                <li><a class="twitter-link" target="_blank" title="Twitter" href="#item/solana-responsive-html5-template/5590059?ref=abcgomel"></a></li>
+                                <li><a class="flickr-link" target="_blank" title="Flickr" href="#item/solana-responsive-html5-template/5590059?ref=abcgomel"></a></li>
+                                <li><a class="vimeo-link" target="_blank" title="Vimeo" href="#item/solana-responsive-html5-template/5590059?ref=abcgomel"></a></li>
+                                <li><a class="linkedin-link" target="_blank" title="linkedin" href="#item/solana-responsive-html5-template/5590059?ref=abcgomel"></a></li>
+                                <li><a class="pintrest-link" target="_blank" title="pintrest" href="#item/solana-responsive-html5-template/5590059?ref=abcgomel"></a></li>
+                                <li><a class="googleplus-link" target="_blank" title="googleplus" href="#item/solana-responsive-html5-template/5590059?ref=abcgomel"></a></li>
+                            </ul>
+                        </div>
+
+
+                    </div>
+                    <div class="one-third column ">
+                        <h3 class="caption footer-block">LATEST <span class="bold">POST</span></h3>
+                        <ul class="latest-post">
+                            <li class="standart-post">
+                                <h4 class="title-post-footer"><a href="blog-single.html">Donec id elit</a></h4>
+                                <h4 class="date-post-footer">July 10, 2013</h4>
+                            </li>
+                            <li class="image-post">
+                                <h4 class="title-post-footer"><a href="blog-single.html">Donec id elit</a></h4>
+                                <h4 class="date-post-footer">July 10, 2013</h4>
+                            </li>
+                            <li class="video-post">
+                                <h4 class="title-post-footer"><a href="blog-single.html">Donec id elit</a></h4>
+                                <h4 class="date-post-footer">July 10, 2013</h4>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="one-third column ">
+                        <h3 class="caption footer-block">联系 <span class="bold">信息</span></h3>
+                        <ul class="footer-contact-info">
+                            <li class="footer-loc">
+                                Corporation, 123 Some Ave, Suite 700,  New York
+                            </li>
+                            <li class="footer-phone">
+                                (123) 456-7890<br>(123) 987-6540
+                            </li>
+                            <li class="footer-mail">
+                                <a href="#item/solana-responsive-html5-template/5590059?ref=abcgomel">email@felius.com</a><br>
+                                <a href="#item/solana-responsive-html5-template/5590059?ref=abcgomel">email@optimas.com</a>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+            <div class="footer-copyright-bg">
+                <div class="container ">
+                    <div class="sixteen columns clearfix">
+                        <div class="footer-menu-container">
+                            <nav class="clearfix" id="footer-nav">
+                                <ul class="footer-menu">
+                                    <li><a href="index.html">Home</a></li>
+                                    <li><a href="elements.html">Features</a></li>
+                                    <li><a href="portfolio.html">Portfolio</a></li>
+                                    <li><a href="blog.html">Blog</a></li>
+                                    <li><a href="contact.html">Contact</a></li>
+                                    <li><a href="#item/solana-responsive-html5-template/5590059?ref=abcgomel">Purchase</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <div class="footer-copyright-container right-text">
+                            Copyright &copy; 2016.Company name All rights reserved.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </footer>
+        <p id="back-top">
+            <a href="#top" title="Back to Top"><span></span></a>
+        </p>
+    </div>        
+        <div class="switcher"></div>
+</body>
+</html>

@@ -5,7 +5,7 @@
 
 <div>
     <ul class="breadcrumb admin-bread-ul">
-        <li><a href="@Url.Action("Index","Sys")">系统管理</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("Index","SysUser")">系统管理</a> <span class="divider">/</span></li>
         <li><a href="@Url.Action("Index","SysUser")">用户管理</a> <span class="divider">/</span></li>
         <li class="active">用户添加</li>
     </ul>
@@ -44,7 +44,7 @@
         <label class="control-label">部门</label>
         <div class="controls">
             <span class="treetext" id="SysDepName"></span>
-            <a class="btn" onclick="LS.admin.myfn.dialogeopendeptree({id:'SysDepID',name:'SysDepName'},'@Url.Action("GetDepTree", "Index", new { Area = "" })');">请选择</a>
+            <a class="btn" onclick="LS.admin.myfn.dialogeopendeptree({id:'SysDepID',name:'SysDepName'},'@Url.Action("GetDepTree", "Async", new { Area = "" })');">请选择</a>
             <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
             <input class="treevalue" type="hidden" name="SysDepID" id="SysDepID" validate min="2" max="36" msg="请选择部门"/>
             <span class="ls-msg help-inline"></span>
@@ -54,7 +54,7 @@
         <label class="control-label">角色</label>
         <div class="controls">
             <span class="treetext" id="SysRolesName">普通用户</span>
-            <a class="btn" onclick="LS.admin.myfn.dialogeopenroletree({id:'SysRolesID',name:'SysRolesName',toggledisplay:true,toggleselect:true},'@Url.Action("GetRoleTree", "Index", new { Area = "" })');">请选择</a>
+            <a class="btn" onclick="LS.admin.myfn.dialogeopenroletree({id:'SysRolesID',name:'SysRolesName',toggledisplay:true,toggleselect:true},'@Url.Action("GetRoleTree", "Async", new { Area = "" })');">请选择</a>
             <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
             <input class="treevalue" type="hidden" name="SysRolesID" id="SysRolesID" value="normaluser" validate min="2" max="360" msg="请选择角色"/>
             <span class="ls-msg help-inline"></span>

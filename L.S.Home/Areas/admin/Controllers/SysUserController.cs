@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using L.S.Common;
 using L.S.Home.Models;
 using L.S.Interface;
 using L.S.Interface.BLL;

@@ -46,6 +46,7 @@
     <Compile Include="BLL\IUserBLL.cs" />
     <Compile Include="IBaseService.cs" />
     <Compile Include="IDepService.cs" />
+    <Compile Include="IInfoService.cs" />
     <Compile Include="IRightService.cs" />
     <Compile Include="IRoleRightService.cs" />
     <Compile Include="IRoleService.cs" />

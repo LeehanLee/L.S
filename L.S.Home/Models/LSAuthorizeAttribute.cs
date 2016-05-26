@@ -12,22 +12,31 @@ using System.Web.Mvc;
 using System.Linq;
 using L.S.Model.DomainModel;
 using L.S.BLL.SysManage;
+using L.S.Interface;
+using Autofac;
 
 namespace L.S.Home.Models
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public class LSAuthorizeAttribute : FilterAttribute, IAuthorizationFilter
     {
+        IRightService rightService;
         public LSAuthorizeAttribute()
         {
             
-        }
+        }        
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rightCode">当前权限ID</param>
+        /// <param name="currentTopRightCode">当前顶部选中权限ID</param>
+        /// <param name="currentLeftRightCode">当前右侧选中权限ID</param>
         public LSAuthorizeAttribute(string rightCode, string currentTopRightCode = "", string currentLeftRightCode = "")
         {
             RightCode = rightCode;
             CurrentActiveTopMenuCode = currentTopRightCode;
-            CurrentActiveLeftMenuCode = currentLeftRightCode;
+            CurrentActiveLeftMenuCode = currentLeftRightCode;            
         }
 
         /// <summary>
@@ -56,8 +65,8 @@ namespace L.S.Home.Models
             var request = filterContext.RequestContext.HttpContext.Request;
             string url = string.Empty;
             if (IsSignIn(request, out cuser))
-            {
-                IList<SysRight> allRightList = CacheData.AllSysRights;
+            {                
+                IList<SysRight> allRightList = new SysRightBLL().GetAllSysRights();
                 ControllerBase c = filterContext.Controller;
                 c.ViewBag.cuser = cuser;
                 c.ViewBag.RightList = allRightList;
@@ -82,7 +91,7 @@ namespace L.S.Home.Models
             }
             else
             {
-                url =string.IsNullOrEmpty(url)? Url.Action("login", "index",new { area = "", returnurl = request.Url.ToString() }):url;
+                url =string.IsNullOrEmpty(url)? Url.Action("index", "signin", new { area = "", returnurl = request.Url.ToString() }):url;
                 HttpContext.Current.Response.Redirect(url, true);
                 return;
                 //filterContext.Result = new RedirectResult(url);

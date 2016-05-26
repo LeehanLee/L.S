@@ -13,6 +13,7 @@ using L.S.Home.Models;
 using L.Study.Common;
 using Autofac;
 using L.S.Interface.BLL;
+using L.S.Common;
 
 namespace L.S.Home.Areas.admin.Controllers
 {
@@ -54,8 +55,8 @@ namespace L.S.Home.Areas.admin.Controllers
         public ActionResult Create([Bind(Include = "IsAvailable,Name,ParentID,ParentName,DefaultHomePath")] SysRole sysRole,string SysRightsID)
         {
             sysRole.ID = IdentityCreator.NextIdentity;
-            sysRole.AddBy = "before login";
-            sysRole.AddByName = "before login";
+            sysRole.AddBy = cuser.UserID;
+            sysRole.AddByName = cuser.LoginName;
             sysRole.AddDate = DateTime.Now;
             sysRole.IsDel = false;
             var parentRole = roleService.Find(sysRole.ParentID);
@@ -78,21 +79,23 @@ namespace L.S.Home.Areas.admin.Controllers
                     }
                 }
                 roleService.Add(sysRole);
-                //if (roleService.SaveChanges(out msg) > 0)//这里不提交，把提交放到下面的SetRoleRights方法（方法里有调用SaveChange）里看是否可行，事实证明是可行的
-                //{
-                if (roleBll.SetRoleRights(sysRole.ID, SysRightsID, out msg))
+                if (roleService.SaveChanges(out msg) > 0)//这里不提交，把提交放到下面的SetRoleRights方法（方法里有调用SaveChange）里看是否可行，事实证明是可行的，然并卵！
+                {
+                    if (roleBll.SetRoleRights(sysRole.ID, SysRightsID, out msg))
                     {
-                        return Json(new AjaxResult() { success = true, msg = updateSuccess, url = Url.Action("index", "sysrole", new { area = "admin" }), moremsg = msg });
+                        return Json(new AjaxResult() { success = true, msg = insertFailure, url = Url.Action("index", "sysrole", new { area = "admin" }), moremsg = msg });
                     }
                     else
                     {
+                        roleService.Remove(sysRole);
+                        roleService.SaveChanges(out msg);//妈的，要是SetRoleRights执行失败了，这里还要手动删除一下刚才插入的SysRole记录。你问我为什么不能放在一个事务里插入SysRole和此角色的权限？因为角色权限有一个字段作为外键关联的SysRole的ID！！
                         return Json(new AjaxResult() { success = false, msg = insertFailure, moremsg = msg });
                     }
-                //}
-                //else
-                //{
-                //    return Json(new AjaxResult() { success = false, msg = insertFailure, moremsg = msg });
-                //}
+                }
+                else
+                {
+                    return Json(new AjaxResult() { success = false, msg = insertFailure, moremsg = msg });
+                }
             }
             else
             {
@@ -131,20 +134,21 @@ namespace L.S.Home.Areas.admin.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,AddBy,AddByName,AddDate,IsAvailable,Name,ParentID,ParentName,DefaultHomePath")] SysRole sysRole,string SysRightsID)
         {
-            sysRole.UpdateBy = "before login";
-            sysRole.UpdateByName = "before login";
-            sysRole.UpdateDate = DateTime.Now;
-            sysRole.IsDel = false;
-            if (ModelState.IsValid)
+            if (sysRole.ID != "superadmin")
             {
+                #region 除系统内置的超级管理员，其他角色可以修改
+                sysRole.UpdateBy = cuser.UserID;
+                sysRole.UpdateByName = cuser.LoginName;
+                sysRole.UpdateDate = DateTime.Now;
+                sysRole.IsDel = false;
                 var parentRole = roleService.Find(sysRole.ParentID);
-                if (parentRole != null|| sysRole.ID== "superadmin")
+                if (parentRole != null || sysRole.ID == "superadmin")
                 {
                     if (sysRole.ID != "superadmin")
                     {
                         var parentRolesRightIDList = parentRole.SysRoleRights.Select(srr => srr.RightID).Distinct().ToList();
                         var roleRightIDList = SysRightsID.Split(',');
-                        if(roleRightIDList.Any(rid => !parentRolesRightIDList.Contains(rid)))//如果所选权限里有一个是上级角色所没有的，就表示所选的上级角色权限太小了，将不允许保存
+                        if (roleRightIDList.Any(rid => !parentRolesRightIDList.Contains(rid)))//如果所选权限里有一个是上级角色所没有的，就表示所选的上级角色权限太小了，将不允许保存
                         {
                             return Json(new AjaxResult() { success = false, msg = updateFailure + "，所选上级角色的权限小于为此角色所选择的权限", moremsg = msg });
                         }
@@ -157,8 +161,8 @@ namespace L.S.Home.Areas.admin.Controllers
                         }
                     }
                     else
-                    {                        
-                        sysRole.RoleIDPath =  sysRole.ID;
+                    {
+                        sysRole.RoleIDPath = sysRole.ID;
                         sysRole.RoleNamePath = sysRole.Name;
                         sysRole.Level = 0;
                     }
@@ -182,9 +186,13 @@ namespace L.S.Home.Areas.admin.Controllers
                 else
                 {
                     return Json(new AjaxResult() { success = false, msg = "未找到上级角色，保存失败", moremsg = msg });
-                }
+                } 
+                #endregion
             }
-            return Json(new AjaxResult() { success = false, msg = updateFailure, moremsg = "数据验证失败" });
+            else
+            {
+                return Json(new AjaxResult() { success = false, msg = "系统内置超级管理员不允许修改" });
+            }
         }
 
         [LSAuthorize("RoleDelete", "SysManage", "RolesManage")]

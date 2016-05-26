@@ -25,6 +25,8 @@ namespace L.S.Service
     {
         View=0,
         Delete,
+        Available,
+        UnAvailable,
     }
     public class StaticResourse
     {

@@ -11,7 +11,7 @@ namespace L.S.Service
 {
     public class UserRoleService:BaseService<SysUserRole>, IUserRoleService
     {
-        public UserRoleService(DbContext context) : base(context) { }
+        //public UserRoleService(DbContext context) : base(context) { }
 
     }
 }

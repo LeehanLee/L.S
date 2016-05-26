@@ -11,7 +11,8 @@ namespace L.S.Service
 {
     public class DepService : BaseService<SysDep>, IDepService
     {
-        public DepService(DbContext context) : base(context) { }
+        //public DepService(DbContext context) : base(context) { }
+        
         public int DepsDelete(string ids,out string msg)
         {
             msg = "";

@@ -10,5 +10,6 @@ namespace L.S.Interface
     public interface IRightService: IBaseService<SysRight>
     {
         int RightsDelete(string ids, out string msg);
+        IList<SysRight> GetAllSysRights();
     }
 }

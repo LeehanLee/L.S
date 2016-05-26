@@ -52,6 +52,7 @@
     <Compile Include="DatabaseModel\Context\LSInitializer.cs" />
     <Compile Include="DatabaseModel\Entity\BaseEntity.cs" />
     <Compile Include="DatabaseModel\Entity\Identifiable.cs" />
+    <Compile Include="DatabaseModel\Entity\Info.cs" />
     <Compile Include="DatabaseModel\Entity\NamedEntity.cs" />
     <Compile Include="DatabaseModel\Entity\SysDep.cs" />
     <Compile Include="DatabaseModel\Entity\SysRight.cs" />
@@ -68,9 +69,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\L.Study.Common\L.Study.Common.csproj">
+    <ProjectReference Include="..\L.Study.Common\L.S.Common.csproj">
       <Project>{9c7fea9a-57b4-407c-887c-5e00cecc782f}</Project>
-      <Name>L.Study.Common</Name>
+      <Name>L.S.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

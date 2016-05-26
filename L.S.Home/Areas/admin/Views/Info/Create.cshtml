@@ -1,0 +1,142 @@
+﻿@model SysDep
+@{
+    ViewBag.Title = "资讯添加";
+}
+<script src="/plugin/ueditor/ueditor.config.js"></script>
+<script src="/plugin/ueditor/ueditor.all.min.js"></script>
+<script src="/plugin/ueditor/lang/zh-cn/zh-cn.js"></script>
+
+<link href="/uploadify/uploadify.css" rel="stylesheet" />
+<script src="/uploadify/jquery.uploadify.min.js"></script>
+<script>
+        $(function () {
+            var ue = UE.getEditor('Content');
+
+            $("#ImgPath_file").uploadify({
+                height: 30,
+                swf: '/uploadify/uploadify.swf',
+                formData: { 'fileType': 'InfoImg' },
+                uploader: '/Async/UploadFile',
+                buttonText: '选择图片',
+                fileTypeExts: '*.gif; *.jpg; *.png',
+                width: 220,
+                'onUploadSuccess': function (file, data, response) {    
+                    var filetext = $("#ImgPath").siblings(".file-name").text();
+                    if (filetext == "") { filetext += file.name; }
+                    else { filetext += "," + file.name; }
+                    $("#ImgPath").siblings(".file-name").text(filetext);
+                    var imgPathValue = $("#ImgPath").val();
+                    if (imgPathValue == "") { imgPathValue += data; }
+                    else { imgPathValue += "|" + data; }
+                    $("#ImgPath").val(imgPathValue);
+                    $("#ImgPath").siblings(".little-remind").before("<img class='info-img' src='" + data + "' />");
+
+                    $(".info-img").on("click", infoImgClick);
+                    $(".clear-file").show();
+                }
+            });
+
+            var todelete = [];
+            $(".clear-file").on("click", function () {
+                var $this = $(this);
+                var oldPathArray = $("#ImgPath").val().split("|");
+                for (var i in oldPathArray) {
+                    todelete.push(oldPathArray[i]);
+                }
+                $("#ImgPath").val("");
+                $this.siblings(".file-name").text("");
+                $this.siblings(".info-img").remove();
+                $("#ImgPathToDelete").val(todelete.join("|"));
+                $(".clear-file").hide();
+            });
+        });
+        function infoImgClick(e) {
+            var $this = $(this);
+            var tmp_img = new Image();
+            tmp_img.src = $this.attr("src");
+            if ($this.css("width") == "30px") {
+                $this.animate({ width: tmp_img.width, height: tmp_img.height }); //$this.animate({height:"auto"});
+            } else {
+                $this.animate({ width: "30px", height: "30px" });// $this.animate({ height: "30px" });
+            }
+            e.stopPropagation();
+        }
+</script>
+<style>
+    #Content{width:98%;min-height:500px;max-width:960px;}
+    .info-img{width:30px;height:30px;margin:0 10px 0 0;}
+</style>
+<div>
+    <ul class="breadcrumb admin-bread-ul">
+        <li><a href="@Url.Action("Index","Info")">资讯</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("Index","Info")">资讯列表</a> <span class="divider">/</span></li>
+        <li class="active">资讯添加</li>
+    </ul>
+</div>
+@using (Ajax.BeginForm("Create", null, new AjaxOptions() { HttpMethod = "Post", OnBegin = "LS.admin.myfn.AjaxBegin('#form0')", OnSuccess = "LS.admin.myfn.AjaxSuccess" }, new { @class = "form-horizontal admin-form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="control-group">
+            <label for="Name" class="control-label">标题</label>
+            <div class="controls">
+                <input type="text" maxlength="20" name="Name" placeholder="标题" validate min="2" max="20">
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="Name" class="control-label">图标</label>
+            <div class="controls">
+                <span class="file-name"></span>
+                <input type="hidden" name="ImgPath" id="ImgPath" validate max="2000"/>
+                <input type="file" maxlength="20" name="ImgPath_file" id="ImgPath_file" placeholder="图标" >   
+                <input type="button" class="clear-file" value="清空" style="display:none;"/>
+                <input type="hidden" name="ImgPathToDelete" id="ImgPathToDelete" />
+                <span class="ls-msg help-inline"></span>                
+                <span class="little-remind">（如果不选择图标，将会取内容里第一张图片作为此项保存）</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="Introduction" class="control-label">简介/导读</label>
+            <div class="controls">                
+                <textarea name="Introduction" maxlength="200" style="width: 38%;" id="Introduction" placeholder="简介/导读" validate max="200" cols="100" rows="5"></textarea><br />（此项如果不填写，将会从内容中取前200字符串作为简介保存）
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">内容</label>
+            <div class="controls">
+                <textarea name="Content" id="Content" validate min="1" cols="200" rows="15"></textarea>
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="Source" class="control-label">来源</label>
+            <div class="controls">
+                <input type="text" maxlength="100" name="Source" placeholder="来源" validate min="2" max="100">
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="Author" class="control-label">作者</label>
+            <div class="controls">
+                <input type="text" maxlength="10" name="Author" placeholder="标题" validate min="2" max="10">
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" name="IsAvailable" value="true" checked="checked">启用
+                </label>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit" data-loading-text="提交中" data-complete-text="完成"><i class="icon-ok icon-white"></i>保存</button>
+            <button class="btn" type="button" onclick="history.go(-1);">返回</button>
+        </div>
+    </div>
+}
+

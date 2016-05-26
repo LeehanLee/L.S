@@ -22,6 +22,8 @@
         public virtual DbSet<SysUserRole> SysUserRoles { get; set; }
         public virtual DbSet<SysRight> SysRights { get; set; }
         public virtual DbSet<SysRoleRight> SysRoleRights { get; set; }
+
+        public virtual DbSet<Info> Infoes { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();

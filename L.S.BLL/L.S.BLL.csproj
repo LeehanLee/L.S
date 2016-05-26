@@ -31,6 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -46,7 +53,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InfoBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SysManage\RightBLL.cs" />
     <Compile Include="SysManage\RoleBLL.cs" />
     <Compile Include="SysManage\UserBLL.cs" />
   </ItemGroup>
@@ -64,9 +73,9 @@
       <Project>{aa0956c1-a1f1-472f-bf46-f7a10cdeb5ea}</Project>
       <Name>L.S.Service</Name>
     </ProjectReference>
-    <ProjectReference Include="..\L.Study.Common\L.Study.Common.csproj">
+    <ProjectReference Include="..\L.Study.Common\L.S.Common.csproj">
       <Project>{9c7fea9a-57b4-407c-887c-5e00cecc782f}</Project>
-      <Name>L.Study.Common</Name>
+      <Name>L.S.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -13,7 +13,7 @@ namespace L.S.Service
     using System.Data.SqlClient;
     public class RoleService: BaseService<SysRole>, IRoleService
     {
-        public RoleService(DbContext context) : base(context) { }
+        //public RoleService(DbContext context) : base(context) { }
         public int RoleDelete(string ids,out string msg)
         {
             msg = "";

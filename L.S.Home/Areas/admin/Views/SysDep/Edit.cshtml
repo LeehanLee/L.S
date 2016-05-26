@@ -4,8 +4,8 @@
 }
 <div>
     <ul class="breadcrumb admin-bread-ul">
-        <li><a href="@Url.Action("Index","Sys")">系统管理</a> <span class="divider">/</span></li>
-        <li><a href="@Url.Action("Index","SysDeps")">部门管理</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("Index","SysUser")">系统管理</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("Index","SysDep")">部门管理</a> <span class="divider">/</span></li>
         <li class="active">部门编辑</li>
     </ul>
 </div>
@@ -32,7 +32,7 @@
             <label class="control-label">上级部门</label>
             <div class="controls">
                 <span class="treetext" id="ParentName">@Model.ParentName</span>
-                <a class="btn" onclick="LS.admin.myfn.dialogeopendeptree({id:'ParentID',name:'ParentName'},'@Url.Action("GetDepTree", "Index", new { Area = "", thisid = Model.ID })');">请选择</a>
+                <a class="btn" onclick="LS.admin.myfn.dialogeopendeptree({id:'ParentID',name:'ParentName'},'@Url.Action("GetDepTree", "Async", new { Area = "", thisid = Model.ID })');">请选择</a>
                 <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
                 <input class="treevalue" type="hidden" name="ParentID" id="ParentID" value="@Model.ParentID" validate min="2" max="36" msg="请选择上级部门"/>
                 <span class="ls-msg help-inline"></span>

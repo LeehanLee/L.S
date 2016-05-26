@@ -6,6 +6,6 @@ namespace L.S.Service
 {
     public class RoleRightService:BaseService<SysRoleRight>, IRoleRightService
     {
-        public RoleRightService(DbContext context) : base(context) { }
+        //public RoleRightService(DbContext context) : base(context) { }
     }
 }

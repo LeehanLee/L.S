@@ -6,7 +6,7 @@
 @model PagedList.IPagedList<SysUser>
 <div>
     <ul class="breadcrumb admin-bread-ul">
-        <li><a href="@Url.Action("Index","Sys")">系统管理</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("Index","SysUser")">系统管理</a> <span class="divider">/</span></li>
         <li class="active">用户管理</li>
     </ul>
 </div>
@@ -16,7 +16,7 @@
     {
         <a class="btn btn-primary" href="@r.MenuUrl" )>@r.Name</a>
     }
-    else
+    else if(r.ActionType!=null)
     {
         <a class="btn btn-primary ls-table-@r.ActionType.ToLower()" url="@r.MenuUrl" )>@r.Name</a>
     }

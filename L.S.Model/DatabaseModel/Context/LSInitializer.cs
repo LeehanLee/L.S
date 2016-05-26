@@ -16,10 +16,10 @@ namespace L.S.Model.DatabaseModel.Context
             string msg = "";
             try
             {
-                SysDep root=new SysDep() { ID = "root", Name = "LSroot", AddBy = "init", AddByName = "init", AddDate = DateTime.Now, IsDel = false, IsAvailable = true, Parent = null, DepFullIDPath = "root", DepFullNamePath = "LSroot" };
+                SysDep root = new SysDep() { ID = "root", Name = "LSroot", AddBy = "init", AddByName = "init", AddDate = DateTime.Now, IsDel = false, IsAvailable = true, Parent = null, DepFullIDPath = "root", DepFullNamePath = "LSroot" };
                 context.SysDeps.Add(root);
                 context.SaveChanges();
-                SysDep center=new SysDep { ID = "manage-center", Name = "平台中心", AddBy = "init", AddByName = "init", AddDate = DateTime.Now, IsDel = false, IsAvailable = true, ParentID = "root", ParentName="LSroot", DepFullIDPath = "root/manage-center", DepFullNamePath = "LSroot/平台中心" };
+                SysDep center = new SysDep { ID = "manage-center", Name = "平台中心", AddBy = "init", AddByName = "init", AddDate = DateTime.Now, IsDel = false, IsAvailable = true, ParentID = "root", ParentName = "LSroot", DepFullIDPath = "root/manage-center", DepFullNamePath = "LSroot/平台中心" };
                 context.SysDeps.Add(center);
                 context.SaveChanges();
                 var users = new List<SysUser>
@@ -32,11 +32,11 @@ namespace L.S.Model.DatabaseModel.Context
                 new SysUser{ID="2016012921540007",Password="123456",Name="z1551",LoginName="z1551",AddBy="init",AddByName="init",AddDate=DateTime.Now, IsDel=false,IsAvailable=true,SysDepID="root",SysDepName="LSroot",Birthday=new DateTime(1995,5,5,5,5,5)},
                 new SysUser{ID="2016012921540002",Password="123456",Name="c1551",LoginName="c1551",AddBy="init",AddByName="init",AddDate=DateTime.Now, IsDel=false,IsAvailable=true,SysDepID="root",SysDepName="LSroot",Birthday=new DateTime(1995,5,5,5,5,5)},
                 new SysUser{ID="2016012921540008",Password="123456",Name="super_man",LoginName="super_man",AddBy="init",AddByName="init",AddDate=DateTime.Now, IsDel=false,IsAvailable=true,SysDepID="root",SysDepName="LSroot"}
-                };                
+                };
                 context.SysUsers.AddRange(users);
                 context.SaveChanges();
 
-                var super = new SysRole { Name = "超级管理员",DefaultHomePath="/admin/sysuser/",Level=0, ID = "superadmin",ParentID=null,ParentName=null,RoleIDPath="superadmin",RoleNamePath= "超级管理员", AddBy = "init", AddByName = "init", AddDate = DateTime.Now, IsDel = false, IsAvailable = true, };
+                var super = new SysRole { Name = "超级管理员", DefaultHomePath = "/admin/sysuser/", Level = 0, ID = "superadmin", ParentID = null, ParentName = null, RoleIDPath = "superadmin", RoleNamePath = "超级管理员", AddBy = "init", AddByName = "init", AddDate = DateTime.Now, IsDel = false, IsAvailable = true, };
                 context.SysRoles.Add(super);
                 context.SaveChanges();
                 var admin = new SysRole { Name = "系统管理员", DefaultHomePath = "/admin/sysuser/", Level = 1, ID = "admin", ParentID = "superadmin", ParentName = "超级管理员", RoleIDPath = "superadmin/admin", RoleNamePath = "超级管理员/系统管理员", AddBy = "init", AddByName = "init", AddDate = DateTime.Now.AddSeconds(1), IsDel = false, IsAvailable = true, };
@@ -60,15 +60,19 @@ namespace L.S.Model.DatabaseModel.Context
                 userroles.ForEach(s => context.SysUserRoles.Add(s));
                 context.SaveChanges();
 
-                var SysManage=new SysRight {SortNo=0, RightIDPath= "SysManage", ID = "SysManage",RightLevel=0, Name = "系统管理", ParentID =null , ActionType = "View", MenuUrl = "/admin/sysusers", AddBy = "init", AddByName = "init", AddDate = DateTime.Now, IsAvailable = true, IsDel = false };
+                var SysManage = new SysRight { SortNo = 0, RightIDPath = "SysManage", ID = "SysManage", RightLevel = 0, Name = "系统管理", ParentID = null, ActionType = "View", MenuUrl = "/admin/sysuser", AddBy = "init", AddByName = "init", AddDate = DateTime.Now, IsAvailable = true, IsDel = false };
+                var InfoManage = new SysRight { SortNo = 1, RightIDPath = "InfoManage", ID = "InfoManage", RightLevel = 0, Name = "资讯管理", ParentID = null, ActionType = "View", MenuUrl = "/admin/info", AddBy = "init", AddByName = "init", AddDate = DateTime.Now, IsAvailable = true, IsDel = false };
                 context.SysRights.Add(SysManage);
+                context.SysRights.Add(InfoManage);
                 context.SaveChanges();
                 var rightList1 = new List<SysRight>
-                {                    
+                {
                     new SysRight {SortNo=10, RightIDPath= "SysManage/UsersManage",RightLevel=1,ID="UsersManage",Name="用户管理",ParentID="SysManage",ActionType="View",MenuUrl="/admin/sysuser",AddBy="init",AddByName="init",AddDate=DateTime.Now,IsAvailable=true,IsDel=false},
                     new SysRight {SortNo=20, RightIDPath= "SysManage/DepsManage",RightLevel=1,ID="DepsManage",Name="部门管理",ParentID="SysManage",ActionType="View",MenuUrl="/admin/sysdep",AddBy="init",AddByName="init",AddDate=DateTime.Now,IsAvailable=true,IsDel=false},
                     new SysRight {SortNo=30, RightIDPath= "SysManage/RolesManage",RightLevel=1,ID="RolesManage",Name="角色管理",ParentID="SysManage",ActionType="View",MenuUrl="/admin/sysrole",AddBy="init",AddByName="init",AddDate=DateTime.Now,IsAvailable=true,IsDel=false},
-                    new SysRight {SortNo=40, RightIDPath= "SysManage/RightsManage",RightLevel=1,ID="RightsManage",Name="权限管理",ParentID="SysManage",ActionType="View",MenuUrl="/admin/sysright",AddBy="init",AddByName="init",AddDate=DateTime.Now,IsAvailable=true,IsDel=false},                   
+                    new SysRight {SortNo=40, RightIDPath= "SysManage/RightsManage",RightLevel=1,ID="RightsManage",Name="权限管理",ParentID="SysManage",ActionType="View",MenuUrl="/admin/sysright",AddBy="init",AddByName="init",AddDate=DateTime.Now,IsAvailable=true,IsDel=false},
+
+                    new SysRight {SortNo=50, RightIDPath= "InfoManage/InfoList",RightLevel=1,ID="InfoList",Name="资讯列表",ParentID="InfoManage",ActionType="View",MenuUrl="/admin/info",AddBy="init",AddByName="init",AddDate=DateTime.Now,IsAvailable=true,IsDel=false},
                 };
                 context.SysRights.AddRange(rightList1);
                 context.SaveChanges();
@@ -97,13 +101,20 @@ namespace L.S.Model.DatabaseModel.Context
                     new SysRight {SortNo=43, RightIDPath= "SysManage/RightsManage/RightDelete",RightLevel=2, ID="RightDelete",Name="权限删除",ParentID="RightsManage",Position="ListTop",ActionType="Delete",MenuUrl="/admin/sysright/delete",AddBy="init",AddByName="init",AddDate=DateTime.Now,IsAvailable=true,IsDel=false},
                     new SysRight {SortNo=44, RightIDPath= "SysManage/RightsManage/RightAvailable",RightLevel=2, ID="RightAvailable",Name="权限启用",ParentID="RightsManage",Position="ListTop",ActionType="Available",MenuUrl="/admin/sysright/available",AddBy="init",AddByName="init",AddDate=DateTime.Now,IsAvailable=true,IsDel=false},
                     new SysRight {SortNo=45, RightIDPath= "SysManage/RightsManage/RightUnAvailable",RightLevel=2, ID="RightUnAvailable",Name="权限禁用",ParentID="RightsManage",Position="ListTop",ActionType="UnAvailable",MenuUrl="/admin/sysright/unavailable",AddBy="init",AddByName="init",AddDate=DateTime.Now,IsAvailable=true,IsDel=false},
+
+                    new SysRight {SortNo=51, RightIDPath= "InfoManage/InfoList/InfoCreate",RightLevel=2, ID="InfoCreate",Name="添加",ParentID="InfoList",Position="ListTop",ActionType="View",MenuUrl="/admin/info/create",AddBy="init",AddByName="init",AddDate=DateTime.Now,IsAvailable=true,IsDel=false},
+                    new SysRight {SortNo=52, RightIDPath= "InfoManage/InfoList/InfoEdit",RightLevel=2, ID="InfoEdit",Name="编辑",ParentID="InfoList",Position="ListRight",ActionType="View",MenuUrl="/admin/info/edit",AddBy="init",AddByName="init",AddDate=DateTime.Now,IsAvailable=true,IsDel=false},
+                    new SysRight {SortNo=53, RightIDPath= "InfoManage/InfoList/InfoDelete",RightLevel=2, ID="InfoDelete",Name="删除",ParentID="InfoList",Position="ListTop",ActionType="Delete",MenuUrl="/admin/info/delete",AddBy="init",AddByName="init",AddDate=DateTime.Now,IsAvailable=true,IsDel=false},                    
+                    new SysRight {SortNo=54, RightIDPath= "InfoManage/InfoList/InfoAvailable",RightLevel=2, ID="InfoAvailable",Name="启用",ParentID="InfoList",Position="ListTop",ActionType="Available",MenuUrl="/admin/info/available",AddBy="init",AddByName="init",AddDate=DateTime.Now,IsAvailable=true,IsDel=false},
+                    new SysRight {SortNo=55, RightIDPath= "InfoManage/InfoList/InfoUnAvailable",RightLevel=2, ID="InfoUnAvailable",Name="禁用",ParentID="InfoList",Position="ListTop",ActionType="UnAvailable",MenuUrl="/admin/info/unavailable",AddBy="init",AddByName="init",AddDate=DateTime.Now,IsAvailable=true,IsDel=false},
+                    new SysRight {SortNo=56, RightIDPath= "InfoManage/InfoList/InfoView",RightLevel=2, ID="InfoView",Name="预览",ParentID="InfoList",Position="ListRight",ActionType="View",MenuUrl="/admin/info/infoview",AddBy="init",AddByName="init",AddDate=DateTime.Now,IsAvailable=true,IsDel=false},
                 };
                 context.SysRights.AddRange(rightList2);
                 context.SaveChanges();
 
                 var rolerightlist = new List<SysRoleRight>
                 {
-                    new SysRoleRight {ID="20160314223000027",RoleID="superadmin",RightID="SysManage" },
+                    new SysRoleRight {ID="20160314223000027",RoleID="superadmin",RightID="SysManage" },                    
                     new SysRoleRight {ID="20160314223000028",RoleID="superadmin",RightID="UsersManage" },
                     new SysRoleRight {ID="20160314223000029",RoleID="superadmin",RightID="DepsManage" },
                     new SysRoleRight {ID="20160314223000030",RoleID="superadmin",RightID="RolesManage" },
@@ -127,7 +138,16 @@ namespace L.S.Model.DatabaseModel.Context
                     new SysRoleRight {ID="20160314223000048",RoleID="superadmin",RightID="RightEdit" },
                     new SysRoleRight {ID="20160314223000049",RoleID="superadmin",RightID="RightDelete" },
                     new SysRoleRight {ID="20160314223000050",RoleID="superadmin",RightID="RightAvailable" },
-                    new SysRoleRight {ID="20160314223000051",RoleID="superadmin",RightID="RightUnAvailable" },
+                    new SysRoleRight {ID="20160314223000051",RoleID="superadmin",RightID="InfoView" },
+
+                    new SysRoleRight {ID="20160520223000027",RoleID="superadmin",RightID="InfoManage" },
+                    new SysRoleRight {ID="20160520223000028",RoleID="superadmin",RightID="InfoList" },
+                    new SysRoleRight {ID="20160520223000029",RoleID="superadmin",RightID="InfoCreate" },
+                    new SysRoleRight {ID="20160520223000030",RoleID="superadmin",RightID="InfoEdit" },
+                    new SysRoleRight {ID="20160520223000031",RoleID="superadmin",RightID="InfoDelete" },
+                    new SysRoleRight {ID="20160520223000032",RoleID="superadmin",RightID="InfoAvailable" },
+                    new SysRoleRight {ID="20160520223000033",RoleID="superadmin",RightID="InfoUnAvailable" },
+                    new SysRoleRight {ID="20160520223000034",RoleID="superadmin",RightID="InfoView" },
 
                     new SysRoleRight {ID="20160314223000052",RoleID="admin",RightID="SysManage" },
                     new SysRoleRight {ID="20160314223000053",RoleID="admin",RightID="UsersManage" },

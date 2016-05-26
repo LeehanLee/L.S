@@ -10,7 +10,7 @@ namespace L.S.Model.DatabaseModel.Entity
     public abstract class ANamedEntity : AIdentifiable
     {
         [Required]
-        [MaxLength(10)]
+        [MaxLength(20)]
         public string Name { get; set; }
     }
 }

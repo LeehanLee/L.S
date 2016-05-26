@@ -16,13 +16,13 @@ namespace L.S.Service
     public class BaseService<T> : IBaseService<T> where T : class
     {
         public DbContext context;
-        public BaseService(DbContext _context)
+        public BaseService(/*DbContext _context*/)
         {
             //if (context == null)
             //{
             //    context = new LSContext();                
             //}
-            context = _context;
+            context = new LSContext();
         }
 
         #region 针对数据库实体集LSContext中表的通用增删改查的泛型实现

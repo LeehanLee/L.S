@@ -1,7 +1,7 @@
 ﻿using L.S.Interface;
 using L.S.Interface.BLL;
 using L.S.Model.DatabaseModel.Entity;
-using L.Study.Common;
+using L.S.Common;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;

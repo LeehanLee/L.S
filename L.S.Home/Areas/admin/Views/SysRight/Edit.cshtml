@@ -4,8 +4,8 @@
 }
 <div>
     <ul class="breadcrumb admin-bread-ul">
-        <li><a href="@Url.Action("Index","Sys")">系统管理</a> <span class="divider">/</span></li>
-        <li><a href="@Url.Action("Index","SysRights")">权限管理</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("Index","SysUser")">系统管理</a> <span class="divider">/</span></li>
+        <li><a href="@Url.Action("Index","SysRight")">权限管理</a> <span class="divider">/</span></li>
         <li class="active">编辑权限</li>
     </ul>
 </div>
@@ -34,7 +34,7 @@
             <label class="control-label">上级权限</label>
             <div class="controls">
                 <span class="treetext" id="ParentName">@ViewBag.rightParentName</span>
-                <a class="btn" onclick="LS.admin.myfn.dialogeopenrighttree({id:'ParentID',name:'ParentName',toggledisplay:true,multiple:false},'@Url.Action("GetRightTree", "Index", new { Area = "",thisid=Model.ID })');">请选择</a>
+                <a class="btn" onclick="LS.admin.myfn.dialogeopenrighttree({id:'ParentID',name:'ParentName',toggledisplay:true,multiple:false},'@Url.Action("GetRightTree", "Async", new { Area = "",thisid=Model.ID })');">请选择</a>
                 <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
                 <input class="treevalue" type="hidden" name="ParentID" id="ParentID" value="@ViewBag.rightParentID" />
                 <span class="ls-msg help-inline"></span>
@@ -54,15 +54,22 @@
                 <span class="ls-msg help-inline"></span>
             </div>
         </div>
-        @if (Model.RightLevel == 3)
+        @if (Model.RightLevel == 2)
         {
-        <div class="control-group">
-            <label for="Type" class="control-label">位置</label>
-            <div class="controls">
-                @Html.DropDownListFor(model => model.Position, ViewBag.RightPositionList as IEnumerable<SelectListItem>, new { @class = "form-control", @validate = "", @empty = "no" })
-                <span class="ls-msg help-inline"></span>
+            <div class="control-group">
+                <label for="ActionType" class="control-label">类型</label>
+                <div class="controls">
+                    @Html.DropDownListFor(model => model.ActionType, ViewBag.RightActionTypeItem as IEnumerable<SelectListItem>, new { @class = "form-control", @validate = "", @empty = "no" })
+                    <span class="ls-msg help-inline"></span>
+                </div>
             </div>
-        </div>
+            <div class="control-group">
+                <label for="Position" class="control-label">位置</label>
+                <div class="controls">
+                    @Html.DropDownListFor(model => model.Position, ViewBag.RightPositionList as IEnumerable<SelectListItem>, new { @class = "form-control", @validate = "", @empty = "no" })
+                    <span class="ls-msg help-inline"></span>
+                </div>
+            </div>
         }
         <div class="control-group">
             <div class="controls">

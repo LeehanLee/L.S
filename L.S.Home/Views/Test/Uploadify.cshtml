@@ -1,0 +1,24 @@
+﻿
+@{
+    Layout = null;
+}
+<script src="~/Scripts/jquery-1.12.0.min.js"></script>
+<link href="~/uploadify/uploadify.css" rel="stylesheet" />
+<script src="~/uploadify/jquery.uploadify.min.js"></script>
+<h2>Uploadify</h2>
+<script type="text/javascript">
+    $(function () {
+        $("#file_upload_1").uploadify({
+            height: 30,
+            swf: '/uploadify/uploadify.swf',
+            uploader: 'UploadifySave',
+            width: 330,
+            'onUploadSuccess': function (file, data, response) {
+                $("#msg").append(file.name + /*response */ '<br />' + data + "<br /><br />");
+            }
+        });
+    });
+</script>
+<div id="fileQueue"></div>
+<input type="file" name="file_upload_1" id="file_upload_1" />
+<div id="msg"></div>

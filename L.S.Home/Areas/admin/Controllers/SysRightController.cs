@@ -40,7 +40,7 @@ namespace L.S.Home.Areas.admin.Controllers
         [LSAuthorize("RightCreate", "SysManage", "RightsManage")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,IsAvailable,Name,ParentID,Type,MenuUrl,Position,SortNo")] SysRight sysRight)
+        public ActionResult Create([Bind(Include = "ID,IsAvailable,Name,ParentID,ActionType,MenuUrl,Position,SortNo")] SysRight sysRight)
         {            
             sysRight.AddBy = "before login";
             sysRight.AddByName = "before login";
@@ -85,12 +85,9 @@ namespace L.S.Home.Areas.admin.Controllers
 
         [LSAuthorize("RightEdit", "SysManage", "RightsManage")]
         public ActionResult Edit(string id)
-        {
-            IEnumerable<SelectListItem> RightPositionList = new List<SelectListItem> {
-                new SelectListItem { Text = "--请选择--", Value = "" },
-                new SelectListItem { Text = StaticResourse.RoleTypeDict[RightPositionType.ListTop.ToString()], Value = RightPositionType.ListTop.ToString() },
-                new SelectListItem { Text = StaticResourse.RoleTypeDict[RightPositionType.ListRight.ToString()], Value = RightPositionType.ListRight.ToString() } };
-            ViewBag.RightPositionList = RightPositionList;
+        {            
+            ViewBag.RightPositionList = GetRightPositionItem();
+            ViewBag.RightActionTypeItem = GetRightActionTypeItem();            
             if (string.IsNullOrEmpty(id))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -111,7 +108,7 @@ namespace L.S.Home.Areas.admin.Controllers
 
         [LSAuthorize("RightEdit", "SysManage", "RightsManage")]
         [HttpPost]
-        public ActionResult Edit([Bind(Include = "ID,IsAvailable,Name,ParentID,AddBy,AddDate,Type,MenuUrl,Position,SortNo")] SysRight sysRight)
+        public ActionResult Edit([Bind(Include = "ID,IsAvailable,Name,ParentID,AddBy,AddDate,ActionType,MenuUrl,Position,SortNo")] SysRight sysRight)
         {
             sysRight.UpdateBy = "before login";
             sysRight.UpdateByName = "before login";
@@ -122,11 +119,12 @@ namespace L.S.Home.Areas.admin.Controllers
                 var parent = rightService.Find(sysRight.ParentID);
                 if (sysRight.ParentID==null || parent != null)
                 {
-                    sysRight.RightLevel = parent == null ? 1 : parent.RightLevel + 1;
+                    sysRight.RightLevel = parent == null ? 0 : parent.RightLevel + 1;
                     sysRight.RightIDPath = parent == null ? sysRight.ID : parent.RightIDPath + "/" + sysRight.ID;
                     rightService.Update(sysRight);
                     if (rightService.SaveChanges(out msg) > 0)
                     {
+                        var r=rightService.Find("UserCreate");
                         CacheMaker.IISCache.Remove("all_sys_right");
                         return Json(new AjaxResult() { success = true, msg = updateSuccess, url = Url.Action("index", "sysright", "admin"), moremsg = msg });
                     }
@@ -222,6 +220,23 @@ namespace L.S.Home.Areas.admin.Controllers
             {
                 return Json(new AjaxResult() { success = false, msg = didnotchoosedata });
             }
+        }
+
+        private IEnumerable<SelectListItem> GetRightPositionItem()
+        {
+            return new List<SelectListItem> {
+                new SelectListItem { Text = "--请选择--", Value = "" },
+                new SelectListItem { Text = StaticResourse.RoleTypeDict[RightPositionType.ListTop.ToString()], Value = RightPositionType.ListTop.ToString() },
+                new SelectListItem { Text = StaticResourse.RoleTypeDict[RightPositionType.ListRight.ToString()], Value = RightPositionType.ListRight.ToString() } };
+        }
+        private IEnumerable<SelectListItem> GetRightActionTypeItem()
+        {
+            return new List<SelectListItem> {
+                new SelectListItem { Text = "--请选择--", Value = "" },
+                new SelectListItem { Text = RightActionType.View.ToString(), Value = RightActionType.View.ToString() },
+                new SelectListItem { Text = RightActionType.Delete.ToString(), Value = RightActionType.Delete.ToString() },
+                new SelectListItem { Text = RightActionType.Available.ToString(), Value = RightActionType.Available.ToString() },
+                new SelectListItem { Text = RightActionType.UnAvailable.ToString(), Value = RightActionType.UnAvailable.ToString() } };
         }
 
         

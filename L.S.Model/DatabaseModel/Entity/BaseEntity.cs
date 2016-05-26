@@ -18,7 +18,7 @@ namespace L.S.Model.DatabaseModel.Entity
         public string UpdateBy { get; set; }
         [MaxLength(20)]
         public string UpdateByName { get; set; }
-        public Nullable<DateTime> UpdateDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
         public bool IsAvailable { get; set; }
         public bool IsDel { get; set; }
     }

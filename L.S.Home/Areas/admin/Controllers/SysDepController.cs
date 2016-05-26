@@ -15,6 +15,8 @@ namespace L.S.Home.Areas.admin.Controllers
     using L.S.Interface;
     using L.S.Home.Models;
     using L.Study.Common;
+    using Common;
+
     public class SysDepController : LsBaseController
     {
         public IDepService depService;
@@ -94,7 +96,8 @@ namespace L.S.Home.Areas.admin.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,AddBy,AddDate,ParentID,IsAvailable,Name")] SysDep sysDep)
         {
-            sysDep.UpdateBy = "before login";
+            sysDep.UpdateBy = cuser.UserID;
+            sysDep.UpdateByName = cuser.LoginName;
             sysDep.UpdateDate = DateTime.Now;
             sysDep.IsDel = false;
             var parentDep = depService.Find(sysDep.ParentID);
