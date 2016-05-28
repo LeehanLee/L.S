@@ -32,5 +32,6 @@ namespace L.S.Model.DatabaseModel.Entity
         public virtual ICollection<SysUserRole> SysUserRoles { get; set; }
         public virtual ICollection<SysRoleRight> SysRoleRights { get; set; }
         public virtual ICollection <SysRole> Children { get; set; }
+        public int SortNo { get; set; }
     }
 }

@@ -14,6 +14,7 @@ using L.Study.Common;
 using Autofac;
 using L.S.Interface.BLL;
 using L.S.Common;
+using L.S.Model.DomainModel.Sys;
 
 namespace L.S.Home.Areas.admin.Controllers
 {
@@ -37,12 +38,35 @@ namespace L.S.Home.Areas.admin.Controllers
             return View(result);
         }
 
+        [LSAuthorize("RolesManage", "SysManage", "RolesManage")]
+        public ActionResult TreeIndex(int page = 1, int pageSize = 10)
+        {
+            return View();
+        }
+
+        [LSAuthorize("DepsManage", "SysManage", "DepsManage")]
+        public ActionResult GetSysRole(string id)
+        {
+            var model = roleService.GetList(r => r.ID == id).Select(r => new SysRoleViewModel
+            {
+                ID = r.ID,
+                Name = r.Name,
+                ParentID = r.ParentID,
+                ParentName = r.Parent == null ? "" : r.Parent.Name,
+                IsAvailable = r.IsAvailable,
+                AddBy = r.AddBy,
+                AddDate = r.AddDate,
+                DefaultHomePath=r.DefaultHomePath,
+                SysRightsID = r.SysRoleRights.Select(rr=>rr.SysRight.ID).ToList(),
+                SysRightsName = r.SysRoleRights.Select(rr => rr.SysRight.Name).ToList(),
+                SortNo=r.SortNo,
+            }).FirstOrDefault();
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
 
         [LSAuthorize("RoleCreate", "SysManage", "RolesManage")]
         public ActionResult Create()
         {
-            //var RoleList = GetRoleListAsEnumerable(roleService, cuser.RolesID);
-            //ViewBag.RoleList = RoleList;
             return View(new SysRole());
         }
 
@@ -52,13 +76,15 @@ namespace L.S.Home.Areas.admin.Controllers
         [LSAuthorize("RoleCreate", "SysManage", "RolesManage")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IsAvailable,Name,ParentID,ParentName,DefaultHomePath")] SysRole sysRole,string SysRightsID)
+        public ActionResult Create([Bind(Include = "IsAvailable,Name,ParentID,ParentName,DefaultHomePath,SortNo")] SysRole sysRole,string SysRightsID)
         {
             sysRole.ID = IdentityCreator.NextIdentity;
             sysRole.AddBy = cuser.UserID;
             sysRole.AddByName = cuser.LoginName;
             sysRole.AddDate = DateTime.Now;
             sysRole.IsDel = false;
+            if (string.IsNullOrEmpty(Request["SortNo"])) { sysRole.SortNo = 0; }
+
             var parentRole = roleService.Find(sysRole.ParentID);
             if (parentRole != null)
             {
@@ -83,7 +109,7 @@ namespace L.S.Home.Areas.admin.Controllers
                 {
                     if (roleBll.SetRoleRights(sysRole.ID, SysRightsID, out msg))
                     {
-                        return Json(new AjaxResult() { success = true, msg = insertSuccess, url = Url.Action("index", "sysrole", new { area = "admin" }), moremsg = msg });
+                        return Json(new AjaxResult() { success = true, msg = insertSuccess, url = Url.Action("treeindex", "sysrole", new { area = "admin" }), moremsg = msg });
                     }
                     else
                     {
@@ -132,7 +158,7 @@ namespace L.S.Home.Areas.admin.Controllers
         [LSAuthorize("RoleEdit", "SysManage", "RolesManage")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,AddBy,AddByName,AddDate,IsAvailable,Name,ParentID,ParentName,DefaultHomePath")] SysRole sysRole,string SysRightsID)
+        public ActionResult Edit([Bind(Include = "ID,AddBy,AddByName,AddDate,IsAvailable,Name,ParentID,ParentName,DefaultHomePath,SortNo")] SysRole sysRole,string SysRightsID)
         {
             var tmpList= roleService.GetQueryable(role=>role.ID==sysRole.ID).SelectMany(role=>role.SysRoleRights.Select(roleright=>roleright.RightID)).ToList();
             bool rightIncrease = !tmpList.Any(tr => !SysRightsID.Contains(tr));//数据库中的此角色的权限，无任何一个未选，则表示权限未降低
@@ -145,6 +171,7 @@ namespace L.S.Home.Areas.admin.Controllers
                 sysRole.UpdateByName = cuser.LoginName;
                 sysRole.UpdateDate = DateTime.Now;
                 sysRole.IsDel = false;
+                if (string.IsNullOrEmpty(Request["SortNo"])) { sysRole.SortNo = 0; }
                 var parentRole = roleService.Find(sysRole.ParentID);
                 if (parentRole != null || sysRole.ID == "superadmin")
                 {
@@ -175,7 +202,7 @@ namespace L.S.Home.Areas.admin.Controllers
                     {
                         if (roleBll.SetRoleRights(sysRole.ID, SysRightsID, out msg))
                         {
-                            return Json(new AjaxResult() { success = true, msg = updateSuccess, url = Url.Action("index", "sysrole", new { area = "admin" }), moremsg = msg });
+                            return Json(new AjaxResult() { success = true, msg = updateSuccess, url = Url.Action("treeindex", "sysrole", new { area = "admin" }), moremsg = msg });
                         }
                         else
                         {
@@ -206,7 +233,7 @@ namespace L.S.Home.Areas.admin.Controllers
             {
                 if (roleService.RoleDelete(ids, out msg) > 0)
                 {
-                    return Json(new AjaxResult() { success = true, msg = deleteSuccess, url = Url.Action("Index") });
+                    return Json(new AjaxResult() { success = true, msg = deleteSuccess, url = Url.Action("treeindex") });
                 }
                 else
                 {
@@ -229,7 +256,7 @@ namespace L.S.Home.Areas.admin.Controllers
                 string sql = "update SysRole set isavailable=1 where id in (" + sqlids + ")";
                 if (roleService.ExecuteSql(sql, out msg) > 0)
                 {
-                    return Json(new AjaxResult() { success = true, msg = AvailableSuccess, url = Url.Action("Index", "sysrole", new { area = "admin" }) });
+                    return Json(new AjaxResult() { success = true, msg = AvailableSuccess, url = Url.Action("treeindex", "sysrole", new { area = "admin" }) });
                 }
                 else
                 {
@@ -252,7 +279,7 @@ namespace L.S.Home.Areas.admin.Controllers
                 string sql = "update SysRole set isavailable=0 where id in (" + sqlids + ")";
                 if (roleService.ExecuteSql(sql, out msg) > 0)
                 {
-                    return Json(new AjaxResult() { success = true, msg = UnAvailableSuccess, url = Url.Action("Index","sysrole",new { area="admin"}) });
+                    return Json(new AjaxResult() { success = true, msg = UnAvailableSuccess, url = Url.Action("treeindex", "sysrole",new { area="admin"}) });
                 }
                 else
                 {

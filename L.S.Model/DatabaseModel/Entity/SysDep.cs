@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace L.S.Model.DatabaseModel.Entity
 {
-    public class SysDep:BaseEntity
+    public class SysDep : BaseEntity
     {
         public SysDep()
         {
@@ -25,5 +25,6 @@ namespace L.S.Model.DatabaseModel.Entity
         public string DepFullNamePath { get; set; }
         public virtual ICollection<SysUser> SysUsers { get; set; }
         public virtual ICollection<SysDep> Children { get; set; }
+        public int SortNo { get; set; }
     }
 }

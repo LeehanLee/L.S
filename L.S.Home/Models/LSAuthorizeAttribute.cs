@@ -20,7 +20,7 @@ namespace L.S.Home.Models
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public class LSAuthorizeAttribute : FilterAttribute, IAuthorizationFilter
     {
-        IRightService rightService;
+        //IRightService rightService;
         public LSAuthorizeAttribute()
         {
             

@@ -1,47 +1,60 @@
 ﻿@{
-    ViewBag.Title = "权限管理";
+    ViewBag.Title = "角色管理";
 }
 <style>
-    .tree-area-container{
+    .tree-area-container {
         border: 1px solid #852b99 !important;
         box-shadow: 0px 0px 4px #852b99;
         padding: 20px 0 20px 2% !important;
-        margin-right: 2%;
+        margin-role: 2%;
         margin-top: 14px;
     }
+
         .tree-area-container:after {
             content: '\0020';
-            display: block;            
-            clear:both;
+            display: block;
+            clear: both;
         }
-    .tree-area{width:22%;padding:10px;border:1px solid lightgray;}
-    .tree-right-form{margin-left:2%;width:72%;}
-    form.admin-form{margin-left:2%;}
+
+    .tree-area {
+        width: 22%;
+        padding: 10px;
+        border: 1px solid lightgray;
+    }
+
+    .tree-role-form {
+        margin-left: 2%;
+        width: 72%;
+    }
+
+    form.admin-form {
+        margin-left: 2%;
+    }
 </style>
 <div>
     <ul class="breadcrumb admin-bread-ul">
         <li><a href="@Url.Action("Index","SysUser")">系统管理</a> <span class="divider">/</span></li>
-        <li class="active">权限管理</li>
+        <li class="active">角色管理</li>
     </ul>
 </div>
 @foreach (SysRight r in ViewBag.pageTopRightList)
-{    
-    <a id="@r.ID" treetype="SysRight" class="btn btn-primary ls-treenode-@r.ActionType.ToLower()" url="@r.MenuUrl" )>@r.DisplayName</a>    
+{
+    <a id="@r.ID" treetype="SysRole" class="btn btn-primary ls-treenode-@r.ActionType.ToLower()" url="@r.MenuUrl" )>@r.DisplayName</a>
 }
 <script>
     $(function () {
-        $("#SysRightTreeArea").jstree({
+        $("#SysRoleTreeArea").jstree({
             "checkbox": {
                 "keep_selected_style": true,
                 "three_state": false,
             },
-            "core": {                
+            "core": {
                 "multiple": true,//不允许多选
                 "themes": {
-                    "stripes": true,//隔一行颜色不同                            
+                    "stripes": true,//隔一行颜色不同
                 },
                 'data': {
-                    'url': "@Url.Action("GetRightTree", "Async", new { Area = "", ismanage= true })",
+                    'url': "@Url.Action("GetRoleTree", "Async", new { Area = "", ismanage= true })",
                     'data': function (node) {
                         return { 'id': node.id, text: node.text };
                     }
@@ -49,30 +62,28 @@
             },
             "plugins": ["search", "state","wholerow","checkbox"]
         }).bind('click.jstree', function (event) {
-            var allselected = $("#SysRightTreeArea").jstree().get_selected(true);
-            var rightids = [];            
+            var allselected = $("#SysRoleTreeArea").jstree().get_selected(true);
+            var roleids = [];
             $(allselected).each(function (i) {
-                rightids.push(allselected[i].id);                
+                roleids.push(allselected[i].id);
             });
-            if (rightids != null && rightids.length > 0) {
+            if (roleids != null && roleids.length > 0) {
                 $.ajax({
-                    url: "GetSysRight",
+                    url: "GetSysRole",
                     type: "get",
-                    data: { id: rightids.join(',') },
+                    data: { id: roleids.join(',') },
                     success: function (result) {
                         $("#ID").val(result.ID);
                         $("#Name").val(result.Name);
                         $("#ParentID").val(result.ParentID);
                         $("#ParentName").text(result.ParentName);
-                        $("#MenuUrl").val(result.MenuUrl);
                         $("#AddBy").val(result.AddBy);
                         $("#AddDate").val(ConvertJSONDateToJSDateObject(result.AddDate));
-                        $("#ActionType").val(result.ActionType);
-                        $("#Position").val(result.Position);
+                        $("#DefaultHomePath").val(result.DefaultHomePath);
                         $("#SortNo").val(result.SortNo);
-                        $("#DisplayName").val(result.DisplayName);
-                        $("#RightEdit").attr("formaction", $("#RightEdit").attr('url'));
-                        $("#IsAvailable").val(result.IsAvailable);
+                        $("#SysRightsID").val(result.SysRightsID.join(","));
+                        $("#SysRightsName").text(result.SysRightsName.join(','));
+                        $("#RoleEdit").attr("formaction", $("#RoleEdit").attr('url'));
                         $("#IsAvailable-msg").addClass("alert");
                         if (result.IsAvailable) {
                             $("#IsAvailable-msg").removeClass("alert-error").addClass("alert-success").text("已启用");
@@ -83,64 +94,64 @@
                 });
             }
         });
-        
+        //$("#SysRoleTreeArea").jstree().toggle_icons();
+
         var to = false;
-        $('#SysRightSearchBoxText').keyup(function () {
+        $('#SysRoleSearchBoxText').keyup(function () {
             if (to) { clearTimeout(to); }
             to = setTimeout(function () {
-                var v = $('#SysRightSearchBoxText').val();
-                $('#SysRightTreeArea').jstree(true).search(v);
+                var v = $('#SysRoleSearchBoxText').val();
+                $('#SysRoleTreeArea').jstree(true).search(v);
             }, 250);
         });
         //展开与折叠功能
-        $("#toggle_all_sysrighttree").click(function () {
+        $("#toggle_all_sysroletree").click(function () {
             var $this = $(this);
             var treestate = $this.attr("treestate");
             if (treestate == "close") {
-                $("#SysRightTreeArea").jstree().open_all();
+                $("#SysRoleTreeArea").jstree().open_all();
                 $this.attr("treestate", "open");
                 $this.val("折叠");
             }
             if (treestate == "open") {
-                $("#SysRightTreeArea").jstree().close_all();
+                $("#SysRoleTreeArea").jstree().close_all();
                 $this.attr("treestate", "close");
                 $this.val("展开");
             }
         });
 
-        $("#toggle_select_all_sysrighttree").click(function () {
+        $("#toggle_select_all_sysroletree").click(function () {
             var $this = $(this);
             var treestate = $this.attr("treestate");
             if (treestate == "unselected") {
-                $("#SysRightTreeArea").jstree().select_all();
+                $("#SysRoleTreeArea").jstree().select_all();
                 $this.attr("treestate", "selected");
                 $this.val("取消");
             }
             if (treestate == "selected") {
-                $("#SysRightTreeArea").jstree().deselect_all();
+                $("#SysRoleTreeArea").jstree().deselect_all();
                 $this.attr("treestate", "unselected");
                 $this.val("全选");
             }
         });
-        
-        $("#RightCreate").click(function (e) {
-            var allselected = $("#SysRightTreeArea").jstree().get_selected(true);
+
+        $("#RoleCreate").click(function (e) {
+            var allselected = $("#SysRoleTreeArea").jstree().get_selected(true);
             $("#ID").val("");
-            $("#Name").val("");            
-            $("#MenuUrl").val("");
+            $("#Name").val("");
             $("#AddBy").val("");
             $("#AddDate").val("");
-            $("#ActionType").val("");
-            $("#Position").val("");
+            $("#DefaultHomePath").val("");
             $("#SortNo").val("");
-            $("#DisplayName").val("");
-            $("#RightEdit").attr("formaction", $(this).attr("url"));
+            $("#SysRightsID").val("");
+            $("#SysRightsName").text("");
+            $("#RoleEdit").attr("formaction", $(this).attr("url"));
             $("#ParentID").val("");
             $("#ParentName").text("");
             if (allselected != null && allselected.length > 0) {
-                var rightids = allselected[0].id;
+                var roleids = allselected[0].id;
                 var names = allselected[0].text;
-                $("#ParentID").val(rightids);
+                $("#ParentID").val(roleids);
                 $("#ParentName").text(names);
                 $("#IsAvailable-msg").removeClass("alert").removeClass("alert-error").removeClass("alert-success").text("");
             }
@@ -151,87 +162,69 @@
     <div class="tree-area fl">
         <div class="" style="margin-bottom:10px;">
             <div class="btn-group">
-                <input class="btn" type="button" id="toggle_all_sysrighttree" treestate="close" value="展开" />
-                <input class="btn" type="button" id="toggle_select_all_sysrighttree" treestate="unselected" value="全选" />
+                <input class="btn" type="button" id="toggle_all_sysroletree" treestate="close" value="展开" />
+                <input class="btn" type="button" id="toggle_select_all_sysroletree" treestate="unselected" value="全选" />
             </div>
         </div>
-        <input type="text" id="SysRightSearchBoxText" value="" class="input" style="padding:4px; border-radius:4px; border:1px solid silver;">
+        <input type="text" id="SysRoleSearchBoxText" value="" class="input" style="padding:4px; border-radius:4px; border:1px solid silver;">
         <span class="selectedValue"></span>
-        <div id="SysRightTreeArea">
+        <div id="SysRoleTreeArea">
         </div>
     </div>
-    @model SysRight
-    @using (Ajax.BeginForm("Create", null, new AjaxOptions() { HttpMethod = "Post", OnBegin = "LS.admin.myfn.AjaxBegin('#form0')", OnSuccess = "LS.admin.myfn.AjaxSuccess", OnFailure = "LS.admin.myfn.AjaxFailure" }, new { @class = "form-horizontal admin-form tree-right-form fl" }))
+    @model SysRole
+    @using (Ajax.BeginForm("Create", null, new AjaxOptions() { HttpMethod = "Post", OnBegin = "LS.admin.myfn.AjaxBegin('#form0')", OnSuccess = "LS.admin.myfn.AjaxSuccess", OnFailure = "LS.admin.myfn.AjaxFailure" }, new { @class = "form-horizontal admin-form tree-role-form fl" }))
     {
         @Html.AntiForgeryToken()
-        <input type="hidden"  name="AddBy" id="AddBy" />
-        <input type="hidden"  name="AddDate" id="AddDate" />
-        <input type="hidden" name="IsAvailable" id="IsAvailable"/>
+        <input type="hidden" name="ID" id="ID" />
+        <input type="hidden" name="AddBy" id="AddBy" />
+        <input type="hidden" name="AddDate" id="AddDate" />
+        <input type="hidden" name="IsAvailable" id="IsAvailable" value="true" />
         <div class="form-horizontal">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="control-group">
-                <label for="ID" class="control-label">权限ID</label>
-                <div class="controls">
-                    @Html.EditorFor(model => model.ID, new { htmlAttributes = new { @class = "form-control", @validate = "", @empty = "no" } })
-                    <span class="ls-msg help-inline"></span>
-                </div>
-            </div>
-            <div class="control-group">
-                <label for="Name" class="control-label">权限名称</label>
+                <label for="Name" class="control-label">角色名称</label>
                 <div class="controls">
                     @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @validate = "", @empty = "no" } })
                     <span class="ls-msg help-inline"></span>
                 </div>
             </div>
             <div class="control-group">
-                <label for="DisplayName" class="control-label">显示名称</label>
-                <div class="controls">
-                    @Html.EditorFor(model => model.DisplayName, new { htmlAttributes = new { @class = "form-control", @validate = "", @empty = "no" } })
-                    <span class="ls-msg help-inline"></span>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label">上级权限</label>
+                <label class="control-label">上级角色</label>
                 <div class="controls">
                     <span class="treetext" id="ParentName"></span>
-                    <a class="btn" onclick="LS.admin.myfn.dialogeopenrighttree({id:'ParentID',name:'ParentName',toggledisplay:true,multiple:false},'@Url.Action("GetRightTree", "Async", new { Area = "" })');">请选择</a>
+                    <a class="btn" onclick="LS.admin.myfn.dialogeopenroletree({id:'ParentID',name:'ParentName',toggledisplay:true,multiple:false},'@Url.Action("GetRoleTree", "Async", new { Area = "" })');">请选择</a>
                     <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
                     <input class="treevalue" type="hidden" name="ParentID" id="ParentID" value="" />
                     <span class="ls-msg help-inline"></span>
                 </div>
             </div>
             <div class="control-group">
-                <label for="ParentID" class="control-label">访问地址</label>
+                <label class="control-label">角色权限</label>
                 <div class="controls">
-                    <input name="MenuUrl" id="MenuUrl" type="text" max="100" />
+                    <span class="treetext" id="SysRightsName">@*@ViewBag.rightNameStr*@</span>
+                    <a class="btn" onclick="LS.admin.myfn.dialogeopenrighttree({id:'SysRightsID',name:'SysRightsName',toggledisplay:true,toggleselect:true},'@Url.Action("GetRightTree", "Async", new { Area = "" })');">请选择</a>
+                    <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
+                    <input class="treevalue" type="hidden" name="SysRightsID" id="SysRightsID" value="@ViewBag.rightIDStr" validate min="2" msg="请为角色选择相应的权限" />
+                    <span class="ls-msg help-inline"></span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="Name" class="control-label">默认主页</label>
+                <div class="controls">
+                    <input class="" type="text" name="DefaultHomePath" id="DefaultHomePath" validate max="50" />
                     <span class="ls-msg help-inline"></span>
                 </div>
             </div>
             <div class="control-group">
                 <label for="SortNo" class="control-label">排序号</label>
                 <div class="controls">
-                    <input name="SortNo" id="SortNo" type="text" max="5"  />
+                    <input name="SortNo" id="SortNo" type="text" max="5" />
                     <span class="ls-msg help-inline"></span>
                 </div>
             </div>
-            <div class="control-group ActionTypediv">
-                <label for="ActionType" class="control-label">类型</label>
-                <div class="controls">
-                    @Html.DropDownListFor(model => model.ActionType, ViewBag.RightActionTypeItem as IEnumerable<SelectListItem>, new { @class = "form-control" })
-                    <span class="ls-msg help-inline"></span>
-                </div>
-            </div>
-            <div class="control-group Positiondiv">
-                <label for="Position" class="control-label">位置</label>
-                <div class="controls">
-                    @Html.DropDownListFor(model => model.Position, ViewBag.RightPositionList as IEnumerable<SelectListItem>, new { @class = "form-control" })
-                    <span class="ls-msg help-inline"></span>
-                </div>
-            </div>            
             <div class="control-group">
                 <div class="controls">
-                    <label class="checkbox" id="IsAvailable-msg">
-                        @*<input type="checkbox" name="IsAvailable" id="IsAvailable" value="true">启用*@                        
+                    <label class="checkbox" name="IsAvailable-msg" id="IsAvailable-msg">
                     </label>
                 </div>
             </div>

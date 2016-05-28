@@ -16,6 +16,7 @@ namespace L.S.Home.Areas.admin.Controllers
     using L.S.Home.Models;
     using L.Study.Common;
     using Common;
+    using Model.DomainModel.Sys;
 
     public class SysDepController : LsBaseController
     {
@@ -32,6 +33,30 @@ namespace L.S.Home.Areas.admin.Controllers
             var list = depService.GetPagedList(d => true, page, pageSize, modellist => modellist.OrderByDescending(d => d.AddDate));
             return View(list);
         }
+        [LSAuthorize("DepsManage", "SysManage", "DepsManage")]
+        public ActionResult TreeIndex(int page = 1, int pageSize = 10)
+        {
+            //ViewBag.RightPositionList = GetRightPositionItem();
+            //ViewBag.RightActionTypeItem = GetRightActionTypeItem();
+            return View();
+        }
+
+        [LSAuthorize("DepsManage", "SysManage", "DepsManage")]
+        public ActionResult GetSysDep(string id)
+        {
+            var model = depService.GetList(r => r.ID == id).Select(r => new SysDepViewModel
+            {
+                                 ID = r.ID,
+                                 Name = r.Name,
+                                 ParentID = r.ParentID,
+                                 ParentName = r.Parent == null ? "" : r.Parent.Name,                                 
+                                 IsAvailable = r.IsAvailable,
+                                 AddBy = r.AddBy,
+                                 AddDate = r.AddDate,                                 
+                                 SortNo = r.SortNo,                                 
+                             }).FirstOrDefault();            
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
 
         [LSAuthorize("DepCreate", "SysManage", "DepsManage")]
         public ActionResult Create()
@@ -44,12 +69,13 @@ namespace L.S.Home.Areas.admin.Controllers
         [LSAuthorize("DepCreate", "SysManage", "DepsManage")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ParentID,IsAvailable,IsDel,Name")] SysDep sysDep)
+        public ActionResult Create([Bind(Include = "ParentID,IsAvailable,IsDel,Name,SortNo")] SysDep sysDep)
         {            
             sysDep.ID = IdentityCreator.NextIdentity;
             sysDep.AddBy = "before login";
             sysDep.AddDate = DateTime.Now;
             sysDep.IsDel = false;
+            if (string.IsNullOrEmpty(Request["SortNo"])) { sysDep.SortNo = 0; }
             var parentDep=depService.Find(sysDep.ParentID);
             if (parentDep != null)
             {
@@ -59,7 +85,7 @@ namespace L.S.Home.Areas.admin.Controllers
                 depService.Add(sysDep);
                 if(depService.SaveChanges(out msg) > 0)
                 {
-                    return Json(new AjaxResult() { success = true, msg = insertSuccess, url = Url.Action("index", "sysdep", "admin"), moremsg = msg });
+                    return Json(new AjaxResult() { success = true, msg = insertSuccess, url = Url.Action("treeindex", "sysdep", "admin"), moremsg = msg });
                 }
                 else
                 {
@@ -94,12 +120,13 @@ namespace L.S.Home.Areas.admin.Controllers
         [LSAuthorize("DepEdit", "SysManage", "DepsManage")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,AddBy,AddDate,ParentID,IsAvailable,Name")] SysDep sysDep)
+        public ActionResult Edit([Bind(Include = "ID,AddBy,AddDate,ParentID,IsAvailable,Name,SortNo")] SysDep sysDep)
         {
             sysDep.UpdateBy = cuser.UserID;
             sysDep.UpdateByName = cuser.LoginName;
             sysDep.UpdateDate = DateTime.Now;
             sysDep.IsDel = false;
+            if (string.IsNullOrEmpty(Request["SortNo"])) { sysDep.SortNo = 0; }
             var parentDep = depService.Find(sysDep.ParentID);
             if (parentDep != null||sysDep.ID=="root")//一般组织一定要有上级，顶级组织的ID为root，并且没有上级
             {
@@ -109,7 +136,7 @@ namespace L.S.Home.Areas.admin.Controllers
                 depService.Update(sysDep);
                 if (depService.SaveChanges(out msg) > 0)
                 {
-                    return Json(new AjaxResult() { success = true, msg = updateSuccess, url = Url.Action("index", "sysdep", "admin"), moremsg = msg });
+                    return Json(new AjaxResult() { success = true, msg = updateSuccess, url = Url.Action("treeindex", "sysdep", "admin"), moremsg = msg });
                 }
                 else
                 {
@@ -130,7 +157,7 @@ namespace L.S.Home.Areas.admin.Controllers
             {                
                 if (depService.DepsDelete(ids, out msg) > 0)
                 {
-                    return Json(new AjaxResult() { success = true, msg = deleteSuccess, url = Url.Action("Index") });
+                    return Json(new AjaxResult() { success = true, msg = deleteSuccess, url = Url.Action("treeindex") });
                 }
                 else
                 {
@@ -153,7 +180,7 @@ namespace L.S.Home.Areas.admin.Controllers
                 string sql = "update SysDep set isavailable=1 where id in (" + sqlids + ")";
                 if (depService.ExecuteSql(sql, out msg) > 0)
                 {
-                    return Json(new AjaxResult() { success = true, msg = AvailableSuccess, url = Url.Action("index") });
+                    return Json(new AjaxResult() { success = true, msg = AvailableSuccess, url = Url.Action("treeindex") });
                 }
                 else
                 {
@@ -176,7 +203,7 @@ namespace L.S.Home.Areas.admin.Controllers
                 string sql = "update SysDep set isavailable=0 where id in (" + sqlids + ")";
                 if (depService.ExecuteSql(sql, out msg) > 0)
                 {
-                    return Json(new AjaxResult() { success = true, msg = UnAvailableSuccess, url = Url.Action("index") });
+                    return Json(new AjaxResult() { success = true, msg = UnAvailableSuccess, url = Url.Action("treeindex") });
                 }
                 else
                 {

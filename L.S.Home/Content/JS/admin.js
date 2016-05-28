@@ -246,8 +246,15 @@ var LS = {
 
                 url = $.setQueryStr(url, "selectNodeID", $this.val());
                 $("#" + bodyid).jstree({
+                    "checkbox": {
+                        "keep_selected_style": true,
+                        "three_state": false,
+                    },
                     "core": {
                         "multiple": false,//不允许多选
+                        "themes": {
+                            "stripes": true,//隔一行颜色不同                            
+                        },
                         'data': {
                             'url': url,
                             'data': function (node) {
@@ -256,9 +263,9 @@ var LS = {
                         }
                     },
                     //"plugins": ["search", "state"]
-                    "plugins": ["search"]
+                    "plugins": ["search", "wholerow", "checkbox"]
                 });
-                $("#" + bodyid).jstree().toggle_icons();
+                //$("#" + bodyid).jstree().toggle_icons();//不用这行代码表示使用默认的节点图标
                 var to = false;
                 $('#' + searchboxid).keyup(function () {
                     if (to) { clearTimeout(to); }
@@ -324,6 +331,9 @@ var LS = {
                     },
                     "core": {
                         "multiple": obj.multiple == undefined ? true : obj.multiple,
+                        "themes": {
+                            "stripes": true,//隔一行颜色不同                            
+                        },
                         'data': {
                             'url': url,
                             'data': function (node) {
@@ -333,7 +343,7 @@ var LS = {
                     },                    
                     "plugins": ["checkbox", "search"]
                 });
-                $("#" + bodyid).jstree().toggle_icons();
+                //$("#" + bodyid).jstree().toggle_icons();//不用这行代码表示使用默认的节点图标
                 var to = false;
                 $('#' + searchboxid).keyup(function () {
                     if (to) { clearTimeout(to); }
@@ -408,6 +418,9 @@ var LS = {
                     },
                     "core": {
                         "multiple": obj.multiple == undefined ? true : obj.multiple,
+                        "themes": {
+                            "stripes": true,//隔一行颜色不同                            
+                        },
                         'data': {
                             'url': url,
                             'data': function (node) {
@@ -418,7 +431,7 @@ var LS = {
                     //"plugins": ["search", "state"]                    
                     "plugins": ["checkbox", "search"]
                 });
-                $("#" + bodyid).jstree().toggle_icons();
+                //$("#" + bodyid).jstree().toggle_icons();//不用这行代码表示使用默认的节点图标
                 var to = false;
                 $('#' + searchboxid).keyup(function () {
                     if (to) { clearTimeout(to); }

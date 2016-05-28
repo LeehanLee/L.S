@@ -43,7 +43,7 @@ namespace L.S.Home.Controllers
             {
                 rightQueryable = rightQueryable.Where(r => r.IsAvailable);
             }
-            var rightList = rightQueryable.ToList();
+            var rightList = rightQueryable.OrderBy(d => d.SortNo).ThenByDescending(d => d.AddDate).ToList();
             rightList.Where(r => r.ParentID == null).ToList().ForEach(r =>
             {
                 bool disabled = r.RightIDPath.Trim('/').Split('/').Any(pid => pid == thisid);
@@ -63,7 +63,7 @@ namespace L.S.Home.Controllers
         }
         private void GenerateTree(JsTree3Node node, List<SysRight> list, string selectNodeID, bool parentDisabled, string thisid)
         {
-            var childs = list.Where(d => d.ParentID == node.id);
+            var childs = list.Where(d => d.ParentID == node.id).OrderBy(d => d.SortNo).ThenByDescending(d => d.AddDate).ToList();
 
             foreach (var c in childs)
             {
@@ -94,11 +94,11 @@ namespace L.S.Home.Controllers
         {
             id = string.IsNullOrEmpty(id) || id == "#" ? "root" : id;
             Expression<Func<SysDep, bool>> exp = d => d.DepFullIDPath.Contains(id);
-            var deps = depService.GetList(exp);
+            var deps = depService.GetList(exp).OrderBy(d=>d.SortNo).ThenByDescending(d=>d.AddDate).ToList();
             var level1 = deps.FirstOrDefault(d => d.ID == id);
             var disabled = !string.IsNullOrEmpty(thisid) && level1.DepFullIDPath.Contains(thisid);
             bool select = selectNodeID == level1.ID;
-            var root = new JsTree3Node() // Create our root node and ensure it is opened
+            var root = new JsTree3Node()
             {
                 id = level1.ID,
                 text = level1.Name,
@@ -110,7 +110,7 @@ namespace L.S.Home.Controllers
         }
         private void GenerateTree(JsTree3Node node, List<SysDep> list, string selectNodeID, bool parentDisabled, string thisid)
         {
-            var childs = list.Where(d => d.ParentID == node.id);
+            var childs = list.Where(d => d.ParentID == node.id).OrderBy(d => d.SortNo).ThenByDescending(d => d.AddDate).ToList();
 
             foreach (var c in childs)
             {
@@ -130,11 +130,21 @@ namespace L.S.Home.Controllers
         #endregion
 
         #region 获取角色树
-        public ActionResult GetRoleTree(string selectNodeID = "", string thisid = "")
+        public ActionResult GetRoleTree(string selectNodeID = "", string thisid = "", bool ismanage = false)
         {
             var cuser = userBLL.GetCurrentUser();
-            Expression<Func<SysRole, bool>> exp = sr => !sr.IsDel && sr.IsAvailable /*&& sr.RoleIDPath.Contains("/" + cuser.RoleID)*/;
-            var roles = roleService.GetList(exp);
+            //Expression<Func<SysRole, bool>> exp = sr => !sr.IsDel && sr.IsAvailable /*&& sr.RoleIDPath.Contains("/" + cuser.RoleID)*/;
+            //var rightQueryable = rightService.GetQueryable(r => !r.IsDel);
+            //if (!ismanage)
+            //{
+            //    rightQueryable = rightQueryable.Where(r => r.IsAvailable);
+            //}
+            var roleQueryable = roleService.GetQueryable(r => !r.IsDel);
+            if (!ismanage)
+            {
+                roleQueryable = roleQueryable.Where(r => r.IsAvailable);
+            }
+            var roles= roleQueryable.OrderBy(d => d.SortNo).ThenByDescending(d => d.AddDate).ToList();
             var level1 = roles.FirstOrDefault(d => d.Parent == null);
             bool disabled = level1.RoleIDPath.Trim('/').Split('/').Any(rid => rid == thisid) || !cuser.RolesID.Contains(level1.ID);
             var selectedNodeIDs = selectNodeID.Split(',');
@@ -151,7 +161,7 @@ namespace L.S.Home.Controllers
         }
         private void GenerateRoleTree(JsTree3Node node, List<SysRole> list, string userRolesID, bool parentDisabled, string[] selectedNodeIDs, string thisid)
         {
-            var childs = list.Where(d => d.ParentID == node.id);
+            var childs = list.Where(d => d.ParentID == node.id).OrderBy(d => d.SortNo).ThenByDescending(d => d.AddDate).ToList();
 
             foreach (var c in childs)
             {

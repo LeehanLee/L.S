@@ -1,0 +1,219 @@
+﻿@{
+    ViewBag.Title = "部门管理";
+}
+<style>
+    .tree-area-container {
+        border: 1px solid #852b99 !important;
+        box-shadow: 0px 0px 4px #852b99;
+        padding: 20px 0 20px 2% !important;
+        margin-dep: 2%;
+        margin-top: 14px;
+    }
+
+        .tree-area-container:after {
+            content: '\0020';
+            display: block;
+            clear: both;
+        }
+
+    .tree-area {
+        width: 22%;
+        padding: 10px;
+        border: 1px solid lightgray;
+    }
+
+    .tree-dep-form {
+        margin-left: 2%;
+        width: 72%;
+    }
+
+    form.admin-form {
+        margin-left: 2%;
+    }
+</style>
+<div>
+    <ul class="breadcrumb admin-bread-ul">
+        <li><a href="@Url.Action("Index","SysUser")">系统管理</a> <span class="divider">/</span></li>
+        <li class="active">部门管理</li>
+    </ul>
+</div>
+@foreach (SysRight r in ViewBag.pageTopRightList)
+{
+    <a id="@r.ID" treetype="SysDep" class="btn btn-primary ls-treenode-@r.ActionType.ToLower()" url="@r.MenuUrl" )>@r.DisplayName</a>
+}
+<script>
+    $(function () {
+        $("#SysDepTreeArea").jstree({
+            "checkbox": {
+                "keep_selected_style": true,
+                "three_state": false,
+            },
+            "core": {
+                "multiple": true,//不允许多选
+                "themes": {
+                    "stripes": true,//隔一行颜色不同                            
+                },
+                'data': {
+                    'url': "@Url.Action("GetDepTree", "Async", new { Area = "", ismanage= true })",
+                    'data': function (node) {
+                        return { 'id': node.id, text: node.text };
+                    }
+                }
+            },
+            "plugins": ["search", "state","wholerow","checkbox"]
+        }).bind('click.jstree', function (event) {
+            var allselected = $("#SysDepTreeArea").jstree().get_selected(true);
+            var depids = [];
+            $(allselected).each(function (i) {
+                depids.push(allselected[i].id);
+            });
+            if (depids != null && depids.length > 0) {
+                $.ajax({
+                    url: "GetSysDep",
+                    type: "get",
+                    data: { id: depids.join(',') },
+                    success: function (result) {
+                        $("#ID").val(result.ID);
+                        $("#Name").val(result.Name);
+                        $("#ParentID").val(result.ParentID);
+                        $("#ParentName").text(result.ParentName);
+                        $("#AddBy").val(result.AddBy);
+                        $("#AddDate").val(ConvertJSONDateToJSDateObject(result.AddDate));
+                        $("#SortNo").val(result.SortNo);
+                        $("#DepEdit").attr("formaction", $("#DepEdit").attr('url'));
+                        $("#IsAvailable-msg").addClass("alert");
+                        if (result.IsAvailable) {
+                            $("#IsAvailable-msg").removeClass("alert-error").addClass("alert-success").text("已启用");
+                        } else {
+                            $("#IsAvailable-msg").addClass("alert-error").removeClass("alert-success").text("未启用");
+                        }
+                    }
+                });
+            }
+        });
+        //$("#SysDepTreeArea").jstree().toggle_icons();
+
+        var to = false;
+        $('#SysDepSearchBoxText').keyup(function () {
+            if (to) { clearTimeout(to); }
+            to = setTimeout(function () {
+                var v = $('#SysDepSearchBoxText').val();
+                $('#SysDepTreeArea').jstree(true).search(v);
+            }, 250);
+        });
+        //展开与折叠功能
+        $("#toggle_all_sysdeptree").click(function () {
+            var $this = $(this);
+            var treestate = $this.attr("treestate");
+            if (treestate == "close") {
+                $("#SysDepTreeArea").jstree().open_all();
+                $this.attr("treestate", "open");
+                $this.val("折叠");
+            }
+            if (treestate == "open") {
+                $("#SysDepTreeArea").jstree().close_all();
+                $this.attr("treestate", "close");
+                $this.val("展开");
+            }
+        });
+
+        $("#toggle_select_all_sysdeptree").click(function () {
+            var $this = $(this);
+            var treestate = $this.attr("treestate");
+            if (treestate == "unselected") {
+                $("#SysDepTreeArea").jstree().select_all();
+                $this.attr("treestate", "selected");
+                $this.val("取消");
+            }
+            if (treestate == "selected") {
+                $("#SysDepTreeArea").jstree().deselect_all();
+                $this.attr("treestate", "unselected");
+                $this.val("全选");
+            }
+        });
+
+        $("#DepCreate").click(function (e) {
+            var allselected = $("#SysDepTreeArea").jstree().get_selected(true);
+            $("#ID").val("");
+            $("#Name").val("");
+            $("#AddBy").val("");
+            $("#AddDate").val("");
+            $("#SortNo").val("");
+            $("#DepEdit").attr("formaction", $(this).attr("url"));
+            $("#ParentID").val("");
+            $("#ParentName").text("");
+            if (allselected != null && allselected.length > 0) {
+                var depids = allselected[0].id;
+                var names = allselected[0].text;
+                $("#ParentID").val(depids);
+                $("#ParentName").text(names);
+                $("#IsAvailable-msg").removeClass("alert").removeClass("alert-error").removeClass("alert-success").text("");
+            }
+        });
+    });
+</script>
+<div class="tree-area-container">
+    <div class="tree-area fl">
+        <div class="" style="margin-bottom:10px;">
+            <div class="btn-group">
+                <input class="btn" type="button" id="toggle_all_sysdeptree" treestate="close" value="展开" />
+                <input class="btn" type="button" id="toggle_select_all_sysdeptree" treestate="unselected" value="全选" />
+            </div>
+        </div>
+        <input type="text" id="SysDepSearchBoxText" value="" class="input" style="padding:4px; border-radius:4px; border:1px solid silver;">
+        <span class="selectedValue"></span>
+        <div id="SysDepTreeArea">
+        </div>
+    </div>
+    @model SysDep
+    @using (Ajax.BeginForm("Create", null, new AjaxOptions() { HttpMethod = "Post", OnBegin = "LS.admin.myfn.AjaxBegin('#form0')", OnSuccess = "LS.admin.myfn.AjaxSuccess", OnFailure = "LS.admin.myfn.AjaxFailure" }, new { @class = "form-horizontal admin-form tree-dep-form fl" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="ID" id="ID" />
+        <input type="hidden" name="AddBy" id="AddBy" />
+        <input type="hidden" name="AddDate" id="AddDate" />
+        <input type="hidden" name="IsAvailable" id="IsAvailable" value="true"/>
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="control-group">
+                <label for="Name" class="control-label">部门名称</label>
+                <div class="controls">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @validate = "", @empty = "no" } })
+                    <span class="ls-msg help-inline"></span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">上级部门</label>
+                <div class="controls">
+                    <span class="treetext" id="ParentName"></span>
+                    <a class="btn" onclick="LS.admin.myfn.dialogeopendeptree({id:'ParentID',name:'ParentName',toggledisplay:true,multiple:false},'@Url.Action("GetDepTree", "Async", new { Area = "" })');">请选择</a>
+                    <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
+                    <input class="treevalue" type="hidden" name="ParentID" id="ParentID" value="" />
+                    <span class="ls-msg help-inline"></span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="SortNo" class="control-label">排序号</label>
+                <div class="controls">
+                    <input name="SortNo" id="SortNo" type="text" max="5" />
+                    <span class="ls-msg help-inline"></span>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <label class="checkbox" name="IsAvailable-msg" id="IsAvailable-msg">                        
+                    </label>
+                </div>
+            </div>
+            <div class="form-actions">
+                @foreach (SysRight r in ViewBag.pageRightRightList)
+                {
+                    <button id="@r.ID" url="@r.MenuUrl.ToLower()" formaction="@r.MenuUrl.ToLower()" onclick="$('#form0').attr('action', $(this).attr('formaction'));" type="submit" class="btn btn-primary" data-loading-text="提交中" data-complete-text="完成">保存</button>
+                }
+                <button class="btn" type="button" onclick="history.go(-1);">返回</button>
+            </div>
+        </div>
+    }
+</div>
+
+

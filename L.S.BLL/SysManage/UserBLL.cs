@@ -23,15 +23,22 @@ namespace L.S.BLL.SysManage
         /// <summary>
         /// 登录，将用户信息保存到浏览器的cookie与服务器cache里
         /// </summary>
-        /// <param name="Model"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public bool SignIn(SysUser Model, out string homePath)
+        public bool SignIn(SysUser model, out string homePath)
         {
             CurrentUser cuser = new CurrentUser();
-            cuser.UserID = Model.ID;
-            cuser.LoginName = Model.LoginName;
+            cuser.UserID = model.ID;
+            cuser.LoginName = model.LoginName;
             cuser.LastLoginTime = DateTime.Now;
-            var roles = Model.SysUserRoles.Select(sur => new { sur.SysRole.Name, sur.SysRole.ID, sur.SysRole.Level, sur.SysRole.DefaultHomePath, Rights = sur.SysRole.SysRoleRights.Select(rr => rr.RightID) }).ToList();
+            var roles = model.SysUserRoles.Where(ur => !ur.SysRole.IsDel && ur.SysRole.IsAvailable).Select(sur => new
+            {
+                sur.SysRole.Name,
+                sur.SysRole.ID,
+                sur.SysRole.Level,
+                sur.SysRole.DefaultHomePath,
+                Rights = sur.SysRole.SysRoleRights.Where(rr => !rr.SysRight.IsDel && rr.SysRight.IsAvailable).Select(rr => rr.RightID)
+            }).ToList();
 
             cuser.HomePath = roles.FirstOrDefault(ro => ro.Level == roles.Min(r => r.Level)).DefaultHomePath;
             homePath = cuser.HomePath;
@@ -39,7 +46,7 @@ namespace L.S.BLL.SysManage
             cuser.RolesName = string.Join(",", roles.Select(r => r.Name).ToArray());
             var rightIDs = roles.SelectMany(rr => rr.Rights).Distinct().ToArray();
             cuser.RightIDs = string.Join(",", rightIDs);
-            var cuserStr = Newtonsoft.Json.JsonConvert.SerializeObject(cuser);
+            var cuserStr = JsonConvert.SerializeObject(cuser);
             var CrypteKey = ConfigMgr.GetAppSettingString("CrypteKey");
             var cuserHash = Cryptor.DesEncrypt(cuserStr, CrypteKey);
             string domain = CookieMgr.GetDomain(HttpContext.Current.Request.Url.ToString());

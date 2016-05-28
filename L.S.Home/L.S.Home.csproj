@@ -366,6 +366,8 @@
     <Content Include="plugin\ueditor\third-party\video-js\font\vjs.ttf" />
     <Content Include="plugin\ueditor\third-party\video-js\font\vjs.woff" />
     <Content Include="Areas\admin\Views\SysRight\TreeIndex.cshtml" />
+    <Content Include="Areas\admin\Views\SysDep\TreeIndex.cshtml" />
+    <Content Include="Areas\admin\Views\SysRole\TreeIndex.cshtml" />
     <None Include="Scripts\jquery-1.12.0.intellisense.js" />
     <Content Include="login\css\form-elements.css" />
     <Content Include="login\css\style.css" />

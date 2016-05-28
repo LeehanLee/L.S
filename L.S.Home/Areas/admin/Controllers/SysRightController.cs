@@ -93,7 +93,7 @@ namespace L.S.Home.Areas.admin.Controllers
                         if (rightService.SaveChanges(out msg) > 0)
                         {
                             CacheMaker.IISCache.Remove("all_sys_right");
-                            return Json(new AjaxResult() { success = true, msg = insertSuccess, url = Url.Action("index", "sysright", "admin"), moremsg = msg });
+                            return Json(new AjaxResult() { success = true, msg = insertSuccess, url = Url.Action("treeindex", "sysright", "admin"), moremsg = msg });
                         }
                         else
                         {
@@ -159,7 +159,7 @@ namespace L.S.Home.Areas.admin.Controllers
                     if (rightService.SaveChanges(out msg) > 0)
                     {                        
                         CacheMaker.IISCache.Remove("all_sys_right");
-                        return Json(new AjaxResult() { success = true, msg = updateSuccess, url = Url.Action("index", "sysright", "admin"), moremsg = msg });
+                        return Json(new AjaxResult() { success = true, msg = updateSuccess, url = Url.Action("treeindex", "sysright", "admin"), moremsg = msg });
                     }
                     else
                     {
@@ -186,7 +186,7 @@ namespace L.S.Home.Areas.admin.Controllers
                 if (rightService.RightsDelete(ids, out msg) > 0)
                 {
                     CacheMaker.IISCache.Remove("all_sys_right");
-                    return Json(new AjaxResult() { success = true, msg = deleteSuccess, url = Url.Action("Index") });
+                    return Json(new AjaxResult() { success = true, msg = deleteSuccess, url = Url.Action("treeindex") });
                 }
                 else
                 {                    
@@ -214,7 +214,7 @@ namespace L.S.Home.Areas.admin.Controllers
                 if (successCount > 0)
                 {
                     CacheMaker.IISCache.Remove("all_sys_right");
-                    return Json(new AjaxResult() { success = true, msg = AvailableSuccess, url = Url.Action("Index") });
+                    return Json(new AjaxResult() { success = true, msg = AvailableSuccess, url = Url.Action("treeindex") });
                 }
                 else
                 {
@@ -242,7 +242,7 @@ namespace L.S.Home.Areas.admin.Controllers
                 if (successCount > 0)
                 {
                     CacheMaker.IISCache.Remove("all_sys_right");
-                    return Json(new AjaxResult() { success = true, msg = UnAvailableSuccess, url = Url.Action("Index") });
+                    return Json(new AjaxResult() { success = true, msg = UnAvailableSuccess, url = Url.Action("treeindex") });
                 }
                 else
                 {
