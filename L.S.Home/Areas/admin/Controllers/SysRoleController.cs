@@ -74,8 +74,8 @@ namespace L.S.Home.Areas.admin.Controllers
                     {
                         sysRole.ParentName = parentRole.Name;
                         sysRole.Level = parentRole.Level + 1;
-                        sysRole.RoleIDPath = parentRole.RoleIDPath + "/" + sysRole.ID;
-                        sysRole.RoleNamePath = parentRole.RoleNamePath + "/" + sysRole.Name;
+                        sysRole.RoleIDPath = parentRole.RoleIDPath  + sysRole.ID + "/";
+                        sysRole.RoleNamePath = parentRole.RoleNamePath  + sysRole.Name + "/";
                     }
                 }
                 roleService.Add(sysRole);
@@ -83,7 +83,7 @@ namespace L.S.Home.Areas.admin.Controllers
                 {
                     if (roleBll.SetRoleRights(sysRole.ID, SysRightsID, out msg))
                     {
-                        return Json(new AjaxResult() { success = true, msg = insertFailure, url = Url.Action("index", "sysrole", new { area = "admin" }), moremsg = msg });
+                        return Json(new AjaxResult() { success = true, msg = insertSuccess, url = Url.Action("index", "sysrole", new { area = "admin" }), moremsg = msg });
                     }
                     else
                     {
@@ -134,7 +134,11 @@ namespace L.S.Home.Areas.admin.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,AddBy,AddByName,AddDate,IsAvailable,Name,ParentID,ParentName,DefaultHomePath")] SysRole sysRole,string SysRightsID)
         {
-            if (sysRole.ID != "superadmin")
+            var tmpList= roleService.GetQueryable(role=>role.ID==sysRole.ID).SelectMany(role=>role.SysRoleRights.Select(roleright=>roleright.RightID)).ToList();
+            bool rightIncrease = !tmpList.Any(tr => !SysRightsID.Contains(tr));//数据库中的此角色的权限，无任何一个未选，则表示权限未降低
+            
+            bool allowedModify = rightIncrease || sysRole.ID != "superadmin";
+            if (allowedModify)
             {
                 #region 除系统内置的超级管理员，其他角色可以修改
                 sysRole.UpdateBy = cuser.UserID;
@@ -156,14 +160,14 @@ namespace L.S.Home.Areas.admin.Controllers
                         {
                             sysRole.ParentName = parentRole.Name;
                             sysRole.Level = parentRole.Level + 1;
-                            sysRole.RoleIDPath = parentRole.RoleIDPath + "/" + sysRole.ID;
-                            sysRole.RoleNamePath = parentRole.RoleNamePath + "/" + sysRole.Name;
+                            sysRole.RoleIDPath = parentRole.RoleIDPath  + sysRole.ID + "/";
+                            sysRole.RoleNamePath = parentRole.RoleNamePath  + sysRole.Name + "/";
                         }
                     }
                     else
                     {
-                        sysRole.RoleIDPath = sysRole.ID;
-                        sysRole.RoleNamePath = sysRole.Name;
+                        sysRole.RoleIDPath = "/" + sysRole.ID + "/";
+                        sysRole.RoleNamePath = "/" + sysRole.Name + "/";
                         sysRole.Level = 0;
                     }
                     roleService.Update(sysRole);
@@ -191,7 +195,7 @@ namespace L.S.Home.Areas.admin.Controllers
             }
             else
             {
-                return Json(new AjaxResult() { success = false, msg = "系统内置超级管理员不允许修改" });
+                return Json(new AjaxResult() { success = false, msg = "系统内置超级管理员不允许降低权限" });
             }
         }
 

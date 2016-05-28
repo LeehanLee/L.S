@@ -5,8 +5,8 @@
     .tree-area-container{
         border: 1px solid #852b99 !important;
         box-shadow: 0px 0px 4px #852b99;
-        padding: 20px 0 20px 20px !important;
-        margin-right: 14px;
+        padding: 20px 0 20px 2% !important;
+        margin-right: 2%;
         margin-top: 14px;
     }
         .tree-area-container:after {
@@ -14,8 +14,9 @@
             display: block;            
             clear:both;
         }
-    .tree-area{width:20%;padding:10px;border:1px solid lightgray;}
-    .tree-right-form{margin-left:10px;width:75%;}
+    .tree-area{width:22%;padding:10px;border:1px solid lightgray;}
+    .tree-right-form{margin-left:2%;width:72%;}
+    form.admin-form{margin-left:2%;}
 </style>
 <div>
     <ul class="breadcrumb admin-bread-ul">
@@ -23,22 +24,10 @@
         <li class="active">权限管理</li>
     </ul>
 </div>
-@*@foreach (SysRight r in ViewBag.pageTopRightList)
-{
-    if (r.ActionType == "View")
-    {
-        <a class="btn btn-primary" href="@r.MenuUrl" )>@r.Name</a>
-    }
-    else
-    {
-        <a class="btn btn-primary ls-table-@r.ActionType.ToLower()" url="@r.MenuUrl" )>@r.Name</a>
-    }
-    <input type="hidden" name="@r.ID.ToLower()" id="@r.ID.ToLower()" value="@r.MenuUrl.ToLower()"/>
+@foreach (SysRight r in ViewBag.pageTopRightList)
+{    
+    <a id="@r.ID" treetype="SysRight" class="btn btn-primary ls-treenode-@r.ActionType.ToLower()" url="@r.MenuUrl" )>@r.DisplayName</a>    
 }
-@foreach (SysRight r in ViewBag.pageRightRightList)
-{
-    <input type="hidden" name="@r.ID.ToLower()" id="@r.ID.ToLower()" value="@r.MenuUrl.ToLower()" />
-}*@
 <script>
     $(function () {
         $("#SysRightTreeArea").jstree({
@@ -49,7 +38,7 @@
             "core": {                
                 "multiple": true,//不允许多选
                 'data': {
-                    'url': "@Url.Action("GetRightTree", "Async", new { Area = "" })",
+                    'url': "@Url.Action("GetRightTree", "Async", new { Area = "", ismanage= true })",
                     'data': function (node) {
                         return { 'id': node.id, text: node.text };
                     }
@@ -78,6 +67,13 @@
                     $("#Position").val(result.Position);
                     $("#SortNo").val(result.SortNo);
                     $("#DisplayName").val(result.DisplayName);
+                    $("#RightEdit").attr("formaction", $("#RightEdit").attr('url'));
+                    $("#IsAvailable").addClass("alert");
+                    if (result.IsAvailable) {
+                        $("#IsAvailable").removeClass("alert-error").addClass("alert-success").text("已启用");
+                    } else {
+                        $("#IsAvailable").addClass("alert-error").removeClass("alert-success").text("未启用");
+                    }
                 }
             });
             //var url = $("#rightedit").val();
@@ -109,37 +105,51 @@
             }
         });
 
-        //将日了狗的json时间格式（从1970年到日期点为止的总毫秒数）转化为yyyy-MM-dd hh:mm:ss格式
-        function ConvertJSONDateToJSDateObject(JSONDateString) {
-            var date = new Date(parseInt(JSONDateString.replace("/Date(", "").replace(")/", ""), 10)).Format("yyyy-MM-dd hh:mm:ss");
-            return date;
-        }
-        Date.prototype.Format = function (fmt) { 
-            var o = {
-                "M+": this.getMonth() + 1, //月份 
-                "d+": this.getDate(), //日 
-                "h+": this.getHours(), //小时 
-                "m+": this.getMinutes(), //分 
-                "s+": this.getSeconds(), //秒 
-                "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
-                "S": this.getMilliseconds() //毫秒 
-            };
-            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-            for (var k in o)
-                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-            return fmt;
-        }
+        $("#toggle_select_all_sysrighttree").click(function () {
+            var $this = $(this);
+            var treestate = $this.attr("treestate");
+            if (treestate == "unselected") {
+                $("#SysRightTreeArea").jstree().select_all();
+                $this.attr("treestate", "selected");
+                $this.val("取消");
+            }
+            if (treestate == "selected") {
+                $("#SysRightTreeArea").jstree().deselect_all();
+                $this.attr("treestate", "unselected");
+                $this.val("全选");
+            }
+        });
+        
+        $("#RightCreate").click(function (e) {
+            var allselected = $("#SysRightTreeArea").jstree().get_selected(true);
+            $("#ID").val("");
+            $("#Name").val("");            
+            $("#MenuUrl").val("");
+            $("#AddBy").val("");
+            $("#AddDate").val("");
+            $("#ActionType").val("");
+            $("#Position").val("");
+            $("#SortNo").val("");
+            $("#DisplayName").val("");
+            $("#RightEdit").attr("formaction", $(this).attr("url"));
+            $("#ParentID").val("");
+            $("#ParentName").text("");
+            if (allselected != null && allselected.length > 0) {
+                var rightids = allselected[0].id;
+                var names = allselected[0].text;
+                $("#ParentID").val(rightids);
+                $("#ParentName").text(names);
+            }
+        });
     });
 </script>
 <div class="tree-area-container">
     <div class="tree-area fl">
-        <div class="">
-            <input class="btn" type="button" id="toggle_all_sysrighttree" treestate="close" value="展开" style="width:50px;height:30px;" />
-            @foreach (SysRight r in ViewBag.pageTopRightList)
-            {
-                <button formaction="@r.MenuUrl.ToLower()" onclick="$('#form0').attr('action', $(this).attr('formaction'));" type="submit" class="btn btn-primary" data-loading-text="提交中" data-complete-text="完成" name="@r.ID.ToLower()" id="@r.ID.ToLower()">@r.Name</button>
-            }
-            
+        <div class="" style="margin-bottom:10px;">
+            <div class="btn-group">
+                <input class="btn" type="button" id="toggle_all_sysrighttree" treestate="close" value="展开" />
+                <input class="btn" type="button" id="toggle_select_all_sysrighttree" treestate="unselected" value="全选" />
+            </div>
         </div>
         <input type="text" id="SysRightSearchBoxText" value="" class="input" style="padding:4px; border-radius:4px; border:1px solid silver;">
         <span class="selectedValue"></span>
@@ -152,6 +162,7 @@
         @Html.AntiForgeryToken()
         <input type="hidden"  name="AddBy" id="AddBy" />
         <input type="hidden"  name="AddDate" id="AddDate" />
+        <input type="hidden" name="IsAvailable" />
         <div class="form-horizontal">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="control-group">
@@ -199,35 +210,32 @@
                     <span class="ls-msg help-inline"></span>
                 </div>
             </div>
-
             <div class="control-group ActionTypediv">
                 <label for="ActionType" class="control-label">类型</label>
                 <div class="controls">
-                    @Html.DropDownListFor(model => model.ActionType, ViewBag.RightActionTypeItem as IEnumerable<SelectListItem>, new { @class = "form-control", @validate = "", @empty = "no" })
+                    @Html.DropDownListFor(model => model.ActionType, ViewBag.RightActionTypeItem as IEnumerable<SelectListItem>, new { @class = "form-control" })
                     <span class="ls-msg help-inline"></span>
                 </div>
             </div>
             <div class="control-group Positiondiv">
                 <label for="Position" class="control-label">位置</label>
                 <div class="controls">
-                    @Html.DropDownListFor(model => model.Position, ViewBag.RightPositionList as IEnumerable<SelectListItem>, new { @class = "form-control", @validate = "", @empty = "no" })
+                    @Html.DropDownListFor(model => model.Position, ViewBag.RightPositionList as IEnumerable<SelectListItem>, new { @class = "form-control" })
                     <span class="ls-msg help-inline"></span>
                 </div>
-            </div>
-            
+            </div>            
             <div class="control-group">
                 <div class="controls">
-                    <label class="checkbox">
-                        <input type="checkbox" name="IsAvailable" id="IsAvailable" value="true" checked="checked">启用
+                    <label class="checkbox" name="IsAvailable" id="IsAvailable">
+                        @*<input type="checkbox" name="IsAvailable" id="IsAvailable" value="true">启用*@                        
                     </label>
                 </div>
             </div>
             <div class="form-actions">
                 @foreach (SysRight r in ViewBag.pageRightRightList)
                 {
-                    <button formaction="@r.MenuUrl.ToLower()" onclick="$('#form0').attr('action', $(this).attr('formaction'));" type="submit" class="btn btn-primary" data-loading-text="提交中" data-complete-text="完成" name="@r.ID.ToLower()" id="@r.ID.ToLower()" >@r.Name</button>
-                }                
-                @*<button  class="btn btn-primary" type="submit" data-loading-text="提交中" data-complete-text="完成"><i class="icon-ok icon-white"></i>保存</button>*@
+                    <button id="@r.ID" url="@r.MenuUrl.ToLower()" formaction="@r.MenuUrl.ToLower()" onclick="$('#form0').attr('action', $(this).attr('formaction'));" type="submit" class="btn btn-primary" data-loading-text="提交中" data-complete-text="完成">@r.DisplayName</button>
+                }
                 <button class="btn" type="button" onclick="history.go(-1);">返回</button>
             </div>
         </div>

@@ -68,11 +68,11 @@
                             {
                                 if (r.ActionType == "View")
                                 {
-                                    <a class="btn btn-primary" href="@r.MenuUrl/@item.ID" )>@r.Name</a>
+                                    <a class="btn btn-primary" href="@r.MenuUrl/@item.ID" )>@r.DisplayName</a>
                                 }
                                 else
                                 {
-                                    <a class="btn btn-primary ls-table-@r.ActionType.ToLower()" url="@r.MenuUrl/@item.ID" )>@r.Name</a>
+                                    <a class="btn btn-primary ls-table-@r.ActionType.ToLower()" url="@r.MenuUrl/@item.ID" )>@r.DisplayName</a>
                                 }
                             }
                         </div>

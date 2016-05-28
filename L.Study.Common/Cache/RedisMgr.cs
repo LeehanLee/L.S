@@ -7,16 +7,20 @@ using System.Threading.Tasks;
 
 namespace L.Study.Common.Cache
 {
-    public class RedisMgr:ACachemgr, ICacheMgr
+    public class RedisMgr : ACachemgr, ICacheMgr
     {
-        RedisClient redis;
-        public RedisMgr(string server="")
+        string server = "";
+        public RedisMgr(string _server = "")
         {
-            if (string.IsNullOrEmpty(server))
+            if (string.IsNullOrEmpty(_server))
             {
                 server = "127.0.0.1:6379";
             }
-            redis = new RedisClient(server);
+            else
+            {
+                server = _server;
+            }
+
         }
         /// <summary>
         /// 键存在时不添加也不覆盖，键不存在时添加
@@ -27,11 +31,17 @@ namespace L.Study.Common.Cache
         /// <returns></returns>
         public override bool Add<T>(string key, T value)
         {
-            return redis.Add<T>(key, value);
+            using (RedisClient redis = new RedisClient(server))
+            {
+                return redis.Add<T>(key, value);
+            }
         }
         public override bool Add<T>(string key, T value, int expireByMinutes)
         {
-            return redis.Add<T>(key, value,DateTime.UtcNow.AddMinutes(expireByMinutes));
+            using (RedisClient redis = new RedisClient(server))
+            {
+                return redis.Add<T>(key, value, DateTime.UtcNow.AddMinutes(expireByMinutes));
+            }
         }
         /// <summary>
         /// 键存在时值覆盖，键不存在时值添加
@@ -42,39 +52,60 @@ namespace L.Study.Common.Cache
         /// <returns></returns>
         public override bool Set<T>(string key, T value)
         {
-            return redis.Set<T>(key, value);
+            using (RedisClient redis = new RedisClient(server))
+            {
+                return redis.Set<T>(key, value);
+            }
         }
         public override bool Set<T>(string key, T value, int expireByMinutes)
         {
-            return redis.Set<T>(key, value,DateTime.UtcNow.AddMinutes(expireByMinutes));
+            using (RedisClient redis = new RedisClient(server))
+            {
+                return redis.Set<T>(key, value, DateTime.UtcNow.AddMinutes(expireByMinutes));
+            }
         }
         public override bool Exist(string key)
         {
-            var result= redis.Exists(key);
-            if (result > 0) { return true; }
-            else { return false; }
+            using (RedisClient redis = new RedisClient(server))
+            {
+                var result = redis.Exists(key);
+                if (result > 0) { return true; }
+                else { return false; }
+            }
         }
         public override T Get<T>(string key)
         {
-            return redis.Get<T>(key);
+            using (RedisClient redis = new RedisClient(server))
+            {
+                return redis.Get<T>(key);
+            }
         }
         public override bool Remove(string key)
         {
-            return redis.Remove(key);
+            using (RedisClient redis = new RedisClient(server))
+            {
+                return redis.Remove(key);
+            }
         }
         public override bool RemoveAll()
-        {            
-            try { redis.FlushAll(); return true; }
-            catch { return false; }
+        {
+            using (RedisClient redis = new RedisClient(server))
+            {
+                try { redis.FlushAll(); return true; }
+                catch { return false; }
+            }
         }
         public override bool RemoveAll(string filter)
         {
-            try
+            using (RedisClient redis = new RedisClient(server))
             {
-                var keys = redis.GetKeysByPattern(filter);
-                redis.RemoveAll(keys); return true;
+                try
+                {
+                    var keys = redis.GetKeysByPattern(filter);
+                    redis.RemoveAll(keys); return true;
+                }
+                catch { return false; }
             }
-            catch { return false; }
         }
     }
 }

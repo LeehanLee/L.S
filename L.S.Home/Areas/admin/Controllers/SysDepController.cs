@@ -54,8 +54,8 @@ namespace L.S.Home.Areas.admin.Controllers
             if (parentDep != null)
             {
                 sysDep.ParentName = parentDep == null ? null : parentDep.Name;
-                sysDep.DepFullIDPath = parentDep.DepFullIDPath + "/" + sysDep.ID;
-                sysDep.DepFullNamePath = parentDep.DepFullNamePath + "/" + sysDep.Name;
+                sysDep.DepFullIDPath = parentDep.DepFullIDPath + sysDep.ID + "/";
+                sysDep.DepFullNamePath = parentDep.DepFullNamePath  + sysDep.Name + "/";
                 depService.Add(sysDep);
                 if(depService.SaveChanges(out msg) > 0)
                 {
@@ -104,8 +104,8 @@ namespace L.S.Home.Areas.admin.Controllers
             if (parentDep != null||sysDep.ID=="root")//一般组织一定要有上级，顶级组织的ID为root，并且没有上级
             {
                 sysDep.ParentName = parentDep == null ? null : parentDep.Name;
-                sysDep.DepFullIDPath = parentDep == null ? sysDep.ID : parentDep.DepFullIDPath + "/" + sysDep.ID;
-                sysDep.DepFullNamePath = parentDep == null ? sysDep.Name : parentDep.DepFullNamePath + "/" + sysDep.Name;
+                sysDep.DepFullIDPath = parentDep == null ? "/"+sysDep.ID+ "/" : parentDep.DepFullIDPath  + sysDep.ID + "/";
+                sysDep.DepFullNamePath = parentDep == null ? "/" + sysDep.Name + "/" : parentDep.DepFullNamePath + sysDep.Name + "/";
                 depService.Update(sysDep);
                 if (depService.SaveChanges(out msg) > 0)
                 {

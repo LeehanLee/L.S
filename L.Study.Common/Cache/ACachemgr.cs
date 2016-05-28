@@ -30,6 +30,6 @@ namespace L.Study.Common.Cache
                 Set<T>(key, result,expireByMinutes);
                 return result as T;
             }
-        }
+        }        
     }
 }

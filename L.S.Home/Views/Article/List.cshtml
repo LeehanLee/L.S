@@ -1,0 +1,442 @@
+﻿@{
+    Layout = "~/Views/Shared/_home_LayoutPage.cshtml";
+}
+@model PagedList.IPagedList<Info>
+<link href="/Content/CSS/swiper-3.3.1.min.css" rel="stylesheet" />
+<script src="/Scripts/swiper-3.3.1.min.js"></script>
+<script>
+    window.onload = function () {
+        var swiper = new Swiper('.swiper-container', {
+            //nextButton: '.swiper-button-next',
+            //prevButton: '.swiper-button-prev',
+            pagination: '.swiper-pagination',
+            paginationClickable: true,
+            loop: true,
+            autoplay: 2500,
+            autoplayDisableOnInteraction: false,
+            // Disable preloading of all images
+            preloadImages: false,
+            // Enable lazy loading
+            lazyLoading: true
+        });
+    }
+</script>
+<style>
+    .blog-item-caption-container {
+        padding-left: 80px;
+    }
+
+    .blog-item-text-container {
+        margin-left: 80px;
+    }
+</style>
+<!-- CONTENT -->
+<div class="container clearfix">
+    <div class="eleven columns m-bot-25">
+        <!-- BLOG ITEM -->
+        @foreach (Info item in Model)
+        {
+            <div class="blog-item m-bot-35 clearfix">
+                <div class="hover-item">
+                    <div class="@if (!string.IsNullOrEmpty(item.ImgPath))
+                    {<text>clearfix</text>}">
+                        <div class="blog-item-date-inf-container left">
+                            <div class="blog-item-date-cont ">
+                                <div class="blog-item-date">21</div>
+                                <div class="blog-item-mounth">OCT</div>
+                            </div>
+                            <div>
+                                <div class="blog-item-category-img ">
+                                    <img src="/demo/images/icon-standart-post.png" alt="Ipsum">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="view view-first swiper-container">
+                            <div class="swiper-wrapper">
+                                @if (!string.IsNullOrEmpty(item.ImgPath))
+                                {
+                                    foreach (string s in item.ImgPath.Split('|'))
+                                    {
+                                        <div class="swiper-slide">
+                                            <img data-src="@s" class="swiper-lazy">
+                                            <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                            <div class="mask"></div>
+                            <div class="abs">
+                                <a href="/demo/images/content/post-2-1.jpg" class="lightbox zoom info"></a><a href="blog-single.html" class="link info"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="blog-item-caption-container">
+                    <a class="a-invert" href="@Url.Action("details", "article", new { id = item.ID })"><span class="bold">@item.Name</span></a>
+                    <div class="lp-item-container-border clearfix">
+                        <div class="blog-info-container">
+                            <ul class="clearfix">
+                                <li class="author">@(string.IsNullOrEmpty(item.Author) ? item.AddByName : item.Author.ToMaxString(5))</li>
+                                <li class="view">@item.ViewCount</li>
+                                <li class="comment">@item.CommontCount</li>
+                                @*<li class="tag">Website Design - Responsive</li>*@
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="blog-item-text-container">
+                    @{
+                        string content = item.Content.ToNoHtml();
+                    }
+                    <p>@Html.Raw(content.Length > 500 ? content.ToMaxString(200) : content)</p>
+
+                </div>
+                <div class="lp-r-m-container right">
+                    <a href="@Url.Action("details", "article", new { id = item.ID })" class="button medium r-m-plus r-m-full">阅读全文</a>
+                </div>
+
+            </div>
+                        }
+        @{
+            Html.RenderPartial("Pager", Model);
+        }
+    </div>
+    <div class="five columns ">
+        <div class="sidebar-item  m-bot-35">
+
+            <div class="caption-container-main m-bot-30">
+                <div class="caption-text-container">BLOG CATEGORIES</div>
+                <div class="content-container-white caption-bg "></div>
+            </div>
+
+            <div>
+                <ul class="blog-categories">
+                    <li class="active "><a href="#"><span class="blog-cat-icon"></span>Business</a></li>
+                    <li><a href="#"><span class="blog-cat-icon"></span>Social Media</a></li>
+                    <li><a href="#"><span class="blog-cat-icon"></span>Technology</a></li>
+                    <li><a href="#"><span class="blog-cat-icon"></span>News</a></li>
+                    <li><a href="#"><span class="blog-cat-icon"></span>Entertainment</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="sidebar-item  m-bot-35">
+            <div class="caption-container-main m-bot-30">
+                <div class="caption-text-container">TAB WIDGET</div>
+                <div class="content-container-white caption-bg "></div>
+            </div>
+
+            <div class="">
+                <ul class="tabs-nav">
+                    <li class="active">
+                        <a href="#tab1">First</a>
+                    </li>
+                    <li class="">
+                        <a href="#tab2">Second</a>
+                    </li>
+                </ul>
+                <div>
+                    <div id="tab1" class="tab-content">
+                        <ul class="latest-post-container">
+                            <li class="latest-post-sidebar clearfix">
+                                <div class="lp-img-cont left">
+                                    <a href=""><img src="/demo/images/content/port-2-3.jpg" alt="project"></a>
+                                </div>
+                                <div class="lp-title-cont left">
+                                    <p class="latest-post-sidebar-title"><a href="">Lorem Ipsum</a></p>
+                                    <p class="latest-post-sidebar-date">Feb 15, 2012</p>
+                                    <p class="latest-post-sidebar-comm">15 comments</p>
+                                </div>
+                            </li>
+                            <li class="latest-post-sidebar clearfix">
+                                <div class="lp-img-cont left">
+                                    <a href=""><img src="/demo/images/content/port-2-2.jpg" alt="project"></a>
+                                </div>
+                                <div class="lp-title-cont left">
+                                    <p class="latest-post-sidebar-title"><a href="">Cras Tincid</a></p>
+                                    <p class="latest-post-sidebar-date">Feb 10, 2013</p>
+                                    <p class="latest-post-sidebar-comm">12 comments</p>
+                                </div>
+                            </li>
+                            <li class="latest-post-sidebar clearfix">
+                                <div class="lp-img-cont left">
+                                    <a href=""><img src="/demo/images/content/port-2-4.jpg" alt="project"></a>
+                                </div>
+                                <div class="lp-title-cont left">
+                                    <p class="latest-post-sidebar-title"><a href="">Amet Mauris</a></p>
+                                    <p class="latest-post-sidebar-date">Jan 14, 2013</p>
+                                    <p class="latest-post-sidebar-comm">10 comments</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="tab2" class="tab-content content-container-white">
+                        <ul class="tab-post-container text ">
+                            <li class="clearfix">
+                                <p>Aenean nisl orci, condim entum ultrices consequat eu, vehicula ac. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nisl orci.</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nisl orci, condim entum ultrices consequat eu, vehicula.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar-item  m-bot-35">
+            <div class="caption-container-main m-bot-30">
+                <div class="caption-text-container">ACCORDION WIDGET</div>
+                <div class="content-container-white caption-bg "></div>
+            </div>
+
+
+
+            <div>
+
+                <div id="accordion">
+
+                    <h3><a href="#">Lorem ipsum</a></h3>
+                    <div>
+                        <p>Nunc ipsum risus, bibendum quis tincidunt a, tempor quis nunc. Aenean in odio in sapien porttitor sodales.</p>
+                    </div>
+
+                    <h3><a href="#">Vestilum pulvinar</a></h3>
+                    <div>
+                        <p>Nunc ipsum risus, bibendum quis tincidunt a, tempor quis nunc. Aenean in odio in sapien porttitor sodales.</p>
+                    </div>
+
+                    <h3><a href="#">Donec sedin</a></h3>
+                    <div>
+                        <p>Nunc ipsum risus, bibendum quis tincidunt a, tempor quis nunc. Aenean in odio in sapien porttitor sodales.</p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="sidebar-item  m-bot-25">
+            <div class="caption-container-main m-bot-30">
+                <div class="caption-text-container">TAG WIDGET</div>
+                <div class="content-container-white caption-bg "></div>
+            </div>
+
+
+            <div>
+
+                <div class="tag-cloud">
+                    <ul class="clearfix">
+                        <li><a href="">HTML 5</a></li>
+                        <li><a href="">CSS 3</a></li>
+                        <li><a href="">Photoshop</a></li>
+                        <li><a href="">WordPress</a></li>
+                        <li><a href="">Joomla!</a></li>
+                        <li><a href="">UI</a></li>
+                        <li><a href="">Template</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="sidebar-item  m-bot-35">
+            <div class="caption-container-main m-bot-30">
+                <div class="caption-text-container">FLICKR WIDGET</div>
+                <div class="content-container-white caption-bg "></div>
+            </div>
+
+            <ul id="flickrfeed" class="clearfix"></ul>
+
+        </div>
+    </div>
+</div>
+<div class="container clearfix m-top-60">
+    <div class="four columns carousel-intro m-bot-33">
+
+        <div class="caption-container m-bot-20">
+            <div class="title-block-text">
+                THIS IS THE LIST OF<br>
+                OUR RECENT<br>
+                <strong>WORKS</strong>
+            </div>
+
+            <div class="carousel-navi jcarousel-scroll">
+                <div class="jcarousel-prev"></div>
+                <div class="jcarousel-next"></div>
+            </div>
+        </div>
+
+    </div>
+    <div class="jcarousel latest-work-jc m-bot-30">
+        <ul class="clearfix">
+            <li class="four columns">
+                <div class="hover-item">
+                    <div class="view view-first">
+                        <img src="/demo/images/content/port-2-1.jpg" alt="Ipsum">
+                        <div class="mask"></div>
+                        <div class="abs">
+                            <a href="/demo/images/content/port-2-1.jpg" class="lightbox zoom info"></a><a href="portfolio-single.html" class="link info"></a>
+                        </div>
+                    </div>
+                    <div class="lw-item-caption-container">
+                        <a class="a-invert" href="portfolio-single.html">
+                            <div class="item-title-main-container clearfix">
+                                <div class="item-title-text-container">
+                                    <span class="bold">Lorem</span> Ipsum
+                                </div>
+                            </div>
+                        </a>
+                        <div class="item-caption">web design</div>
+                    </div>
+                </div>
+            </li>
+            <li class="four columns">
+                <div class=" hover-item">
+                    <div class="view view-first">
+                        <img src="/demo/images/content/port-2-2.jpg" alt="Ipsum">
+                        <div class="mask"></div>
+                        <div class="abs">
+                            <a href="/demo/images/content/port-2-2.jpg" class="lightbox zoom info"></a><a href="portfolio-single.html" class="link info"></a>
+                        </div>
+                    </div>
+                    <div class="lw-item-caption-container">
+                        <a class="a-invert" href="portfolio-single.html">
+                            <div class="item-title-main-container clearfix">
+                                <div class="item-title-text-container">
+                                    <span class="bold">Lorem</span> Ipsum
+                                </div>
+                            </div>
+                        </a>
+                        <div class="item-caption">photography</div>
+                    </div>
+                </div>
+            </li>
+            <li class="four columns">
+                <div class=" hover-item">
+                    <div class="view view-first">
+                        <img src="/demo/images/content/port-2-3.jpg" alt="Ipsum">
+                        <div class="mask"></div>
+                        <div class="abs">
+                            <a href="/demo/images/content/port-2-3.jpg" class="lightbox zoom info"></a><a href="portfolio-single.html" class="link info"></a>
+                        </div>
+                    </div>
+                    <div class="lw-item-caption-container">
+                        <a class="a-invert" href="portfolio-single.html">
+                            <div class="item-title-main-container clearfix">
+                                <div class="item-title-text-container">
+                                    <span class="bold">Lorem</span> Ipsum
+                                </div>
+                            </div>
+                        </a>
+                        <div class="item-caption">illustration</div>
+                    </div>
+                </div>
+            </li>
+            <li class="four columns">
+                <div class="hover-item">
+                    <div class="view view-first">
+                        <img src="/demo/images/content/port-2-4.jpg" alt="Ipsum">
+                        <div class="mask"></div>
+                        <div class="abs">
+                            <a href="/demo/images/content/port-2-4.jpg" class="lightbox zoom info"></a><a href="portfolio-single.html" class="link info"></a>
+                        </div>
+                    </div>
+                    <div class="lw-item-caption-container">
+                        <a class="a-invert" href="portfolio-single.html">
+                            <div class="item-title-main-container clearfix">
+                                <div class="item-title-text-container">
+                                    <span class="bold">Lorem</span> Ipsum
+                                </div>
+                            </div>
+                        </a>
+                        <div class="item-caption">web design</div>
+                    </div>
+                </div>
+            </li>
+            <li class="four columns">
+                <div class=" hover-item">
+                    <div class="view view-first">
+                        <img src="/demo/images/content/port-2-5.jpg" alt="Ipsum">
+                        <div class="mask"></div>
+                        <div class="abs">
+                            <a href="/demo/images/content/port-2-5.jpg" class="lightbox zoom info"></a><a href="portfolio-single.html" class="link info"></a>
+                        </div>
+                    </div>
+                    <div class="lw-item-caption-container">
+                        <a class="a-invert" href="portfolio-single.html">
+                            <div class="item-title-main-container clearfix">
+                                <div class="item-title-text-container">
+                                    <span class="bold">Lorem</span> Ipsum
+                                </div>
+                            </div>
+                        </a>
+                        <div class="item-caption">web design</div>
+                    </div>
+                </div>
+            </li>
+            <li class="four columns">
+                <div class=" hover-item">
+                    <div class="view view-first">
+                        <img src="/demo/images/content/port-2-6.jpg" alt="Ipsum">
+                        <div class="mask"></div>
+                        <div class="abs">
+                            <a href="/demo/images/content/port-2-6.jpg" class="lightbox zoom info"></a><a href="portfolio-single.html" class="link info"></a>
+                        </div>
+                    </div>
+                    <div class="lw-item-caption-container">
+                        <a class="a-invert" href="portfolio-single.html">
+                            <div class="item-title-main-container clearfix">
+                                <div class="item-title-text-container">
+                                    <span class="bold">Lorem</span> Ipsum
+                                </div>
+                            </div>
+                        </a>
+                        <div class="item-caption">web design</div>
+                    </div>
+                </div>
+            </li>
+            <li class="four columns">
+                <div class=" hover-item">
+                    <div class="view view-first">
+                        <img src="/demo/images/content/port-2-7.jpg" alt="Ipsum">
+                        <div class="mask"></div>
+                        <div class="abs">
+                            <a href="/demo/images/content/port-2-7.jpg" class="lightbox zoom info"></a><a href="portfolio-single.html" class="link info"></a>
+                        </div>
+                    </div>
+                    <div class="lw-item-caption-container">
+                        <a class="a-invert" href="portfolio-single.html">
+                            <div class="item-title-main-container clearfix">
+                                <div class="item-title-text-container">
+                                    <span class="bold">Lorem</span> Ipsum
+                                </div>
+                            </div>
+                        </a>
+                        <div class="item-caption">web design</div>
+                    </div>
+                </div>
+            </li>
+            <li class="four columns">
+                <div class=" hover-item">
+                    <div class="view view-first">
+                        <img src="/demo/images/content/port-2-8.jpg" alt="Ipsum">
+                        <div class="mask"></div>
+                        <div class="abs">
+                            <a href="/demo/images/content/port-2-8.jpg" class="lightbox zoom info"></a><a href="portfolio-single.html" class="link info"></a>
+                        </div>
+                    </div>
+                    <div class="lw-item-caption-container">
+                        <a class="a-invert" href="portfolio-single.html">
+                            <div class="item-title-main-container clearfix">
+                                <div class="item-title-text-container">
+                                    <span class="bold">Lorem</span> Ipsum
+                                </div>
+                            </div>
+                        </a>
+                        <div class="item-caption">web design</div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+
+

@@ -13,11 +13,11 @@
 {
     if (r.ActionType == "View")
     {
-        <a class="btn btn-primary" href="@r.MenuUrl" )>@r.Name</a>
+        <a class="btn btn-primary" href="@r.MenuUrl" )>@r.DisplayName</a>
     }
     else
     {
-        <a class="btn btn-primary ls-table-@r.ActionType.ToLower()" url="@r.MenuUrl" )>@r.Name</a>
+        <a class="btn btn-primary ls-table-@r.ActionType.ToLower()" url="@r.MenuUrl" )>@r.DisplayName</a>
     }
 }
 @if (Model != null && Model.Count > 0)

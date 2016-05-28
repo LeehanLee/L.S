@@ -18,6 +18,7 @@ namespace L.S.Interface
         T Find(string id);
         T Find(Expression<Func<T, bool>> exp);
         List<T> GetList(Expression<Func<T, bool>> exp);
+        IQueryable<T> GetQueryable(Expression<Func<T, bool>> exp);
         List<T> GetListForPaging(Expression<Func<T, bool>> exp, int page, int pagesize, out int totalcount, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy);
 
         /// <summary>

@@ -36,19 +36,15 @@ namespace L.S.Home.Areas.admin.Controllers
         {
             ViewBag.RightPositionList = GetRightPositionItem();
             ViewBag.RightActionTypeItem = GetRightActionTypeItem();
-            List<SysRight> pageRights = new List<SysRight>();
-            pageRights.AddRange(ViewBag.pageTopRightList);
-            pageRights.AddRange(ViewBag.pageRightRightList);
-            pageRights = pageRights.OrderBy(r => r.SortNo).ToList();
-            ViewBag.pageRights = pageRights;
             return View();
         }
         [LSAuthorize("RightsManage", "SysManage", "RightsManage")]
         public ActionResult GetSysRight(string id)
         {
-            var model = CacheMaker.RedisCache.GetOrSetThenGet("SysRightTreeNodeData-" + id, () =>
+            var model = 
+                /*CacheMaker.RedisCache.GetOrSetThenGet("SysRightTreeNodeData-" + id, () =>
                 {
-                    return rightService.GetList(r => r.ID == id).Select(r => new SysRightViewModel
+                    return*/ rightService.GetList(r => r.ID == id).Select(r => new SysRightViewModel
                     {
                         ID = r.ID,
                         Name = r.Name,
@@ -60,9 +56,10 @@ namespace L.S.Home.Areas.admin.Controllers
                         AddDate=r.AddDate,
                         ActionType=r.ActionType,
                         Position=r.Position,
-                        SortNo = r.SortNo
+                        SortNo = r.SortNo,
+                        DisplayName=r.DisplayName,                        
                     }).FirstOrDefault();
-                },5);
+                //},5);
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
@@ -77,8 +74,8 @@ namespace L.S.Home.Areas.admin.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,IsAvailable,Name,ParentID,ActionType,MenuUrl,Position,SortNo,DisplayName")] SysRight sysRight)
         {            
-            sysRight.AddBy = "before login";
-            sysRight.AddByName = "before login";
+            sysRight.AddBy = cuser.UserID;
+            sysRight.AddByName = cuser.LoginName;
             sysRight.AddDate = DateTime.Now;
             sysRight.IsDel = false;
             sysRight.ParentID = string.IsNullOrEmpty(sysRight.ParentID) ? null : sysRight.ParentID;
@@ -86,7 +83,7 @@ namespace L.S.Home.Areas.admin.Controllers
             if ((sysRight.ParentID==null) || parent != null)
             {
                 sysRight.RightLevel = parent == null ? 1 : parent.RightLevel + 1;
-                sysRight.RightIDPath = parent == null ? sysRight.ID : parent.RightIDPath + "/" + sysRight.ID;
+                sysRight.RightIDPath = parent == null ? "/"+ sysRight.ID + "/" : parent.RightIDPath + sysRight.ID + "/";
                 if (!string.IsNullOrEmpty(sysRight.ID))
                 {
                     var exist = rightService.Exist(r => r.ID == sysRight.ID.Trim());
@@ -157,11 +154,10 @@ namespace L.S.Home.Areas.admin.Controllers
                 if (sysRight.ParentID==null || parent != null)
                 {
                     sysRight.RightLevel = parent == null ? 0 : parent.RightLevel + 1;
-                    sysRight.RightIDPath = parent == null ? sysRight.ID : parent.RightIDPath + "/" + sysRight.ID;
+                    sysRight.RightIDPath = parent == null ? "/"+ sysRight.ID + "/" : parent.RightIDPath  + sysRight.ID + "/";
                     rightService.Update(sysRight);
                     if (rightService.SaveChanges(out msg) > 0)
-                    {
-                        //var r=rightService.Find("UserCreate");
+                    {                        
                         CacheMaker.IISCache.Remove("all_sys_right");
                         return Json(new AjaxResult() { success = true, msg = updateSuccess, url = Url.Action("index", "sysright", "admin"), moremsg = msg });
                     }

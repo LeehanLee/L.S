@@ -61,6 +61,11 @@ namespace L.S.Service
             var result_list = result.ToList();
             return result_list;
         }
+        public virtual IQueryable<T> GetQueryable(Expression<Func<T, bool>> exp)
+        {
+            var result = context.Set<T>().Where(exp);            
+            return result;
+        }
         public virtual List<T> GetListForPaging(Expression<Func<T, bool>> exp, int page, int pagesize, out int totalcount, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy)
         {
             if (page <= 0 || pagesize <= 0) { page = 1; pagesize = 10; }

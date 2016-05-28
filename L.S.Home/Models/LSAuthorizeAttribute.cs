@@ -71,6 +71,7 @@ namespace L.S.Home.Models
                 c.ViewBag.cuser = cuser;
                 c.ViewBag.RightList = allRightList;
                 var userRightIDList = cuser.RightIDs.Split(',');
+                
                 var UserRightList = allRightList.Where(ar => userRightIDList.Contains(ar.ID)).ToList();
                 c.ViewBag.UserRightList = UserRightList;
                 var pageRightList = UserRightList.Where(r => r.ParentID == CurrentActiveLeftMenuCode).ToList();
@@ -93,8 +94,7 @@ namespace L.S.Home.Models
             {
                 url =string.IsNullOrEmpty(url)? Url.Action("index", "signin", new { area = "", returnurl = request.Url.ToString() }):url;
                 HttpContext.Current.Response.Redirect(url, true);
-                return;
-                //filterContext.Result = new RedirectResult(url);
+                return;                
             }            
         }
         /// <summary>

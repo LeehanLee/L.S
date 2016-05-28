@@ -35,13 +35,18 @@ namespace L.S.Home.Controllers
         /// </summary>
         /// <param name="selectNodeID"></param>
         /// <returns></returns>
-        public ActionResult GetRightTree(string selectNodeID, string userid = "", string thisid = "")
+        public ActionResult GetRightTree(string selectNodeID, string userid = "", string thisid = "", bool ismanage =false)
         {
             List<JsTree3Node> rightTreeNodes = new List<JsTree3Node>();
-            var rightList = rightService.GetList(r => r.IsAvailable && !r.IsDel);
+            var rightQueryable = rightService.GetQueryable(r => !r.IsDel);
+            if (!ismanage)
+            {
+                rightQueryable = rightQueryable.Where(r => r.IsAvailable);
+            }
+            var rightList = rightQueryable.ToList();
             rightList.Where(r => r.ParentID == null).ToList().ForEach(r =>
             {
-                bool disabled = r.RightIDPath.Split('/').Any(pid => pid == thisid);
+                bool disabled = r.RightIDPath.Trim('/').Split('/').Any(pid => pid == thisid);
                 bool select = !string.IsNullOrEmpty(selectNodeID) && selectNodeID.Contains(r.ID);
                 var node = new JsTree3Node
                 {
@@ -62,7 +67,7 @@ namespace L.S.Home.Controllers
 
             foreach (var c in childs)
             {
-                bool disabled = parentDisabled || c.RightIDPath.Split('/').Any(pid => pid == thisid);
+                bool disabled = parentDisabled || c.RightIDPath.Trim('/').Split('/').Any(pid => pid == thisid);
                 bool select = !string.IsNullOrEmpty(selectNodeID) && selectNodeID.Contains(c.ID);
                 var child = new JsTree3Node()
                 {
@@ -131,7 +136,7 @@ namespace L.S.Home.Controllers
             Expression<Func<SysRole, bool>> exp = sr => !sr.IsDel && sr.IsAvailable /*&& sr.RoleIDPath.Contains("/" + cuser.RoleID)*/;
             var roles = roleService.GetList(exp);
             var level1 = roles.FirstOrDefault(d => d.Parent == null);
-            bool disabled = level1.RoleIDPath.Split('/').Any(rid => rid == thisid) || !cuser.RolesID.Contains(level1.ID);
+            bool disabled = level1.RoleIDPath.Trim('/').Split('/').Any(rid => rid == thisid) || !cuser.RolesID.Contains(level1.ID);
             var selectedNodeIDs = selectNodeID.Split(',');
             bool selected = selectedNodeIDs.Any(nodeid => nodeid == level1.ID);
             var root = new JsTree3Node()
@@ -150,7 +155,7 @@ namespace L.S.Home.Controllers
 
             foreach (var c in childs)
             {
-                bool disabled = c.RoleIDPath.Split('/').Any(rid => rid == thisid) || (parentDisabled && !userRolesID.Contains(c.ID));
+                bool disabled = c.RoleIDPath.Trim('/').Split('/').Any(rid => rid == thisid) || (parentDisabled && !userRolesID.Contains(c.ID));
                 var child = new JsTree3Node()
                 {
                     id = c.ID,
