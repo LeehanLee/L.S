@@ -63,7 +63,7 @@ namespace L.S.Home.Controllers
         public ActionResult SignOut()
         {
             userBLL.SignOut();
-            return RedirectToAction("Login");
+            return RedirectToAction("index");
         }
         public ActionResult NoPermission()
         {

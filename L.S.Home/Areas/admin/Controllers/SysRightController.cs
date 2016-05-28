@@ -2,6 +2,7 @@
 using L.S.Home.Models;
 using L.S.Interface;
 using L.S.Model.DatabaseModel.Entity;
+using L.S.Model.DomainModel.Sys;
 using L.S.Service;
 using L.Study.Common;
 using L.Study.Common.Cache;
@@ -30,6 +31,40 @@ namespace L.S.Home.Areas.admin.Controllers
             var model = rightService.GetPagedList(r => !r.IsDel, page, pageSize, modellist => modellist.OrderBy(r=>r.SortNo).ThenByDescending(r => r.UpdateDate).ThenByDescending(r => r.AddDate));
             return View(model);
         }
+        [LSAuthorize("RightsManage", "SysManage", "RightsManage")]
+        public ActionResult TreeIndex(int page = 1, int pageSize = 10)
+        {
+            ViewBag.RightPositionList = GetRightPositionItem();
+            ViewBag.RightActionTypeItem = GetRightActionTypeItem();
+            List<SysRight> pageRights = new List<SysRight>();
+            pageRights.AddRange(ViewBag.pageTopRightList);
+            pageRights.AddRange(ViewBag.pageRightRightList);
+            pageRights = pageRights.OrderBy(r => r.SortNo).ToList();
+            ViewBag.pageRights = pageRights;
+            return View();
+        }
+        [LSAuthorize("RightsManage", "SysManage", "RightsManage")]
+        public ActionResult GetSysRight(string id)
+        {
+            var model = CacheMaker.RedisCache.GetOrSetThenGet("SysRightTreeNodeData-" + id, () =>
+                {
+                    return rightService.GetList(r => r.ID == id).Select(r => new SysRightViewModel
+                    {
+                        ID = r.ID,
+                        Name = r.Name,
+                        ParentID = r.ParentID,
+                        ParentName = r.Parent == null ? "" : r.Parent.Name,
+                        MenuUrl = r.MenuUrl,
+                        IsAvailable = r.IsAvailable,
+                        AddBy=r.AddBy,
+                        AddDate=r.AddDate,
+                        ActionType=r.ActionType,
+                        Position=r.Position,
+                        SortNo = r.SortNo
+                    }).FirstOrDefault();
+                },5);
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
 
         [LSAuthorize("RightCreate", "SysManage", "RightsManage")]
         public ActionResult Create()
@@ -40,7 +75,7 @@ namespace L.S.Home.Areas.admin.Controllers
         [LSAuthorize("RightCreate", "SysManage", "RightsManage")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,IsAvailable,Name,ParentID,ActionType,MenuUrl,Position,SortNo")] SysRight sysRight)
+        public ActionResult Create([Bind(Include = "ID,IsAvailable,Name,ParentID,ActionType,MenuUrl,Position,SortNo,DisplayName")] SysRight sysRight)
         {            
             sysRight.AddBy = "before login";
             sysRight.AddByName = "before login";
@@ -106,12 +141,14 @@ namespace L.S.Home.Areas.admin.Controllers
             return View(sysRight);
         }
 
+        
         [LSAuthorize("RightEdit", "SysManage", "RightsManage")]
         [HttpPost]
-        public ActionResult Edit([Bind(Include = "ID,IsAvailable,Name,ParentID,AddBy,AddDate,ActionType,MenuUrl,Position,SortNo")] SysRight sysRight)
-        {
-            sysRight.UpdateBy = "before login";
-            sysRight.UpdateByName = "before login";
+        public ActionResult Edit([Bind(Include = "ID,IsAvailable,Name,ParentID,AddBy,AddDate,ActionType,MenuUrl,Position,SortNo,DisplayName")] SysRight sysRight)
+        {            
+            
+            sysRight.UpdateBy = cuser.UserID;
+            sysRight.UpdateByName = cuser.LoginName;
             sysRight.UpdateDate = DateTime.Now;
             sysRight.ParentID = string.IsNullOrEmpty(sysRight.ParentID) ? null : sysRight.ParentID;
             if (sysRight.ParentID != sysRight.ID)
@@ -124,7 +161,7 @@ namespace L.S.Home.Areas.admin.Controllers
                     rightService.Update(sysRight);
                     if (rightService.SaveChanges(out msg) > 0)
                     {
-                        var r=rightService.Find("UserCreate");
+                        //var r=rightService.Find("UserCreate");
                         CacheMaker.IISCache.Remove("all_sys_right");
                         return Json(new AjaxResult() { success = true, msg = updateSuccess, url = Url.Action("index", "sysright", "admin"), moremsg = msg });
                     }

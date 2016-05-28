@@ -186,7 +186,7 @@ namespace L.S.Home.Areas.admin.Controllers
                 else
                 {
                     return Json(new AjaxResult() { success = false, msg = "未找到上级角色，保存失败", moremsg = msg });
-                } 
+                }
                 #endregion
             }
             else

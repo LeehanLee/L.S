@@ -15,6 +15,8 @@ namespace L.S.Model.DatabaseModel.Entity
             Children = new HashSet<SysRight>();
             SysRoleRights = new HashSet<SysRoleRight>();
         }
+        [MaxLength(10)]
+        public string DisplayName { get; set; }
         [MaxLength(360)]
         public string RightIDPath { get; set; }
         [MaxLength(36)]

@@ -137,6 +137,9 @@
 form.admin-form{padding:20px 0 0 0 !important;margin-right:14px; border:1px solid #852b99 !important;box-shadow: 0px 0px 4px #852b99;}
 .proj-name{line-height:30px;}
 
+.fl{float:left;}
+.fr{float:right;}
+.clear{clear:both;}
 .ls-top{background:black !important;border:0;}
 .ls-tablecontainer{margin:14px 14px 0 0;box-shadow: 0px 0px 5px #888;border:1px solid #852b99;}
 .ls-table{margin-bottom:0px;}
@@ -145,6 +148,8 @@ form.admin-form{padding:20px 0 0 0 !important;margin-right:14px; border:1px soli
 .ls-table-hover-bright thead tr{background: #852b99;color:white;}
 .ls-table-hover-bright tbody tr{-webkit-transition: background-color .3s ease;-moz-transition: background-color .3s ease;-o-transition: background-color .3s ease;transition: background-color .3s ease;}
 .ls-table-hover-bright tbody tr:hover{background:#e43c59 !important;color:white;}
+
+.bs-docs-sidebar{min-height: 200px !important;}
 
 @media (max-width: 767px) {
     .ls-tablecontainer {

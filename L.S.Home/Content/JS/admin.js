@@ -163,11 +163,11 @@ var LS = {
                 $(".form-actions .btn[type=submit]").button('reset');
             },
             keepfootbuttom: function () {
-                if ($(window).height() > $(document.body).height()) {
-                    $(".footer").addClass("navbar-fixed-bottom");
-                } else {
-                    $(".footer").removeClass("navbar-fixed-bottom");
-                }
+                var footheight = $(".footer").outerHeight(true);
+                var topheight = $(".navbar").outerHeight(true);
+                var subheadheight = $(".subhead").outerHeight(true);
+                var level2menuminheight = $(window).height() - footheight - topheight - subheadheight;
+                $(".bs-docs-sidebar").css("height", level2menuminheight);
             },
 
             level2menuposition: function () {
@@ -269,8 +269,7 @@ var LS = {
 
                 url = $.setQueryStr(url, "selectNodeID", $this.val());
                 $("#" + bodyid).jstree({
-                    "checkbox": {
-                        //"keep_selected_style": true,
+                    "checkbox": {                        
                         "three_state": false,
                     },
                     "core": {
@@ -281,8 +280,7 @@ var LS = {
                                 return { 'id': node.id, text: node.text };
                             }
                         }
-                    },
-                    //"plugins": ["search", "state"]                    
+                    },                    
                     "plugins": ["checkbox", "search"]
                 });
                 $("#" + bodyid).jstree().toggle_icons();
@@ -326,23 +324,16 @@ var LS = {
                 });
                 $(righttreedialoge).bind("hide", function () {
                     var allselected = $("#" + bodyid).jstree().get_selected(true);
-                    //if (allselected.length <= 0 && $this.val().trim().length <= 0) {
-                    //    bootbox.alert("请选择权限");
-                    //    return false;
-                    //}
                     var rightids = [];
                     var names = [];
                     $(allselected).each(function (i) {
                         rightids.push(allselected[i].id);
                         names.push(allselected[i].text);
                     });
-                    //if (rightids.length > 0) {
                     $this.val(rightids.join(','));
                     $thisname.val(names.join(','));
                     $thisname.text(names.join(','));
-                    //}
                 });
-
             },
 
             //角色树

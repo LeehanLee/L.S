@@ -22,13 +22,25 @@
         });
     }
 </script>
+<style>
+    .blog-item-caption-container {
+        padding-left: 80px;
+    }
+
+    .blog-item-text-container {
+        margin-left: 80px;
+    }
+    .caption-text-container{
+        font-family: '微软雅黑',Arial,Helvetica,sans-serif;
+    }
+</style>
 <!-- CONTENT -->
 <div class="container clearfix">
     <div class="eleven columns m-bot-25">
         <!-- BLOG ITEM -->
         <div class="blog-item m-bot-35 clearfix">
             <div class="hover-item">
-                <div class="clearfix">
+                <div class="@if(!string.IsNullOrEmpty(Model.ImgPath)){<text>clearfix</text>}">
                     <div class="blog-item-date-inf-container left">
                         <div class="blog-item-date-cont">
                             <div class="blog-item-date">21</div>
@@ -50,23 +62,19 @@
                                         <img data-src="@s" class="swiper-lazy">
                                         <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
                                     </div>
-                                    @*<img class="swiper-lazy" data-src="@s" alt="Ipsum">
-                                        <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>*@
                                 }
                             </div>
                             <div class="swiper-pagination"></div>
                             <!-- Add Arrows -->
-                            @*<div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>*@
                             <div class="mask"></div>
                             <div class="abs">
-                                <a href="/demo/images/content/post-2-1.jpg" class="lightbox zoom info"></a><a href="blog-single.html" class="link info"></a>
+                                <a href="/demo/images/content/post-2-1.jpg" class="lightbox zoom info"></a><a @*href="blog-single.html"*@ class="link info"></a>
                             </div>
                         </div>
                     }
                 </div>
                 <div class="blog-item-caption-container">
-                    <a class="a-invert" href="blog-single.html"><span class="bold">@Model.Name</span></a>
+                    <a class="a-invert" @*href="blog-single.html"*@><span class="bold">@Model.Name</span></a>
                     <div class="lp-item-container-border clearfix">
                         <div class="blog-info-container">
                             <ul class="clearfix">
@@ -102,7 +110,7 @@
         </div>
         <!-- COMMENTS all-->
         <div class="caption-container-main m-bot-30">
-            <div class="caption-text-container"><span class="bold">5</span> COMMENTS</div>
+            <div class="caption-text-container">5 条评论</div>
             <div class="content-container-white caption-bg "></div>
         </div>
         <!-- COMMENTS -->
@@ -118,7 +126,7 @@
                         <div class="comment-head clearfix">
                             <div class="comment-name left"><a href="#">John Doe</a></div>
                             <div class="right">
-                                <span class="comment-desc">15 May 2012 at 10:10</span>
+                                <span class="comment-desc">@DateTime.Now</span>
                                 <span class="comment-reply"><a href="#">Reply</a></span>
                             </div>
                         </div>
@@ -217,7 +225,7 @@
         <!-- LEAVE A COMMENT -->
 
         <div class="caption-container-main m-bot-30">
-            <div class="caption-text-container"><span class="bold">LEAVE</span> A COMMENT</div>
+            <div class="caption-text-container">评论</div>
             <div class="content-container-white caption-bg "></div>
         </div>
         <div class="leave-comment-container">
@@ -235,7 +243,7 @@
                     <textarea name="message" id="Mymessage" rows="5" cols="30" class="text requiredField" onblur="if(this.value=='')this.value='Your message...';" onfocus="if(this.value=='Your message...')this.value='';">Your message...</textarea>
                 </fieldset>
                 <fieldset class="right m-t-min-1">
-                    <input name="Mysubmitted" id="Mysubmitted" value="SEND" class="button medium" type="submit">
+                    <input name="Mysubmitted" id="Mysubmitted" value="保存" class="button medium" type="submit">
                 </fieldset>
             </form>
         </div>

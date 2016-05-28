@@ -1,0 +1,15 @@
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList
+@{
+    string actionName = "/" + ViewContext.RouteData.Values["action"].ToString();
+    string controllerName = "/" + ViewContext.RouteData.Values["controller"].ToString();
+    PagedListRenderOptions normalOption = new PagedListRenderOptions()
+    {
+        ContainerDivClasses= new List<string> { "pagination-1-container " },
+        UlElementClasses = new List<string> { "pagination-1" },
+        
+    };
+
+    List<int> optionsForPerPageDataCount = ViewBag.optionsForPerPageDataCount as List<int>;
+    }
+    @Html.PagedListPager(Model, page => Url.Action(actionName, new { page = page, pagesize = Model.PageSize }), normalOption)

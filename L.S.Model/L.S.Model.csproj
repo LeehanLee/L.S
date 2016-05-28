@@ -61,9 +61,9 @@
     <Compile Include="DatabaseModel\Entity\SysUser.cs" />
     <Compile Include="DatabaseModel\Entity\SysUserRole.cs" />
     <Compile Include="DomainModel\CurrentUser.cs" />
+    <Compile Include="DomainModel\Sys\SysRightViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />

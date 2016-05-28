@@ -17,6 +17,6 @@ namespace L.Study.Common.Cache
         bool Remove(string key);
         bool RemoveAll();
         bool RemoveAll(string filter);
-        T GetOrSetThenGet<T>(string key, Func<T> getFunc) where T:class;
+        T GetOrSetThenGet<T>(string key, Func<T> getFunc, int expireByMinutes=0) where T:class;
     }
 }

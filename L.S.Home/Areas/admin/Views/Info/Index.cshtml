@@ -1,0 +1,27 @@
+﻿@model PagedList.IPagedList<Info>
+
+@{
+    ViewBag.Title = "资讯列表";
+}
+<div>
+    <ul class="breadcrumb admin-bread-ul">
+        <li><a href="@Url.Action("Index","Info")">资讯</a> <span class="divider">/</span></li>
+        <li class="active">资讯列表</li>
+    </ul>
+</div>
+@foreach (SysRight r in ViewBag.pageTopRightList)
+{
+    if (r.ActionType == "View")
+    {
+        <a class="btn btn-primary" target="b" href="@r.MenuUrl" )>@r.Name</a>
+    }
+    else
+    {
+        <a class="btn btn-primary ls-table-@r.ActionType.ToLower()" url="@r.MenuUrl" )>@r.Name</a>
+    }
+}
+@if (Model != null && Model.Count > 0)
+{
+    Html.RenderPartial("InfoList_Pa");
+}
+else { Html.RenderPartial("_NoData"); }
