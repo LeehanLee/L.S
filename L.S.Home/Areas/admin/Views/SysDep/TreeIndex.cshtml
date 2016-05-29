@@ -43,25 +43,7 @@
 }
 <script>
     $(function () {
-        $("#SysDepTreeArea").jstree({
-            "checkbox": {
-                "keep_selected_style": true,
-                "three_state": false,
-            },
-            "core": {
-                "multiple": true,//不允许多选
-                "themes": {
-                    "stripes": true,//隔一行颜色不同                            
-                },
-                'data': {
-                    'url': "@Url.Action("GetDepTree", "Async", new { Area = "", ismanage= true })",
-                    'data': function (node) {
-                        return { 'id': node.id, text: node.text };
-                    }
-                }
-            },
-            "plugins": ["search", "state","wholerow","checkbox"]
-        }).bind('click.jstree', function (event) {
+        function makeSelectedDepNodeToDetail() {
             var allselected = $("#SysDepTreeArea").jstree().get_selected(true);
             var depids = [];
             $(allselected).each(function (i) {
@@ -90,7 +72,26 @@
                     }
                 });
             }
-        });
+        }
+        $("#SysDepTreeArea").jstree({
+            "checkbox": {
+                "keep_selected_style": true,
+                "three_state": false,
+            },
+            "core": {
+                "multiple": true,//不允许多选
+                "themes": {
+                    "stripes": true,//隔一行颜色不同                            
+                },
+                'data': {
+                    'url': "@Url.Action("GetDepTree", "Async", new { Area = "", ismanage= true })",
+                    'data': function (node) {
+                        return { 'id': node.id, text: node.text };
+                    }
+                }
+            },
+            "plugins": ["search", "state","wholerow","checkbox"]
+        }).on('click.jstree', makeSelectedDepNodeToDetail).on('state_ready.jstree', makeSelectedDepNodeToDetail);
         //$("#SysDepTreeArea").jstree().toggle_icons();
 
         var to = false;
@@ -142,14 +143,15 @@
             $("#DepEdit").attr("formaction", $(this).attr("url"));
             $("#ParentID").val("");
             $("#ParentName").text("");
+            $("#IsAvailable-msg").removeClass("alert").removeClass("alert-error").removeClass("alert-success").text("");
             if (allselected != null && allselected.length > 0) {
                 var depids = allselected[0].id;
                 var names = allselected[0].text;
                 $("#ParentID").val(depids);
                 $("#ParentName").text(names);
-                $("#IsAvailable-msg").removeClass("alert").removeClass("alert-error").removeClass("alert-success").text("");
             }
         });
+        $("#DepEdit").attr("formaction", $("#DepCreate").attr("url"));
     });
 </script>
 <div class="tree-area-container">
@@ -186,7 +188,8 @@
                 <label class="control-label">上级部门</label>
                 <div class="controls">
                     <span class="treetext" id="ParentName"></span>
-                    <a class="btn" onclick="LS.admin.myfn.dialogeopendeptree({id:'ParentID',name:'ParentName',toggledisplay:true,multiple:false},'@Url.Action("GetDepTree", "Async", new { Area = "" })');">请选择</a>
+                    <a class="btn" url="@Url.Action("GetDepTree", "Async", new { Area = "" })"
+                        onclick="var url = $(this).attr('url') + '?thisid=' + $('#ID').val(); LS.admin.myfn.dialogeopendeptree({ id: 'ParentID', name: 'ParentName', toggledisplay: true, multiple: false }, url);">请选择</a>
                     <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
                     <input class="treevalue" type="hidden" name="ParentID" id="ParentID" value="" />
                     <span class="ls-msg help-inline"></span>

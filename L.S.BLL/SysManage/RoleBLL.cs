@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace L.S.BLL.SysManage
 {
-    public class RoleBLL:IRoleBLL
+    public class RoleBLL : IRoleBLL
     {
         public IRoleRightService roleRightService;
         public IUserRoleService userRoleService;
@@ -24,33 +24,53 @@ namespace L.S.BLL.SysManage
         {
             SqlParameter param = new SqlParameter("@RoleID", roleID);
             roleRightService.ExecuteSql("DELETE FROM dbo.SysRoleRight WHERE RoleID=@RoleID", out msg, param);
-            SysRightsID.Split(',').ToList().ForEach(rightid =>
+            if (!string.IsNullOrEmpty(SysRightsID))
             {
-                var roleRight = new SysRoleRight()
+                SysRightsID.Split(',').ToList().ForEach(rightid =>
                 {
-                    ID = IdentityCreator.NextIdentity,
-                    RightID = rightid,
-                    RoleID = roleID,
-                };
-                roleRightService.Add(roleRight);
-            });
-            return roleRightService.SaveChanges(out msg) > 0;
+                    if (!string.IsNullOrEmpty(rightid))
+                    {
+                        var roleRight = new SysRoleRight()
+                        {
+                            ID = IdentityCreator.NextIdentity,
+                            RightID = rightid,
+                            RoleID = roleID,
+                        };
+                        roleRightService.Add(roleRight);
+                    }
+                });
+                return roleRightService.SaveChanges(out msg) > 0;
+            }
+            else
+            {
+                return true;
+            }
         }
         public bool SetUserRoles(string userID, string roleIDs, out string msg)
         {
             SqlParameter param = new SqlParameter("@UserID", userID);
             userRoleService.ExecuteSql("DELETE FROM dbo.SysUserRole WHERE UserID=@UserID", out msg, param);
-            roleIDs.Split(',').ToList().ForEach(roileid =>
+            if (!string.IsNullOrEmpty(roleIDs))
             {
-                var userRole = new SysUserRole()
+                roleIDs.Split(',').ToList().ForEach(roileid =>
                 {
-                    ID = IdentityCreator.NextIdentity,
-                    UserID = userID,
-                    RoleID = roileid,
-                };
-                userRoleService.Add(userRole);
-            });
-            return userRoleService.SaveChanges(out msg) > 0;
+                    if (!string.IsNullOrEmpty(roileid))
+                    {
+                        var userRole = new SysUserRole()
+                        {
+                            ID = IdentityCreator.NextIdentity,
+                            UserID = userID,
+                            RoleID = roileid,
+                        };
+                        userRoleService.Add(userRole);
+                    }
+                });
+                return userRoleService.SaveChanges(out msg) > 0;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }

@@ -1,0 +1,243 @@
+﻿@{
+    ViewBag.Title = "分类管理";
+    string treeurl = Url.Action("GetCategoryTree", "Async", new { Area = "", ismanage = true ,cateTypeID= ViewBag.cateTypeID });
+}
+<style>
+    .tree-area-container {
+        border: 1px solid #852b99 !important;
+        box-shadow: 0px 0px 4px #852b99;
+        padding: 20px 0 20px 2% !important;
+        margin-category: 2%;
+        margin-top: 14px;
+    }
+
+        .tree-area-container:after {
+            content: '\0020';
+            display: block;
+            clear: both;
+        }
+
+    .tree-area {
+        width: 22%;
+        padding: 10px;
+        border: 1px solid lightgray;
+    }
+
+    .tree-category-form {
+        margin-left: 2%;
+        width: 72%;
+    }
+
+    form.admin-form {
+        margin-left: 2%;
+    }
+        .tabbable{margin-top:14px;}
+    .nav-tabs{margin-bottom:0px;margin-right:10px;}
+    .tab-content{background:white;border:1px solid #ddd;border-top:none;padding:10px 10px;margin-right:10px;}
+    .admin-nodata{margin: 14px 0 0 0;}
+</style>
+<div>
+    <ul class="breadcrumb admin-bread-ul">
+        <li><a href="@Url.Action("Index","SysUser")">系统管理</a> <span class="divider">/</span></li>
+        <li class="active">分类管理</li>
+    </ul>
+</div>
+@foreach (SysRight r in ViewBag.pageTopRightList)
+{
+    <a id="@r.ID" treetype="Category" class="btn btn-primary ls-treenode-@r.ActionType.ToLower()" url="@r.MenuUrl" )>@r.DisplayName</a>
+}
+<script>
+    $(function () {
+        function makeSelectedCategoryNodeToDetail() {
+            var allselected = $("#CategoryTreeArea").jstree().get_selected(true);
+            var categoryids = [];
+            $(allselected).each(function (i) {
+                categoryids.push(allselected[i].id);
+            });
+            if (categoryids != null && categoryids.length > 0) {
+                $.ajax({
+                    url: "GetCategory",
+                    type: "get",
+                    data: { id: categoryids.join(',') },
+                    success: function (result) {
+                        $("#ID").val(result.ID);
+                        $("#Name").val(result.Name);
+                        $("#ParentID").val(result.ParentID);
+                        $("#ParentName").text(result.ParentName);
+                        $("#AddBy").val(result.AddBy);
+                        $("#AddDate").val(ConvertJSONDateToJSDateObject(result.AddDate));
+                        //$("#CateTypeID").val(result.CateTypeID);
+                        $("#SortNo").val(result.SortNo);
+                        $("#CategoryEdit").attr("formaction", $("#CategoryEdit").attr('url'));
+                        $("#IsAvailable-msg").addClass("alert");
+                        if (result.IsAvailable) {
+                            $("#IsAvailable-msg").removeClass("alert-error").addClass("alert-success").text("已启用");
+                        } else {
+                            $("#IsAvailable-msg").addClass("alert-error").removeClass("alert-success").text("未启用");
+                        }
+                    }
+                });
+            }
+        }
+        $("#CategoryTreeArea").jstree({
+            "checkbox": {
+                "keep_selected_style": true,
+                "three_state": false,
+            },
+            "core": {
+                "multiple": true,//不允许多选
+                "themes": {
+                    "stripes": true,//隔一行颜色不同
+                },
+                'data': {
+                    'url': "/Async/GetCategoryTree?ismanage=true&cateTypeID=@ViewBag.cateTypeID",
+                    'data': function (node) {
+                        return { 'id': node.id, text: node.text };
+                    }
+                }
+            },
+            "plugins": ["search", "state","wholerow","checkbox"]
+        }).on('click.jstree', makeSelectedCategoryNodeToDetail).on('state_ready.jstree', makeSelectedCategoryNodeToDetail);
+        //$("#CategoryTreeArea").jstree().toggle_icons();
+
+        var to = false;
+        $('#CategorySearchBoxText').keyup(function () {
+            if (to) { clearTimeout(to); }
+            to = setTimeout(function () {
+                var v = $('#CategorySearchBoxText').val();
+                $('#CategoryTreeArea').jstree(true).search(v);
+            }, 250);
+        });
+        //展开与折叠功能
+        $("#toggle_all_syscategorytree").click(function () {
+            var $this = $(this);
+            var treestate = $this.attr("treestate");
+            if (treestate == "close") {
+                $("#CategoryTreeArea").jstree().open_all();
+                $this.attr("treestate", "open");
+                $this.val("折叠");
+            }
+            if (treestate == "open") {
+                $("#CategoryTreeArea").jstree().close_all();
+                $this.attr("treestate", "close");
+                $this.val("展开");
+            }
+        });
+
+        $("#toggle_select_all_syscategorytree").click(function () {
+            var $this = $(this);
+            var treestate = $this.attr("treestate");
+            if (treestate == "unselected") {
+                $("#CategoryTreeArea").jstree().select_all();
+                $this.attr("treestate", "selected");
+                $this.val("取消");
+            }
+            if (treestate == "selected") {
+                $("#CategoryTreeArea").jstree().deselect_all();
+                $this.attr("treestate", "unselected");
+                $this.val("全选");
+            }
+        });
+
+        $("#CategoryCreate").click(function (e) {
+            var allselected = $("#CategoryTreeArea").jstree().get_selected(true);
+            $("#ID").val("");
+            $("#Name").val("");
+            $("#AddBy").val("");
+            $("#AddDate").val("");
+            //$("#CateTypeID").val("");
+            $("#SortNo").val("");
+            $("#CategoryEdit").attr("formaction", $(this).attr("url"));
+            $("#ParentID").val("");
+            $("#ParentName").text("");
+            $("#IsAvailable-msg").removeClass("alert").removeClass("alert-error").removeClass("alert-success").text("");
+            if (allselected != null && allselected.length > 0) {
+                var categoryids = allselected[0].id;
+                var names = allselected[0].text;
+                $("#ParentID").val(categoryids);
+                $("#ParentName").text(names);                
+            }
+        });
+        $("#CategoryEdit").attr("formaction", $("#CategoryCreate").attr("url"));
+    });
+</script>
+<div class="tabbable">
+    <ul class="nav nav-tabs">
+        @foreach (CategoryType cateType in ViewBag.cateTypeList)
+        {
+            <li @if (ViewBag.cateTypeID == cateType.ID) { <text> class="active" </text> }><a href="@Url.Action("treeindex",new {cateTypeID=cateType.ID })" @*data-toggle="tab"使用这个表示tab切换之间都在本页面*@>@cateType.Name</a></li>
+        }
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active">
+            <div class="tree-area-container">
+                <div class="tree-area fl">
+                    <div class="" style="margin-bottom:10px;">
+                        <div class="btn-group">
+                            <input class="btn" type="button" id="toggle_all_syscategorytree" treestate="close" value="展开" />
+                            <input class="btn" type="button" id="toggle_select_all_syscategorytree" treestate="unselected" value="全选" />
+                        </div>
+                    </div>
+                    <input type="text" id="CategorySearchBoxText" value="" class="input" style="padding:4px; border-radius:4px; border:1px solid silver;">
+                    <span class="selectedValue"></span>
+                    <div id="CategoryTreeArea">
+                    </div>
+                </div>
+                @model Category
+                @using (Ajax.BeginForm("Create", null, new AjaxOptions() { HttpMethod = "Post", OnBegin = "LS.admin.myfn.AjaxBegin('#form0')", OnSuccess = "LS.admin.myfn.AjaxSuccess", OnFailure = "LS.admin.myfn.AjaxFailure" }, new { @class = "form-horizontal admin-form tree-category-form fl" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="ID" id="ID" />
+                    <input type="hidden" name="AddBy" id="AddBy" />
+                    <input type="hidden" name="AddDate" id="AddDate" />
+                    <input type="hidden" name="IsAvailable" id="IsAvailable" value="true" />
+                    <input type="hidden" name="CateTypeID" id="CateTypeID" value="@ViewBag.cateTypeID"/>
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="control-group">
+                            <label for="Name" class="control-label">分类名称</label>
+                            <div class="controls">
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @validate = "", @empty = "no" } })
+                                <span class="ls-msg help-inline"></span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">上级分类</label>
+                            <div class="controls">
+                                <span class="treetext" id="ParentName"></span>
+                                <a class="btn" url="@Url.Action("GetCategoryTree", "Async", new { Area = "" ,cateTypeID=ViewBag.cateTypeID})" 
+                                   onclick="var url=$(this).attr('url')+'&thisid='+$('#ID').val();LS.admin.myfn.dialogeopencategorytree({id:'ParentID',name:'ParentName',toggledisplay:true,multiple:false},url);">请选择</a>
+                                <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
+                                <input class="treevalue" type="hidden" name="ParentID" id="ParentID" value="" />
+                                <span class="ls-msg help-inline"></span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="SortNo" class="control-label">排序号</label>
+                            <div class="controls">
+                                <input name="SortNo" id="SortNo" type="text" max="5" />
+                                <span class="ls-msg help-inline"></span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="controls">
+                                <label class="checkbox" name="IsAvailable-msg" id="IsAvailable-msg">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            @foreach (SysRight r in ViewBag.pageRightRightList)
+                {
+                                <button id="@r.ID" url="@r.MenuUrl.ToLower()" formaction="@r.MenuUrl.ToLower()" onclick="$('#form0').attr('action', $(this).attr('formaction'));" type="submit" class="btn btn-primary" data-loading-text="提交中" data-complete-text="完成">保存</button>
+                            }
+                            <button class="btn" type="button" onclick="history.go(-1);">返回</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

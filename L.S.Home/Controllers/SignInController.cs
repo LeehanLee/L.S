@@ -42,17 +42,17 @@ namespace L.S.Home.Controllers
             SysUser verifiedUser;
             if (VerifyUser(model, out verifiedUser))
             {
-                var homePath = "";
-                if (userBLL.SignIn(verifiedUser, out homePath))
+                var homePathOrMsg = "";
+                if (userBLL.SignIn(verifiedUser, out homePathOrMsg))
                 {
                     string url = Url.Action("index", "sysuser", "admin");//再次取一个硬代码规定的的主页
-                    if (!string.IsNullOrEmpty(homePath)) { url = homePath; }//其次取数据库内为角色设置的默认主页
-                    if (!string.IsNullOrEmpty(returnurl)) { url = returnurl; }//最dmu优先取访问时带来的返回地址
+                    if (!string.IsNullOrEmpty(homePathOrMsg)) { url = homePathOrMsg; }//其次取数据库内为角色设置的默认主页
+                    if (!string.IsNullOrEmpty(returnurl)) { url = returnurl; }//最优先取访问时带来的返回地址
                     return Json(new AjaxResult() { success = true, msg = "登录成功", url = url });
                 }
                 else
                 {
-                    return Json(new AjaxResult() { success = false, msg = "登录失败，请联系管理员", moremsg = "管理员请检查缓存服务是否启动" });
+                    return Json(new AjaxResult() { success = false, msg = "登录失败，请联系管理员", moremsg = homePathOrMsg });
                 }
             }
             else

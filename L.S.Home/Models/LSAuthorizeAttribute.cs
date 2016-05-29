@@ -85,7 +85,7 @@ namespace L.S.Home.Models
                 p.SetValue(c, cuser);
                 if (string.IsNullOrEmpty(RightCode)||cuser == null||string.IsNullOrEmpty(cuser.RightIDs)||!cuser.RightIDs.Contains(RightCode))//若没有权限，重定向到一个无权限的说明页面
                 {
-                    string no_permission_url = Url.Action("NoPermission", "index", new { area = "" });
+                    string no_permission_url = Url.Action("nopermission", "home", new { area = "" });
                     HttpContext.Current.Response.Redirect(no_permission_url, true);
                     return;
                 }
@@ -111,7 +111,7 @@ namespace L.S.Home.Models
             {
                 var CrypteKey = ConfigMgr.GetAppSettingString("CrypteKey");
                 cuser = JsonConvert.DeserializeObject<CurrentUser>(Cryptor.DesDecrypt(cookieLoginInfo, CrypteKey));
-                string cacheLoginInfo = CacheMaker.RedisCache.Get<string>(cuser.UserID);
+                string cacheLoginInfo = CacheMaker.RedisCache.Get<string>("sidkey" + cuser.UserID);
                 if (!string.IsNullOrEmpty(cacheLoginInfo))
                 {
                     return cookieLoginInfo.Equals(cacheLoginInfo);

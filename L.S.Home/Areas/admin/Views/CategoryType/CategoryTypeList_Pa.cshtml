@@ -1,0 +1,82 @@
+﻿
+@model PagedList.IPagedList<CategoryType>
+@if (Model != null && Model.Count > 0)
+{
+    <div class=" ls-tablecontainer">
+        <table class="table ls-table ls-table-hover-bright">
+            <thead>
+                <tr>
+                    <th style="width:3%">
+                        <input type="checkbox" class="ls-table-selectall" />
+                    </th>
+                    <th>
+                        分类类型名称
+                    </th>
+                    <th>
+                        添加人
+                    </th>
+                    <th>
+                        添加日期
+                    </th>
+                    <th>
+                        修改人
+                    </th>
+                    <th>
+                        修改日期
+                    </th>
+                    <th>
+                        启用
+                    </th>
+                    <th style="width:8%">操作</th>
+                </tr>
+            </thead>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" class="ls-table-selecttr" value="@item.ID" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AddByName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AddDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UpdateByName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UpdateDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsAvailable)
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            @foreach (SysRight r in ViewBag.pageRightRightList)
+                            {
+                                if (r.ActionType == "View")
+                                {
+                                    <a class="btn btn-primary" href="@r.MenuUrl/@item.ID" )>@r.DisplayName</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-primary ls-table-@r.ActionType.ToLower()" url="@r.MenuUrl/@item.ID" )>@r.DisplayName</a>
+                                }
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+    Html.RenderPartial("Pager_admin", Model);
+}
+else
+{
+    Html.RenderPartial("_NoData");
+}

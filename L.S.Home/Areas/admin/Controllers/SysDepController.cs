@@ -36,8 +36,6 @@ namespace L.S.Home.Areas.admin.Controllers
         [LSAuthorize("DepsManage", "SysManage", "DepsManage")]
         public ActionResult TreeIndex(int page = 1, int pageSize = 10)
         {
-            //ViewBag.RightPositionList = GetRightPositionItem();
-            //ViewBag.RightActionTypeItem = GetRightActionTypeItem();
             return View();
         }
 
@@ -69,20 +67,21 @@ namespace L.S.Home.Areas.admin.Controllers
         [LSAuthorize("DepCreate", "SysManage", "DepsManage")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ParentID,IsAvailable,IsDel,Name,SortNo")] SysDep sysDep)
+        public ActionResult Create([Bind(Include = "ParentID,IsAvailable,IsDel,Name,SortNo")] SysDep model)
         {            
-            sysDep.ID = IdentityCreator.NextIdentity;
-            sysDep.AddBy = "before login";
-            sysDep.AddDate = DateTime.Now;
-            sysDep.IsDel = false;
-            if (string.IsNullOrEmpty(Request["SortNo"])) { sysDep.SortNo = 0; }
-            var parentDep=depService.Find(sysDep.ParentID);
+            model.ID = IdentityCreator.NextIdentity;
+            model.AddBy = cuser.UserID;
+            model.AddByName = cuser.LoginName;
+            model.AddDate = DateTime.Now;
+            model.IsDel = false;
+            if (string.IsNullOrEmpty(Request["SortNo"])) { model.SortNo = 0; }
+            var parentDep=depService.Find(model.ParentID);
             if (parentDep != null)
             {
-                sysDep.ParentName = parentDep == null ? null : parentDep.Name;
-                sysDep.DepFullIDPath = parentDep.DepFullIDPath + sysDep.ID + "/";
-                sysDep.DepFullNamePath = parentDep.DepFullNamePath  + sysDep.Name + "/";
-                depService.Add(sysDep);
+                model.ParentName = parentDep == null ? null : parentDep.Name;
+                model.DepFullIDPath = parentDep.DepFullIDPath + model.ID + "/";
+                model.DepFullNamePath = parentDep.DepFullNamePath  + model.Name + "/";
+                depService.Add(model);
                 if(depService.SaveChanges(out msg) > 0)
                 {
                     return Json(new AjaxResult() { success = true, msg = insertSuccess, url = Url.Action("treeindex", "sysdep", "admin"), moremsg = msg });

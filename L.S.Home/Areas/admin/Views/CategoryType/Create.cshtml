@@ -1,34 +1,24 @@
-﻿@model SysDep
+﻿@model CategoryType
 @{
-    ViewBag.Title = "部门添加";
+    ViewBag.Title = "分类类型添加";
 }
 <div>
     <ul class="breadcrumb admin-bread-ul">
         <li><a href="@Url.Action("Index","SysUser")">系统管理</a> <span class="divider">/</span></li>
-        <li><a href="@Url.Action("Index","SysDep")">部门管理</a> <span class="divider">/</span></li>
-        <li class="active">部门添加</li>
+        <li><a href="@Url.Action("Index","CategoryType")">分类类型管理</a> <span class="divider">/</span></li>
+        <li class="active">分类类型添加</li>
     </ul>
 </div>
 @using (Ajax.BeginForm("Create", null, new AjaxOptions() { HttpMethod = "Post", OnBegin = "LS.admin.myfn.AjaxBegin('#form0')", OnSuccess = "LS.admin.myfn.AjaxSuccess" }, new { @class = "form-horizontal admin-form" }))
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">                
+
+    <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="control-group">
-            <label for="Name" class="control-label">部门名称</label>
+            <label for="Name" class="control-label">分类类型名称</label>
             <div class="controls">
                 <input type="text" maxlength="16" name="Name" placeholder="名称" validate min="2" max="10">
-                <span class="ls-msg help-inline"></span>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">上级部门</label>
-            <div class="controls">
-                <span class="treetext" id="ParentName"></span>
-                <a class="btn" onclick="LS.admin.myfn.dialogeopendeptree({id:'ParentID',name:'ParentName'},'@Url.Action("GetDepTree", "Async", new { Area = ""})');">请选择</a>
-                <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
-                <input class="treevalue" type="hidden" name="ParentID" id="ParentID" validate min="2" max="36" msg="请选择上级部门"/>
                 <span class="ls-msg help-inline"></span>
             </div>
         </div>

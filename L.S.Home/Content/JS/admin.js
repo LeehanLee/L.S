@@ -490,6 +490,86 @@ var LS = {
                 });
 
             },
+
+            //分类树
+            dialogeopencategorytree: function (obj, url) {
+                if (typeof obj == "string") {
+                    var $this = $("#" + obj);
+                    var $thisname = $("#" + obj + "name");
+                }
+                if (typeof obj == "object") {
+                    $this = $("#" + obj.id);
+                    $thisname = $("#" + obj.name);
+                }
+                var bodyid = "categorytreebody";
+                var searchboxid = "categorysearchbox";
+                var categorytreedialoge = bootbox.alert({ header: "请选择", bodyid: bodyid, searchboxid: searchboxid, toggledisplay: true, width: 560, height: 500, classes: "treecontainer" });
+
+                url = $.setQueryStr(url, "selectNodeID", $this.val());
+                $("#" + bodyid).jstree({
+                    "checkbox": {
+                        "keep_selected_style": true,
+                        "three_state": false,
+                    },
+                    "core": {
+                        "multiple": false,//不允许多选
+                        "themes": {
+                            "stripes": true,//隔一行颜色不同                            
+                        },
+                        'data': {
+                            'url': url,
+                            'data': function (node) {
+                                return { 'id': node.id, text: node.text };
+                            }
+                        }
+                    },
+                    //"plugins": ["search", "state"]
+                    "plugins": ["search", "wholerow", "checkbox"]
+                });
+                //$("#" + bodyid).jstree().toggle_icons();//不用这行代码表示使用默认的节点图标
+                var to = false;
+                $('#' + searchboxid).keyup(function () {
+                    if (to) { clearTimeout(to); }
+                    to = setTimeout(function () {
+                        var v = $('#' + searchboxid).val();
+                        $('#' + bodyid).jstree(true).search(v);
+                    }, 250);
+                });
+                //展开与折叠功能
+                $("#toggle_all" + bodyid).click(function () {
+                    var $this = $(this);
+                    var treestate = $this.attr("treestate");
+                    if (treestate == "close") {
+                        $("#" + bodyid).jstree().open_all();
+                        $this.attr("treestate", "open");
+                        $this.text("折叠");
+                    }
+                    if (treestate == "open") {
+                        $("#" + bodyid).jstree().close_all();
+                        $this.attr("treestate", "close");
+                        $this.text("展开");
+                    }
+                });
+                $(categorytreedialoge).bind("hide", function () {
+                    var allselected = $("#" + bodyid).jstree().get_selected(true);
+                    //if (allselected.length <= 0 && $this.val().trim().length <= 0) {
+                    //    bootbox.alert("请选择部门");
+                    //    return false;
+                    //}
+                    var categoryids = [];
+                    var names = [];
+                    $(allselected).each(function (i) {
+                        categoryids.push(allselected[i].id);
+                        names.push(allselected[i].text);
+                    });
+                    //if (categoryids.length > 0) {
+                    $this.val(categoryids.join(','));
+                    $thisname.val(names.join(','));
+                    $thisname.text(names.join(','));
+                    //}
+                });
+
+            },
         }
     }
 };

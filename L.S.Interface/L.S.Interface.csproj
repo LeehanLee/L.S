@@ -45,6 +45,8 @@
     <Compile Include="BLL\IRoleBLL.cs" />
     <Compile Include="BLL\IUserBLL.cs" />
     <Compile Include="IBaseService.cs" />
+    <Compile Include="ICategoryService.cs" />
+    <Compile Include="ICategoryTypeService.cs" />
     <Compile Include="IDepService.cs" />
     <Compile Include="IInfoService.cs" />
     <Compile Include="IRightService.cs" />

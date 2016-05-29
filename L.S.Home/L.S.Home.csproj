@@ -142,7 +142,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\admin\adminAreaRegistration.cs" />
+    <Compile Include="Areas\admin\Controllers\CategoryController.cs" />
+    <Compile Include="Areas\admin\Controllers\CategoryTypeController.cs" />
     <Compile Include="Areas\admin\Controllers\InfoController.cs" />
+    <Compile Include="Areas\admin\Controllers\ProductController.cs" />
     <Compile Include="Areas\admin\Controllers\SysController.cs" />
     <Compile Include="Areas\admin\Controllers\SysDepController.cs" />
     <Compile Include="Areas\admin\Controllers\SysRightController.cs" />
@@ -368,6 +371,16 @@
     <Content Include="Areas\admin\Views\SysRight\TreeIndex.cshtml" />
     <Content Include="Areas\admin\Views\SysDep\TreeIndex.cshtml" />
     <Content Include="Areas\admin\Views\SysRole\TreeIndex.cshtml" />
+    <Content Include="Areas\admin\Views\Product\Index.cshtml" />
+    <Content Include="Areas\admin\Views\CategoryType\Create.cshtml" />
+    <Content Include="Areas\admin\Views\CategoryType\Index.cshtml" />
+    <Content Include="Areas\admin\Views\CategoryType\Edit.cshtml" />
+    <Content Include="Areas\admin\Views\CategoryType\CategoryTypeList_Pa.cshtml" />
+    <Content Include="Areas\admin\Views\Category\Index.cshtml" />
+    <Content Include="Areas\admin\Views\Category\CategoryList_Pa.cshtml" />
+    <Content Include="Areas\admin\Views\Category\Create.cshtml" />
+    <Content Include="Areas\admin\Views\Category\Edit.cshtml" />
+    <Content Include="Areas\admin\Views\Category\TreeIndex.cshtml" />
     <None Include="Scripts\jquery-1.12.0.intellisense.js" />
     <Content Include="login\css\form-elements.css" />
     <Content Include="login\css\style.css" />
@@ -674,7 +687,6 @@
     <Content Include="Views\Test\FormUrlTest.cshtml" />
     <Content Include="Views\Test\CacheTest.cshtml" />
     <Content Include="Views\SignIn\Index.cshtml" />
-    <Content Include="Views\Index\NoPermission.cshtml" />
     <Content Include="Views\Test\Uploadify.cshtml" />
     <Content Include="Views\Test\UEditorTest.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
@@ -682,6 +694,7 @@
     <Content Include="Views\Article\Details.cshtml" />
     <Content Include="Views\Shared\_home_LayoutPage.cshtml" />
     <Content Include="Views\Shared\Pager.cshtml" />
+    <Content Include="Views\Home\NoPermission.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\admin\Models\" />

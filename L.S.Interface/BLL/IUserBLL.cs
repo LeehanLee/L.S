@@ -10,7 +10,7 @@ namespace L.S.Interface.BLL
 {
     public interface IUserBLL
     {
-        bool SignIn(SysUser Model, out string homePath);
+        bool SignIn(SysUser Model, out string homePathOrMsg);
         bool SignOut();
         CurrentUser GetCurrentUser();
     }

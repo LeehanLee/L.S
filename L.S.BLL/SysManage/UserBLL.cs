@@ -25,7 +25,7 @@ namespace L.S.BLL.SysManage
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public bool SignIn(SysUser model, out string homePath)
+        public bool SignIn(SysUser model, out string homePathOrMsg)
         {
             CurrentUser cuser = new CurrentUser();
             cuser.UserID = model.ID;
@@ -39,25 +39,33 @@ namespace L.S.BLL.SysManage
                 sur.SysRole.DefaultHomePath,
                 Rights = sur.SysRole.SysRoleRights.Where(rr => !rr.SysRight.IsDel && rr.SysRight.IsAvailable).Select(rr => rr.RightID)
             }).ToList();
-
-            cuser.HomePath = roles.FirstOrDefault(ro => ro.Level == roles.Min(r => r.Level)).DefaultHomePath;
-            homePath = cuser.HomePath;
-            cuser.RolesID = string.Join(",", roles.Select(r => r.ID).ToArray());
-            cuser.RolesName = string.Join(",", roles.Select(r => r.Name).ToArray());
-            var rightIDs = roles.SelectMany(rr => rr.Rights).Distinct().ToArray();
-            cuser.RightIDs = string.Join(",", rightIDs);
-            var cuserStr = JsonConvert.SerializeObject(cuser);
-            var CrypteKey = ConfigMgr.GetAppSettingString("CrypteKey");
-            var cuserHash = Cryptor.DesEncrypt(cuserStr, CrypteKey);
-            string domain = CookieMgr.GetDomain(HttpContext.Current.Request.Url.ToString());
-            CookieMgr.Set(LoginCookieName, cuserHash, 0, domain);
-            if (CacheMaker.RedisCache.Set(cuser.UserID, cuserHash))
+            if (roles != null && roles.Count > 0)
             {
-                return true;
+                cuser.HomePath = roles.FirstOrDefault(ro => ro.Level == roles.Min(r => r.Level)).DefaultHomePath;
+                homePathOrMsg = cuser.HomePath;
+                cuser.RolesID = string.Join(",", roles.Select(r => r.ID).ToArray());
+                cuser.RolesName = string.Join(",", roles.Select(r => r.Name).ToArray());
+                var rightIDs = roles.SelectMany(rr => rr.Rights).Distinct().ToArray();
+                cuser.RightIDs = string.Join(",", rightIDs);
+                var cuserStr = JsonConvert.SerializeObject(cuser);
+                var CrypteKey = ConfigMgr.GetAppSettingString("CrypteKey");
+                var cuserHash = Cryptor.DesEncrypt(cuserStr, CrypteKey);
+                string domain = CookieMgr.GetDomain(HttpContext.Current.Request.Url.ToString());
+                CookieMgr.Set(LoginCookieName, cuserHash, 0, domain);
+                if (CacheMaker.RedisCache.Set("sidkey" + cuser.UserID, cuserHash))
+                {
+                    return true;
+                }
+                else
+                {
+                    CookieMgr.Remove(LoginCookieName);
+                    homePathOrMsg = "缓存设置失败，请管理员检查是否安装缓存服务";
+                    return false;
+                }
             }
             else
             {
-                CookieMgr.Remove(LoginCookieName);
+                homePathOrMsg = "当前用户没有启用的角色";
                 return false;
             }
         }
@@ -75,7 +83,7 @@ namespace L.S.BLL.SysManage
             else
             {
                 CookieMgr.Remove(LoginCookieName);
-                CacheMaker.RedisCache.Remove(cuser.UserID);
+                CacheMaker.RedisCache.Remove("sidkey" + cuser.UserID);
                 return true;
             }
         }
@@ -93,7 +101,7 @@ namespace L.S.BLL.SysManage
             {
                 var CrypteKey = ConfigMgr.GetAppSettingString("CrypteKey");
                 cuser = JsonConvert.DeserializeObject<CurrentUser>(Cryptor.DesDecrypt(cookieLoginInfo, CrypteKey));
-                string cacheLoginInfo = CacheMaker.RedisCache.Get<string>(cuser.UserID);
+                string cacheLoginInfo = CacheMaker.RedisCache.Get<string>("sidkey" + cuser.UserID);
                 if (!string.IsNullOrEmpty(cacheLoginInfo))
                 {
                     if (cookieLoginInfo.Equals(cacheLoginInfo))

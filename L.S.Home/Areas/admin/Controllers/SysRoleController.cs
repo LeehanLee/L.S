@@ -91,8 +91,9 @@ namespace L.S.Home.Areas.admin.Controllers
                 if (sysRole.ID != "superadmin")
                 {
                     var parentRolesRightIDList = parentRole.SysRoleRights.Select(srr => srr.RightID).Distinct().ToList();
-                    var roleRightIDList = SysRightsID.Split(',');
-                    if (roleRightIDList.Any(rid => !parentRolesRightIDList.Contains(rid)))//如果所选权限里有一个是上级角色所没有的，就表示所选的上级角色权限太小了，将不允许保存
+                    var roleRightIDList = SysRightsID.Split(',').Where(s => !string.IsNullOrEmpty(s)).ToList();
+                    var notallowed = roleRightIDList.Any(rid => !parentRolesRightIDList.Contains(rid));
+                    if (notallowed)//如果所选权限里有一个是上级角色所没有的，就表示所选的上级角色权限太小了，将不允许保存
                     {
                         return Json(new AjaxResult() { success = false, msg = insertFailure + "，所选上级角色的权限小于为此角色所选择的权限", moremsg = msg });
                     }
@@ -178,8 +179,9 @@ namespace L.S.Home.Areas.admin.Controllers
                     if (sysRole.ID != "superadmin")
                     {
                         var parentRolesRightIDList = parentRole.SysRoleRights.Select(srr => srr.RightID).Distinct().ToList();
-                        var roleRightIDList = SysRightsID.Split(',');
-                        if (roleRightIDList.Any(rid => !parentRolesRightIDList.Contains(rid)))//如果所选权限里有一个是上级角色所没有的，就表示所选的上级角色权限太小了，将不允许保存
+                        var roleRightIDList = SysRightsID.Split(',').Where(s=>!string.IsNullOrEmpty(s)).ToList();
+                        var notallowed = roleRightIDList.Any(rid => !parentRolesRightIDList.Contains(rid));
+                        if (notallowed)//如果所选权限里有一个是上级角色所没有的，就表示所选的上级角色权限太小了，将不允许保存
                         {
                             return Json(new AjaxResult() { success = false, msg = updateFailure + "，所选上级角色的权限小于为此角色所选择的权限", moremsg = msg });
                         }

@@ -51,9 +51,12 @@
     <Compile Include="DatabaseModel\Context\LSContext.cs" />
     <Compile Include="DatabaseModel\Context\LSInitializer.cs" />
     <Compile Include="DatabaseModel\Entity\BaseEntity.cs" />
+    <Compile Include="DatabaseModel\Entity\Category.cs" />
+    <Compile Include="DatabaseModel\Entity\CategoryType.cs" />
     <Compile Include="DatabaseModel\Entity\Identifiable.cs" />
     <Compile Include="DatabaseModel\Entity\Info.cs" />
     <Compile Include="DatabaseModel\Entity\NamedEntity.cs" />
+    <Compile Include="DatabaseModel\Entity\Product.cs" />
     <Compile Include="DatabaseModel\Entity\SysDep.cs" />
     <Compile Include="DatabaseModel\Entity\SysRight.cs" />
     <Compile Include="DatabaseModel\Entity\SysRole.cs" />
@@ -61,6 +64,7 @@
     <Compile Include="DatabaseModel\Entity\SysUser.cs" />
     <Compile Include="DatabaseModel\Entity\SysUserRole.cs" />
     <Compile Include="DomainModel\CurrentUser.cs" />
+    <Compile Include="DomainModel\Sys\CategoryViewModel.cs" />
     <Compile Include="DomainModel\Sys\SysDepViewModel.cs" />
     <Compile Include="DomainModel\Sys\SysRightViewModel.cs" />
     <Compile Include="DomainModel\Sys\SysRoleViewModel.cs" />

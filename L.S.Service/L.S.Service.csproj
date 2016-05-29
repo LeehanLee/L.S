@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseService.cs" />
+    <Compile Include="CategoryService.cs" />
+    <Compile Include="CategoryTypeService.cs" />
     <Compile Include="CommonStr.cs" />
     <Compile Include="DepService.cs" />
     <Compile Include="InfoService.cs" />

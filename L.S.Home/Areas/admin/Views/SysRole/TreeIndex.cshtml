@@ -43,25 +43,7 @@
 }
 <script>
     $(function () {
-        $("#SysRoleTreeArea").jstree({
-            "checkbox": {
-                "keep_selected_style": true,
-                "three_state": false,
-            },
-            "core": {
-                "multiple": true,//不允许多选
-                "themes": {
-                    "stripes": true,//隔一行颜色不同
-                },
-                'data': {
-                    'url': "@Url.Action("GetRoleTree", "Async", new { Area = "", ismanage= true })",
-                    'data': function (node) {
-                        return { 'id': node.id, text: node.text };
-                    }
-                }
-            },
-            "plugins": ["search", "state","wholerow","checkbox"]
-        }).bind('click.jstree', function (event) {
+        function makeSelectedRoleNodeToDetail() {
             var allselected = $("#SysRoleTreeArea").jstree().get_selected(true);
             var roleids = [];
             $(allselected).each(function (i) {
@@ -93,7 +75,27 @@
                     }
                 });
             }
-        });
+        }
+
+        $("#SysRoleTreeArea").jstree({
+            "checkbox": {
+                "keep_selected_style": true,
+                "three_state": false,
+            },
+            "core": {
+                "multiple": true,//不允许多选
+                "themes": {
+                    "stripes": true,//隔一行颜色不同
+                },
+                'data': {
+                    'url': "@Url.Action("GetRoleTree", "Async", new { Area = "", ismanage= true })",
+                    'data': function (node) {
+                        return { 'id': node.id, text: node.text };
+                    }
+                }
+            },
+            "plugins": ["search", "state","wholerow","checkbox"]
+        }).on('click.jstree', makeSelectedRoleNodeToDetail).on('state_ready.jstree', makeSelectedRoleNodeToDetail);
         //$("#SysRoleTreeArea").jstree().toggle_icons();
 
         var to = false;
@@ -148,14 +150,15 @@
             $("#RoleEdit").attr("formaction", $(this).attr("url"));
             $("#ParentID").val("");
             $("#ParentName").text("");
+            $("#IsAvailable-msg").removeClass("alert").removeClass("alert-error").removeClass("alert-success").text("");
             if (allselected != null && allselected.length > 0) {
                 var roleids = allselected[0].id;
                 var names = allselected[0].text;
                 $("#ParentID").val(roleids);
-                $("#ParentName").text(names);
-                $("#IsAvailable-msg").removeClass("alert").removeClass("alert-error").removeClass("alert-success").text("");
+                $("#ParentName").text(names);                
             }
         });
+        $("#RoleEdit").attr("formaction", $("#RoleCreate").attr("url"));
     });
 </script>
 <div class="tree-area-container">
@@ -192,7 +195,8 @@
                 <label class="control-label">上级角色</label>
                 <div class="controls">
                     <span class="treetext" id="ParentName"></span>
-                    <a class="btn" onclick="LS.admin.myfn.dialogeopenroletree({id:'ParentID',name:'ParentName',toggledisplay:true,multiple:false},'@Url.Action("GetRoleTree", "Async", new { Area = "" })');">请选择</a>
+                    <a class="btn" url="@Url.Action("GetRoleTree", "Async", new { Area = "" })"
+                        onclick="var url = $(this).attr('url') + '?thisid=' + $('#ID').val(); LS.admin.myfn.dialogeopenroletree({ id: 'ParentID', name: 'ParentName', toggledisplay: true, multiple: false }, url);">请选择</a>
                     <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
                     <input class="treevalue" type="hidden" name="ParentID" id="ParentID" value="" />
                     <span class="ls-msg help-inline"></span>
@@ -204,7 +208,7 @@
                     <span class="treetext" id="SysRightsName">@*@ViewBag.rightNameStr*@</span>
                     <a class="btn" onclick="LS.admin.myfn.dialogeopenrighttree({id:'SysRightsID',name:'SysRightsName',toggledisplay:true,toggleselect:true},'@Url.Action("GetRightTree", "Async", new { Area = "" })');">请选择</a>
                     <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
-                    <input class="treevalue" type="hidden" name="SysRightsID" id="SysRightsID" value="@ViewBag.rightIDStr" validate min="2" msg="请为角色选择相应的权限" />
+                    <input class="treevalue" type="hidden" name="SysRightsID" id="SysRightsID" value="@ViewBag.rightIDStr" @*validate min="2" msg="请为角色选择相应的权限"*@ />
                     <span class="ls-msg help-inline"></span>
                 </div>
             </div>

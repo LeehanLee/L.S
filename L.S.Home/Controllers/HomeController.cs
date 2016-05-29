@@ -246,5 +246,9 @@ namespace L.S.Home.Controllers
         {
             return View();
         }
+        public ActionResult NoPermission()
+        {
+            return View();
+        }
     }
 }

@@ -5,6 +5,7 @@ using L.S.Interface;
 using L.S.Interface.BLL;
 using L.S.Model.DatabaseModel.Entity;
 using L.Study.Common;
+using L.Study.Common.Cache;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +24,7 @@ namespace L.S.Home.Areas.admin.Controllers
         public SysUserController(IUserService _userService, IDepService _depService,IRoleBLL _roleBLL)
         {
             userService = _userService;
-            depService = _depService;
-            //roleBll = IocConfig.Container.Resolve<RoleBLL>();
+            depService = _depService;            
             roleBll = _roleBLL;
         }
 
@@ -49,7 +49,8 @@ namespace L.S.Home.Areas.admin.Controllers
         {
             SysUser u = model;
             u.ID = IdentityCreator.NextIdentity;
-            u.AddBy = "before login";
+            u.AddBy = cuser.UserID;
+            u.AddByName = cuser.LoginName;
             u.AddDate = DateTime.Now;
             if (!userService.Exist(user => user.LoginName == model.LoginName))
             {
@@ -109,6 +110,9 @@ namespace L.S.Home.Areas.admin.Controllers
         {
             if (!string.IsNullOrEmpty(model.ID))
             {
+                model.UpdateBy = cuser.UserID;
+                model.UpdateByName = cuser.LoginName;
+                model.UpdateDate = DateTime.Now;
                 var dep = depService.Find(model.SysDepID);
                 if (dep != null)
                 {
@@ -119,6 +123,7 @@ namespace L.S.Home.Areas.admin.Controllers
                     {
                         if (roleBll.SetUserRoles(model.ID, SysRolesID, out msg))
                         {
+                            CacheMaker.RedisCache.Remove("sidkey" + model.ID);
                             return Json(new AjaxResult() { success = true, msg = updateSuccess, url = Url.Action("Index") });
                         }
                         else
