@@ -207,6 +207,7 @@ form.admin-form{padding:20px 0 0 0 !important;margin-right:14px; border:1px soli
 .bootboxconfirm.fade.in{top:30%;width:360px;margin-left:0;left:0;}
 .bootboxconfirm .modal-footer{text-align: center;}
 .bootbox .modal-header h3{font-family: 微软雅黑;}
+.bootbox .modal-header:hover{cursor:move;}
 .bootbox .modal-body{font-size: 16px;}
 
 .edui-editor,.edui-editor-iframeholder{width:100% !important;}

@@ -64,6 +64,7 @@
     <Compile Include="DatabaseModel\Entity\SysUser.cs" />
     <Compile Include="DatabaseModel\Entity\SysUserRole.cs" />
     <Compile Include="DomainModel\CurrentUser.cs" />
+    <Compile Include="DomainModel\Info\InfoViewModel.cs" />
     <Compile Include="DomainModel\Sys\CategoryViewModel.cs" />
     <Compile Include="DomainModel\Sys\SysDepViewModel.cs" />
     <Compile Include="DomainModel\Sys\SysRightViewModel.cs" />

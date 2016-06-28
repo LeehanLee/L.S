@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,5 +39,14 @@ namespace L.S.Model.DatabaseModel.Entity
         public string Author { get; set; }
         public int ViewCount { get; set; }
         public int CommontCount { get; set; }
+
+        /// <summary>
+        /// 所属分类ID
+        /// </summary>
+        [MaxLength(36)]
+        public string CategoryID { get; set; }
+
+        [ForeignKey("CategoryID")]
+        public virtual Category Category { get; set; }
     }
 }

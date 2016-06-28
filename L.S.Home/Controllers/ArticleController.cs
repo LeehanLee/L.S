@@ -10,6 +10,8 @@ using L.S.Model.DatabaseModel.Context;
 using L.S.Model.DatabaseModel.Entity;
 using L.S.Interface;
 using System.Data.SqlClient;
+using L.Study.Common.Cache;
+using System.Linq.Expressions;
 
 namespace L.S.Home.Controllers
 {
@@ -17,15 +19,28 @@ namespace L.S.Home.Controllers
     {
         private string msg = string.Empty;
         public IInfoService infoService;
-        public ArticleController(IInfoService _infoService)
+        public ICategoryService cateService;
+        public ArticleController(IInfoService _infoService, ICategoryService _cateService)
         {
             infoService = _infoService;
+            cateService = _cateService;
         }
 
         // GET: Article
-        public ActionResult List(int page = 1)
+        public ActionResult List(string infoCategoryID = "", int page = 1)
         {
-            var result = infoService.GetPagedList(info => !info.IsDel && info.IsAvailable, page, 5, orderby => orderby.OrderByDescending(info => info.UpdateDate).OrderByDescending(info => info.AddDate));
+            Expression<Func<Info, bool>> exp = info => !info.IsDel && info.IsAvailable;
+            if (!string.IsNullOrEmpty(infoCategoryID))
+            {
+                exp = info => !info.IsDel && info.CategoryID == infoCategoryID;
+                ViewBag.infoCategoryID = infoCategoryID;
+            }
+            var result = infoService.GetPagedList(exp, page, 5, orderby => orderby.OrderByDescending(info => info.UpdateDate).ThenByDescending(info => info.AddDate));
+            var InfoCategoryTypeList = CacheMaker.IISCache.GetOrSetThenGet("InfoCategoryType_Cache_Key", () =>
+            {
+                return cateService.GetQueryable(cate => cate.CateTypeID == "InfoCategoryType").OrderByDescending(c => c.UpdateDate).ThenByDescending(c => c.AddDate).Select(cate => new SelectListItem { Value = cate.ID, Text = cate.Name }).ToList();
+            });
+            ViewBag.InfoCategoryTypeList = InfoCategoryTypeList;
             return View(result);
         }
 
@@ -42,6 +57,11 @@ namespace L.S.Home.Controllers
             {
                 return HttpNotFound();
             }
+            var InfoCategoryTypeList = CacheMaker.IISCache.GetOrSetThenGet("InfoCategoryType_Cache_Key", () =>
+            {
+                return cateService.GetQueryable(cate => cate.CateTypeID == "InfoCategoryType").OrderByDescending(c => c.UpdateDate).ThenByDescending(c => c.AddDate).Select(cate => new SelectListItem { Value = cate.ID, Text = cate.Name }).ToList();
+            });
+            ViewBag.InfoCategoryTypeList = InfoCategoryTypeList;
             return View(info);
         }
     }

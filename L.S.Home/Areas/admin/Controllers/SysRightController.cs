@@ -28,7 +28,7 @@ namespace L.S.Home.Areas.admin.Controllers
         [LSAuthorize("RightsManage", "SysManage", "RightsManage")]
         public ActionResult Index(int page = 1, int pageSize = 10)
         {
-            var model = rightService.GetPagedList(r => !r.IsDel, page, pageSize, modellist => modellist.OrderBy(r=>r.SortNo).ThenByDescending(r => r.UpdateDate).ThenByDescending(r => r.AddDate));
+            var model = rightService.GetPagedList(r => !r.IsDel, page, pageSize, modellist => modellist.OrderBy(r => r.SortNo).ThenByDescending(r => r.UpdateDate).ThenByDescending(r => r.AddDate));
             return View(model);
         }
         [LSAuthorize("RightsManage", "SysManage", "RightsManage")]
@@ -41,25 +41,25 @@ namespace L.S.Home.Areas.admin.Controllers
         [LSAuthorize("RightsManage", "SysManage", "RightsManage")]
         public ActionResult GetSysRight(string id)
         {
-            var model = 
-                /*CacheMaker.RedisCache.GetOrSetThenGet("SysRightTreeNodeData-" + id, () =>
-                {
-                    return*/ rightService.GetList(r => r.ID == id).Select(r => new SysRightViewModel
+            var model =
+                    /*CacheMaker.RedisCache.GetOrSetThenGet("SysRightTreeNodeData-" + id, () =>
                     {
-                        ID = r.ID,
-                        Name = r.Name,
-                        ParentID = r.ParentID,
-                        ParentName = r.Parent == null ? "" : r.Parent.Name,
-                        MenuUrl = r.MenuUrl,
-                        IsAvailable = r.IsAvailable,
-                        AddBy=r.AddBy,
-                        AddDate=r.AddDate,
-                        ActionType=r.ActionType,
-                        Position=r.Position,
-                        SortNo = r.SortNo,
-                        DisplayName=r.DisplayName,                        
-                    }).FirstOrDefault();
-                //},5);
+                        return*/ rightService.GetList(r => r.ID == id).Select(r => new SysRightViewModel
+                             {
+                                 ID = r.ID,
+                                 Name = r.Name,
+                                 ParentID = r.ParentID,
+                                 ParentName = r.Parent == null ? "" : r.Parent.Name,
+                                 MenuUrl = r.MenuUrl,
+                                 IsAvailable = r.IsAvailable,
+                                 AddBy = r.AddBy,
+                                 AddDate = r.AddDate,
+                                 ActionType = r.ActionType,
+                                 Position = r.Position,
+                                 SortNo = r.SortNo,
+                                 DisplayName = r.DisplayName,
+                             }).FirstOrDefault();
+            //},5);
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
@@ -73,17 +73,17 @@ namespace L.S.Home.Areas.admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,IsAvailable,Name,ParentID,ActionType,MenuUrl,Position,SortNo,DisplayName")] SysRight sysRight)
-        {            
+        {
             sysRight.AddBy = cuser.UserID;
             sysRight.AddByName = cuser.LoginName;
             sysRight.AddDate = DateTime.Now;
             sysRight.IsDel = false;
             sysRight.ParentID = string.IsNullOrEmpty(sysRight.ParentID) ? null : sysRight.ParentID;
             var parent = rightService.Find(sysRight.ParentID);
-            if ((sysRight.ParentID==null) || parent != null)
+            if ((sysRight.ParentID == null) || parent != null)
             {
                 sysRight.RightLevel = parent == null ? 1 : parent.RightLevel + 1;
-                sysRight.RightIDPath = parent == null ? "/"+ sysRight.ID + "/" : parent.RightIDPath + sysRight.ID + "/";
+                sysRight.RightIDPath = parent == null ? "/" + sysRight.ID + "/" : parent.RightIDPath + sysRight.ID + "/";
                 if (!string.IsNullOrEmpty(sysRight.ID))
                 {
                     var exist = rightService.Exist(r => r.ID == sysRight.ID.Trim());
@@ -111,15 +111,15 @@ namespace L.S.Home.Areas.admin.Controllers
             }
             else
             {
-                return Json(new AjaxResult() { success = false, msg = insertFailure+ ",上级权限ID只能为root或者已存在的权限的ID" });
+                return Json(new AjaxResult() { success = false, msg = insertFailure + ",上级权限ID只能为root或者已存在的权限的ID" });
             }
         }
 
         [LSAuthorize("RightEdit", "SysManage", "RightsManage")]
         public ActionResult Edit(string id)
-        {            
+        {
             ViewBag.RightPositionList = GetRightPositionItem();
-            ViewBag.RightActionTypeItem = GetRightActionTypeItem();            
+            ViewBag.RightActionTypeItem = GetRightActionTypeItem();
             if (string.IsNullOrEmpty(id))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -129,7 +129,7 @@ namespace L.S.Home.Areas.admin.Controllers
             {
                 return View("_NoDataInLayout");
             }
-            var rightParent=sysRight.Parent;
+            var rightParent = sysRight.Parent;
             if (rightParent != null)
             {
                 ViewBag.rightParentName = rightParent.Name;
@@ -138,12 +138,12 @@ namespace L.S.Home.Areas.admin.Controllers
             return View(sysRight);
         }
 
-        
+
         [LSAuthorize("RightEdit", "SysManage", "RightsManage")]
         [HttpPost]
         public ActionResult Edit([Bind(Include = "ID,IsAvailable,Name,ParentID,AddBy,AddDate,ActionType,MenuUrl,Position,SortNo,DisplayName")] SysRight sysRight)
-        {            
-            
+        {
+
             sysRight.UpdateBy = cuser.UserID;
             sysRight.UpdateByName = cuser.LoginName;
             sysRight.UpdateDate = DateTime.Now;
@@ -151,13 +151,13 @@ namespace L.S.Home.Areas.admin.Controllers
             if (sysRight.ParentID != sysRight.ID)
             {
                 var parent = rightService.Find(sysRight.ParentID);
-                if (sysRight.ParentID==null || parent != null)
+                if (sysRight.ParentID == null || parent != null)
                 {
                     sysRight.RightLevel = parent == null ? 0 : parent.RightLevel + 1;
-                    sysRight.RightIDPath = parent == null ? "/"+ sysRight.ID + "/" : parent.RightIDPath  + sysRight.ID + "/";
+                    sysRight.RightIDPath = parent == null ? "/" + sysRight.ID + "/" : parent.RightIDPath + sysRight.ID + "/";
                     rightService.Update(sysRight);
                     if (rightService.SaveChanges(out msg) > 0)
-                    {                        
+                    {
                         CacheMaker.IISCache.Remove("all_sys_right");
                         return Json(new AjaxResult() { success = true, msg = updateSuccess, url = Url.Action("treeindex", "sysright", "admin"), moremsg = msg });
                     }
@@ -189,8 +189,8 @@ namespace L.S.Home.Areas.admin.Controllers
                     return Json(new AjaxResult() { success = true, msg = deleteSuccess, url = Url.Action("treeindex") });
                 }
                 else
-                {                    
-                    return Json(new AjaxResult() { success = false, msg =errorOutPutToPage?deleteFailure+"<br />"+msg:deleteFailure, moremsg=msg});
+                {
+                    return Json(new AjaxResult() { success = false, msg = errorOutPutToPage ? deleteFailure + "<br />" + msg : deleteFailure, moremsg = msg });
                 }
             }
             else
@@ -204,10 +204,13 @@ namespace L.S.Home.Areas.admin.Controllers
             if (!string.IsNullOrEmpty(ids))
             {
                 var idarray = ids.Split(',');
-                var rightList=rightService.GetList(r => idarray.Contains(r.ID));
-                foreach(var r in rightList)
+                var rightList = rightService.GetList(r => idarray.Contains(r.ID));
+                foreach (var r in rightList)
                 {
                     r.IsAvailable = true;
+                    r.UpdateBy = cuser.UserID;
+                    r.UpdateByName = cuser.LoginName;
+                    r.UpdateDate = DateTime.Now;
                     rightService.Update(r);
                 }
                 int successCount = rightService.SaveChanges(out msg);
@@ -236,6 +239,9 @@ namespace L.S.Home.Areas.admin.Controllers
                 foreach (var r in rightList)
                 {
                     r.IsAvailable = false;
+                    r.UpdateBy = cuser.UserID;
+                    r.UpdateByName = cuser.LoginName;
+                    r.UpdateDate = DateTime.Now;
                     rightService.Update(r);
                 }
                 int successCount = rightService.SaveChanges(out msg);
@@ -272,6 +278,6 @@ namespace L.S.Home.Areas.admin.Controllers
                 new SelectListItem { Text = RightActionType.UnAvailable.ToString(), Value = RightActionType.UnAvailable.ToString() } };
         }
 
-        
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_home_LayoutPage.cshtml";
+    List<SelectListItem> InfoCategoryTypeList = ViewBag.InfoCategoryTypeList as List<SelectListItem>;
 }
 @model PagedList.IPagedList<Info>
 <link href="/Content/CSS/swiper-3.3.1.min.css" rel="stylesheet" />
@@ -42,8 +43,8 @@
                     {<text>clearfix</text>}">
                         <div class="blog-item-date-inf-container left">
                             <div class="blog-item-date-cont ">
-                                <div class="blog-item-date">21</div>
-                                <div class="blog-item-mounth">OCT</div>
+                                <div class="blog-item-date">@(item.UpdateDate.HasValue? item.UpdateDate.Value.Day:item.AddDate.Day)</div>
+                                <div class="blog-item-mounth">@(item.UpdateDate.HasValue ? item.UpdateDate.Value.Month : item.AddDate.Month)月</div>
                             </div>
                             <div>
                                 <div class="blog-item-category-img ">
@@ -87,9 +88,9 @@
                 </div>
                 <div class="blog-item-text-container">
                     @{
-                        string content = item.Content.ToNoHtml();
+                        string content =string.IsNullOrEmpty(item.Introduction)? item.Content.ToNoHtml():item.Introduction.ToMaxString(200);
                     }
-                    <p>@Html.Raw(content.Length > 500 ? content.ToMaxString(200) : content)</p>
+                    <p>@Html.Raw(content.Length > 200 ? content.ToMaxString(200) : content)</p>
 
                 </div>
                 <div class="lp-r-m-container right">
@@ -106,17 +107,23 @@
         <div class="sidebar-item  m-bot-35">
 
             <div class="caption-container-main m-bot-30">
-                <div class="caption-text-container">BLOG CATEGORIES</div>
+                <div class="caption-text-container" ><a href="@Url.Action("list","article",new { infocategoryid="",page=""})">资讯分类</a></div>
                 <div class="content-container-white caption-bg "></div>
             </div>
 
             <div>
                 <ul class="blog-categories">
-                    <li class="active "><a href="#"><span class="blog-cat-icon"></span>Business</a></li>
-                    <li><a href="#"><span class="blog-cat-icon"></span>Social Media</a></li>
-                    <li><a href="#"><span class="blog-cat-icon"></span>Technology</a></li>
-                    <li><a href="#"><span class="blog-cat-icon"></span>News</a></li>
-                    <li><a href="#"><span class="blog-cat-icon"></span>Entertainment</a></li>
+                    @if (!string.IsNullOrEmpty(ViewBag.infoCategoryID ) && InfoCategoryTypeList.Exists(i => i.Value == ViewBag.infoCategoryID ))
+                    {
+                        SelectListItem cate = InfoCategoryTypeList.FirstOrDefault(i => i.Value == ViewBag.infoCategoryID );
+                        InfoCategoryTypeList.Remove(cate);
+                        <text>
+                            <li class="active "><a href="@Url.Action("list","article",new { infoCategoryID=cate.Value})"><span class="blog-cat-icon"></span>@cate.Text</a></li></text>
+                    }
+                    @foreach (SelectListItem cateItem in InfoCategoryTypeList.Take(5).ToList())
+                    {
+                        <li class=" @if(cateItem.Value==ViewBag.infoCategoryID ){<text>active </text>}"><a href="@Url.Action("list","article",new { infoCategoryID=cateItem.Value})"><span class="blog-cat-icon"></span>@cateItem.Text</a></li>
+                    }
                 </ul>
             </div>
         </div>

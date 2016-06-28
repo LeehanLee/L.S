@@ -157,8 +157,11 @@
                 $("#ParentID").val(categoryids);
                 $("#ParentName").text(names);                
             }
+            $("#Name").focus();
         });
         $("#CategoryEdit").attr("formaction", $("#CategoryCreate").attr("url"));
+
+        $("#Name").focus();
     });
 </script>
 <div class="tabbable">
@@ -215,7 +218,7 @@
                         <div class="control-group">
                             <label for="SortNo" class="control-label">排序号</label>
                             <div class="controls">
-                                <input name="SortNo" id="SortNo" type="text" max="5" />
+                                <input name="SortNo" id="SortNo" type="text" max="5" validate="number" empty="yes"/>
                                 <span class="ls-msg help-inline"></span>
                             </div>
                         </div>

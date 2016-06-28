@@ -1,3 +1,85 @@
+var EricsDragableDialog = function (dialogid, titleid) {
+    dialogid = dialogid || 'bootboxalert';
+    titleid = titleid || 'modal-header';
+    //this.dialogEl = document.getElementsByClassName(dialogid)[0];//弹窗主体元素
+    //this.dialogTitleEl = document.getElementsByClassName(titleid)[0];//弹窗里的标题元素
+    this.dialogEl = document.querySelectorAll('.'+dialogid)[0];//弹窗主体元素
+    this.dialogTitleEl = document.querySelectorAll('.'+dialogid+' .'+titleid)[0];//弹窗里的标题元素
+    this.mouseOffsetX = 0;
+    this.mouseOffsetY = 0;
+    this.pageWidth = document.documentElement.clientWidth;
+    this.pageHeight = document.documentElement.clientHeight;
+    this.isDraging = false;
+    var self = this;
+    this.autoCenter(this.dialogEl);
+
+    this.dialogTitleEl.addEventListener('mousedown', function (e) {
+        var e = e || window.event;
+        self.mouseOffsetX = e.pageX - self.dialogEl.offsetLeft;
+        self.mouseOffsetY = e.pageY - self.dialogEl.offsetTop;
+        self.isDraging = true;
+    });
+
+    document.addEventListener('mouseup', function (e) {
+        self.isDraging = false;
+    });
+
+    document.addEventListener('mousemove', function (e) {
+        var e = e || window.event;
+        var mouseX = e.pageX;
+        var mouseY = e.pageY;
+        var moveX = 0;
+        var moveY = 0;
+        if (self.isDraging === true) {
+            moveX = mouseX - self.mouseOffsetX;
+            moveY = mouseY - self.mouseOffsetY;
+
+            var dialogWidth = self.dialogEl.offsetWidth;
+            var dialogHeight = self.dialogEl.offsetHeight;
+
+            var maxX = self.pageWidth - dialogWidth;
+            var maxY = self.pageHeight - dialogHeight;
+
+            moveX = Math.min(maxX, Math.max(0, moveX));
+            moveY = Math.min(maxY, Math.max(0, moveY));
+            self.dialogEl.style.left = moveX + 'px';
+            self.dialogEl.style.top = moveY + 'px';
+        }
+    });
+
+    window.addEventListener('resize', function (e) {
+        var newpageWidth = document.documentElement.clientWidth;
+        var newpageHeight = document.documentElement.clientHeight;
+
+        moveX = (parseFloat(self.dialogEl.style.left) / self.pageWidth) * newpageWidth;
+        moveY = (parseFloat(self.dialogEl.style.top) / self.pageHeight) * newpageHeight;
+
+        var dialogWidth = self.dialogEl.offsetWidth;
+        var dialogHeight = self.dialogEl.offsetHeight;
+
+        self.pageWidth = newpageWidth;
+        self.pageHeight = newpageHeight;
+
+        var maxX = self.pageWidth - dialogWidth;
+        var maxY = self.pageHeight - dialogHeight;
+
+        moveX = Math.min(maxX, Math.max(0, moveX));
+        moveY = Math.min(maxY, Math.max(0, moveY));
+        self.dialogEl.style.left = moveX + 'px';
+        self.dialogEl.style.top = moveY + 'px';
+    });
+}
+EricsDragableDialog.prototype.autoCenter = function (el) {
+    var bodyW = this.pageWidth;
+    var bodyH = this.pageHeight;
+
+    var elw = el.offsetWidth;
+    var elh = el.offsetHeight;
+
+    el.style.left = (bodyW - elw) / 2 + 'px';
+    el.style.top = (bodyH - elh) / 3 + 'px';
+}
+
 /**
  * bootbox.js v3.3.0
  *
@@ -451,7 +533,8 @@ var bootbox = window.bootbox || (function(document, $) {
         if (shouldFade) {
             div.addClass("fade");
         }
-
+        
+        
         var optionalClasses = (typeof options.classes === 'undefined') ? _classes : options.classes;
         if (optionalClasses) {
             div.addClass(optionalClasses);

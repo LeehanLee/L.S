@@ -14,10 +14,16 @@ namespace L.S.Home
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "Article",
+                url: "{controller}/{action}/{infocategoryid}/{page}",
+                defaults: new { controller = "Home", action = "Index", infocategoryid = UrlParameter.Optional, page = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            );
+            );            
         }
     }
 }

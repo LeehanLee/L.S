@@ -74,5 +74,39 @@ namespace L.S.Home.Controllers
             return View();
         } 
         #endregion
+
+        public ActionResult swiper()
+        {
+            return View();
+        }
+
+        #region JS学习
+
+        /// <summary>
+        /// 类似天猫左侧的侧边栏
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult sidebar()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 自制可拖动弹出框
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult mousedrag()
+        {
+            return View();
+        } 
+        public ActionResult waterfall()
+        {
+            return View();
+        }
+        public ActionResult lightbox()
+        {
+            return View();
+        }
+        #endregion
     }
 }

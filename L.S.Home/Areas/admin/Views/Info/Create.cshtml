@@ -87,6 +87,14 @@
             </div>
         </div>
         <div class="control-group">
+            <label for="Name" class="control-label">分类</label>
+            <div class="controls">                
+                @Html.DropDownList("CategoryID", ViewBag.InfoCategoryTypeList as IEnumerable<SelectListItem>, "--请选择分类--")
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>
+
+        <div class="control-group">
             <label for="Name" class="control-label">图标</label>
             <div class="controls">
                 <span class="file-name"></span>
@@ -95,7 +103,7 @@
                 <input type="button" class="clear-file btn" value="清空" style="display:none;"/>
                 <input type="hidden" name="ImgPathToDelete" id="ImgPathToDelete" />
                 <span class="ls-msg help-inline"></span>                
-                <span class="little-remind">（如果不选择图标，将会取内容里第一张图片作为此项保存）</span>
+                <span class="little-remind">@*（如果不选择图标，将会取内容里第一张图片作为此项保存）*@</span>
             </div>
         </div>
         <div class="control-group">

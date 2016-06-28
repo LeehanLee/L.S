@@ -179,6 +179,13 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="plugin\bootstrap3\css\bootstrap-theme.css" />
+    <Content Include="plugin\bootstrap3\css\bootstrap-theme.min.css" />
+    <Content Include="plugin\bootstrap3\css\bootstrap.css" />
+    <Content Include="plugin\bootstrap3\css\bootstrap.min.css" />
+    <Content Include="plugin\bootstrap3\js\bootstrap.js" />
+    <Content Include="plugin\bootstrap3\js\bootstrap.min.js" />
+    <Content Include="plugin\bootstrap3\js\npm.js" />
     <Content Include="Content\CSS\login.css" />
     <Content Include="Content\CSS\swiper-3.3.1.min.css" />
     <Content Include="Content\Images\Admin\logo.png" />
@@ -381,6 +388,13 @@
     <Content Include="Areas\admin\Views\Category\Create.cshtml" />
     <Content Include="Areas\admin\Views\Category\Edit.cshtml" />
     <Content Include="Areas\admin\Views\Category\TreeIndex.cshtml" />
+    <Content Include="plugin\bootstrap3\css\bootstrap-theme.css.map" />
+    <Content Include="plugin\bootstrap3\css\bootstrap.css.map" />
+    <Content Include="plugin\bootstrap3\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="plugin\bootstrap3\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="plugin\bootstrap3\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="plugin\bootstrap3\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="plugin\bootstrap3\fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Scripts\jquery-1.12.0.intellisense.js" />
     <Content Include="login\css\form-elements.css" />
     <Content Include="login\css\style.css" />
@@ -695,11 +709,18 @@
     <Content Include="Views\Shared\_home_LayoutPage.cshtml" />
     <Content Include="Views\Shared\Pager.cshtml" />
     <Content Include="Views\Home\NoPermission.cshtml" />
+    <Content Include="Views\Test\swiper.cshtml" />
+    <Content Include="Views\Test\sidebar.cshtml" />
+    <Content Include="Views\Test\Index.cshtml" />
+    <Content Include="Views\Test\mousedrag.cshtml" />
+    <Content Include="Views\Test\waterfall.cshtml" />
+    <Content Include="Views\Test\lightbox.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\admin\Models\" />
     <Folder Include="demo\css\images\" />
     <Folder Include="demo\images\content\" />
+    <Folder Include="myjs\" />
     <Folder Include="uploadify\" />
     <Folder Include="Views\Async\" />
   </ItemGroup>

@@ -255,7 +255,7 @@ namespace L.S.Home.Areas.admin.Controllers
             {
                 var idarray = ids.Split(',');
                 string sqlids = "'" + string.Join("','", idarray) + "'";
-                string sql = "update SysRole set isavailable=1 where id in (" + sqlids + ")";
+                string sql = "update SysRole set isavailable=1,UpdateDate=GETDATE(),UpdateBy='" + cuser.UserID + "',UpdateByName='" + cuser.LoginName + "' where id in (" + sqlids + ")";
                 if (roleService.ExecuteSql(sql, out msg) > 0)
                 {
                     return Json(new AjaxResult() { success = true, msg = AvailableSuccess, url = Url.Action("treeindex", "sysrole", new { area = "admin" }) });
@@ -278,7 +278,7 @@ namespace L.S.Home.Areas.admin.Controllers
             {
                 var idarray = ids.Split(',');
                 string sqlids = "'" + string.Join("','", idarray) + "'";
-                string sql = "update SysRole set isavailable=0 where id in (" + sqlids + ")";
+                string sql = "update SysRole set isavailable=0,UpdateDate=GETDATE(),UpdateBy='" + cuser.UserID + "',UpdateByName='" + cuser.LoginName + "' where id in (" + sqlids + ")";
                 if (roleService.ExecuteSql(sql, out msg) > 0)
                 {
                     return Json(new AjaxResult() { success = true, msg = UnAvailableSuccess, url = Url.Action("treeindex", "sysrole",new { area="admin"}) });

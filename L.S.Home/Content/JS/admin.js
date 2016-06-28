@@ -56,11 +56,13 @@ $(function () {
         var deleteurl = $(this).attr("url");
         if (deleteurl == null) {
             bootbox.alert("敢问将要往哪里删除？");
+            var dialog = new EricsDragableDialog();
             return false;
         } else {
             var selectedlist = $(".ls-table input[type='radio']:checked.ls-table-selecttr,.ls-table input[type='checkbox']:checked.ls-table-selecttr");
             if (selectedlist.length <= 0) {
                 bootbox.alert("请选择要删除的数据");
+                var dialog = new EricsDragableDialog();
                 return false;
             } else {
                 var selectedidarray = [];
@@ -82,6 +84,7 @@ $(function () {
             var selectedlist = $(".ls-table input[type='radio']:checked.ls-table-selecttr,.ls-table input[type='checkbox']:checked.ls-table-selecttr");
             if (selectedlist.length <= 0) {
                 bootbox.alert("请选择要启用的数据");
+                var dialog = new EricsDragableDialog();
                 return false;
             } else {
                 var selectedidarray = [];
@@ -98,11 +101,13 @@ $(function () {
         var unavailableurl = $(this).attr("url");
         if (unavailableurl == null) {
             bootbox.alert("敢问将要往哪里禁用？");
+            var dialog = new EricsDragableDialog();
             return false;
         } else {
             var selectedlist = $(".ls-table input[type='radio']:checked.ls-table-selecttr,.ls-table input[type='checkbox']:checked.ls-table-selecttr");
             if (selectedlist.length <= 0) {
                 bootbox.alert("请选择要禁用的数据");
+                var dialog = new EricsDragableDialog();
                 return false;
             } else {
                 var selectedidarray = [];
@@ -175,6 +180,7 @@ var LS = {
             },
             LoginFailure: function (result) {
                 bootbox.alert(result.msg || "服务器内部发生错误，请与开发人员联系");
+                var dialog = new EricsDragableDialog();
                 $(".btn[type=submit]").button('reset');
             },
             LoginSuccess: function (result) {
@@ -186,6 +192,7 @@ var LS = {
                 } else {
                     $(".btn[type=submit]").button('reset');
                     bootbox.alert(result.msg || "操作失败");
+                    var dialog = new EricsDragableDialog();
                 }
             },
             AjaxSuccess: function (result) {
@@ -199,10 +206,12 @@ var LS = {
                                 }
                             }
                         });
+                        var dialog = new EricsDragableDialog();
                     }
                 } else {
                     $(".form-actions .btn[type=submit]").button('reset');
                     bootbox.alert(result.msg || "操作失败");
+                    var dialog = new EricsDragableDialog();
                 }
             },
             AjaxBegin: function (selector) {
@@ -210,6 +219,7 @@ var LS = {
             },
             AjaxFailure: function (result) {
                 bootbox.alert(result.msg || "服务器内部发生错误，请与开发人员联系");
+                var dialog = new EricsDragableDialog();
                 $(".form-actions .btn[type=submit]").button('reset');
             },
             keepfootbuttom: function () {
@@ -243,6 +253,7 @@ var LS = {
                 var bodyid = "deptreebody";
                 var searchboxid = "depsearchbox";
                 var deptreedialoge = bootbox.alert({ header: "请选择", bodyid: bodyid, searchboxid: searchboxid, toggledisplay: true, width: 560, height: 500, classes: "treecontainer" });
+                var dialog = new EricsDragableDialog();
 
                 url = $.setQueryStr(url, "selectNodeID", $this.val());
                 $("#" + bodyid).jstree({
@@ -323,6 +334,7 @@ var LS = {
                 var bodyid = "righttreebody";
                 var searchboxid = "rightsearchbox";
                 var righttreedialoge = bootbox.alert({ header: "请选择", bodyid: bodyid, searchboxid: searchboxid, toggledisplay: obj.toggledisplay, toggleselect: obj.toggleselect, width: 560, height: 500, classes: "treecontainer" });
+                var dialog = new EricsDragableDialog();
 
                 url = $.setQueryStr(url, "selectNodeID", $this.val());
                 $("#" + bodyid).jstree({
@@ -409,6 +421,7 @@ var LS = {
                 var bodyid = "roletreebody";
                 var searchboxid = "rolesearchbox";
                 var roletreedialoge = bootbox.alert({ header: "请选择", bodyid: bodyid, searchboxid: searchboxid, toggledisplay: obj.toggledisplay, toggleselect: obj.toggleselect, width: 560, height: 500, classes: "treecontainer" });
+                var dialog = new EricsDragableDialog();
 
                 url = $.setQueryStr(url, "selectNodeID", $this.val());
                 $("#" + bodyid).jstree({
@@ -504,6 +517,7 @@ var LS = {
                 var bodyid = "categorytreebody";
                 var searchboxid = "categorysearchbox";
                 var categorytreedialoge = bootbox.alert({ header: "请选择", bodyid: bodyid, searchboxid: searchboxid, toggledisplay: true, width: 560, height: 500, classes: "treecontainer" });
+                var dialog = new EricsDragableDialog();
 
                 url = $.setQueryStr(url, "selectNodeID", $this.val());
                 $("#" + bodyid).jstree({

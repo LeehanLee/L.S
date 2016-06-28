@@ -3,6 +3,7 @@ using L.S.Home.Models;
 using L.S.Interface;
 using L.S.Model.DatabaseModel.Entity;
 using L.S.Model.DomainModel.Sys;
+using L.Study.Common.Cache;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,10 +25,10 @@ namespace L.S.Home.Areas.admin.Controllers
         [LSAuthorize("CategoryManage", "SysManage", "CategoryManage")]
         public ActionResult Index(string cateTypeID = "")
         {
-            var list = cateService.GetPagedList(cate => cate.CateTypeID == cateTypeID && !cate.IsDel, page, pageSize, modellist => modellist.OrderBy(l => l.SortNo).ThenByDescending(d => d.AddDate));
             var cateTypeList = cateTypeService.GetList(catetype => !catetype.IsDel && catetype.IsAvailable);
             ViewBag.cateTypeList = cateTypeList;
             if (string.IsNullOrEmpty(cateTypeID)) { cateTypeID = cateTypeList.FirstOrDefault().ID; }
+            var list = cateService.GetPagedList(cate => cate.CateTypeID == cateTypeID && !cate.IsDel, page, pageSize, modellist => modellist.OrderBy(l => l.SortNo).ThenByDescending(d => d.AddDate));
             ViewBag.cateTypeID = cateTypeID;
             return View(list);
         }
@@ -91,6 +92,10 @@ namespace L.S.Home.Areas.admin.Controllers
             cateService.Add(model);
             if (cateService.SaveChanges(out msg) > 0)
             {
+                if (model.CateTypeID == "InfoCategoryType")
+                {
+                    CacheMaker.IISCache.Remove("InfoCategoryType_Cache_Key");
+                }
                 return Json(new AjaxResult() { success = true, msg = insertSuccess, url = Url.Action("treeindex", "category", new { cateTypeID = model.CateTypeID }), moremsg = msg });
             }
             else
@@ -108,7 +113,7 @@ namespace L.S.Home.Areas.admin.Controllers
                 CategoryViewModel model = cateService.GetQueryable(u => u.ID == id).Select(m => new CategoryViewModel {
                     ID = m.ID,
                     AddBy = m.AddBy,
-                    AddByName = m.AddByName,
+                    //AddByName = m.AddByUser.Name,
                     AddDate = m.AddDate,
                     Name = m.Name,
                     ParentName = string.IsNullOrEmpty(m.ParentID) ?"": m.Parent.Name,
@@ -160,6 +165,10 @@ namespace L.S.Home.Areas.admin.Controllers
                 var result = cateService.SaveChanges(out msg);
                 if (result > 0)
                 {
+                    if (model.CateTypeID == "InfoCategoryType")
+                    {
+                        CacheMaker.IISCache.Remove("InfoCategoryType_Cache_Key");
+                    }
                     return Json(new AjaxResult() { success = true, msg = updateSuccess, url = Url.Action("treeindex", new { cateTypeID = model.CateTypeID }) });
                 }
                 else
@@ -202,7 +211,7 @@ namespace L.S.Home.Areas.admin.Controllers
             {
                 var idarray = ids.Split(',');
                 string sqlids = "'" + string.Join("','", idarray) + "'";
-                string sql = "update Category set isavailable=1 where id in (" + sqlids + ")";
+                string sql = "update Category set isavailable=1,UpdateDate=GETDATE(),UpdateBy='" + cuser.UserID + "',UpdateByName='" + cuser.LoginName + "' where id in (" + sqlids + ")";
                 if (cateService.ExecuteSql(sql, out msg) > 0)
                 {
                     return Json(new AjaxResult() { success = true, msg = AvailableSuccess, url = Url.Action("treeindex") });
@@ -225,7 +234,7 @@ namespace L.S.Home.Areas.admin.Controllers
             {
                 var idarray = ids.Split(',');
                 string sqlids = "'" + string.Join("','", idarray) + "'";
-                string sql = "update Category set isavailable=0 where id in (" + sqlids + ")";
+                string sql = "update Category set isavailable=0,UpdateDate=GETDATE(),UpdateBy='" + cuser.UserID + "',UpdateByName='" + cuser.LoginName + "' where id in (" + sqlids + ")";
                 if (cateService.ExecuteSql(sql, out msg) > 0)
                 {
                     return Json(new AjaxResult() { success = true, msg = UnAvailableSuccess, url = Url.Action("treeindex") });

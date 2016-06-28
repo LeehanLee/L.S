@@ -22,17 +22,27 @@
         });
     }
 </script>
+<style>
+    .blog-item-caption-container {
+        padding-left: 80px;
+    }
+
+    .blog-item-text-container {
+        margin-left: 80px;
+    }
+</style>
 <!-- CONTENT -->
 <div class="container clearfix">
     <div class="eleven columns m-bot-25">
         <!-- BLOG ITEM -->
         <div class="blog-item m-bot-35 clearfix">
             <div class="hover-item">
-                <div class="clearfix">
+                <div class="@if(!string.IsNullOrEmpty(Model.ImgPath))
+                    {<text>clearfix</text>}">
                     <div class="blog-item-date-inf-container left">
                         <div class="blog-item-date-cont">
-                            <div class="blog-item-date">21</div>
-                            <div class="blog-item-mounth">OCT</div>
+                            <div class="blog-item-date">@(Model.UpdateDate.HasValue ? Model.UpdateDate.Value.Day : Model.AddDate.Day)</div>
+                            <div class="blog-item-mounth">@(Model.UpdateDate.HasValue ? Model.UpdateDate.Value.Month : Model.AddDate.Month)月</div>
                         </div>
                         <div>
                             <div class="blog-item-category-img">
@@ -66,7 +76,7 @@
                     }
                 </div>
                 <div class="blog-item-caption-container">
-                    <a class="a-invert" href="blog-single.html"><span class="bold">@Model.Name</span></a>
+                    <a class="a-invert" @*href="blog-single.html"*@><span class="bold">@Model.Name</span></a>
                     <div class="lp-item-container-border clearfix">
                         <div class="blog-info-container">
                             <ul class="clearfix">

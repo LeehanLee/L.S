@@ -1,0 +1,327 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>mousedrag</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 2000px;
+        }
+        /*登录浮层组件*/
+        .ui-dialog {
+            width: 380px;
+            height: auto;
+            position: fixed;
+            z-index: 9000;
+            top: 100px;
+            left: 100px;
+            border: 1px solid #D5D5D5;
+            background: #fff;
+        }
+
+            .ui-dialog a {
+                text-decoration: none;
+            }
+
+        /*标题栏区域*/
+        .ui-dialog-title {
+            height: 48px;
+            line-height: 48px;
+            padding: 0px 20px;
+            color: #535353;
+            font-size: 16px;
+            border-bottom: 1px solid #efefef;
+            background: #f5f5f5;
+            cursor: move;
+            user-select: none;
+        }
+
+        /*关闭按钮设置*/
+        .ui-dialog-closebutton {
+            width: 16px;
+            height: 16px;
+            display: block;
+            position: absolute;
+            top: 12px;
+            right: 20px;
+            background: url(images/close_def.png) no-repeat;
+            cursor: pointer;
+        }
+
+            .ui-dialog-closebutton:hover {
+                background: url(images/close_hov.png);
+            }
+
+        /*内容区域*/
+        .ui-dialog-content {
+            padding: 15px 20px;
+        }
+
+        /*每行元素可能需要的样式*/
+        .ui-dialog-pt15 {
+            padding-top: 15px;
+        }
+
+        .ui-dialog-l40 {
+            height: 40px;
+            line-height: 40px;
+            text-align: right;
+        }
+
+        /*输入框公用的样式*/
+        .ui-dialog-input {
+            width: 100%;
+            height: 40px;
+            margin: 0px;
+            padding: 0px;
+            border: 1px solid #d5d5d5;
+            font-size: 16px;
+            color: #c1c1c1;
+            text-indent: 25px;
+            outline: none;
+        }
+
+        /*两个输入框的icon设置*/
+        .ui-dialog-input-username {
+            background: url(images/input_username.png) no-repeat 2px;
+        }
+
+        .ui-dialog-input-password {
+            background: url(images/input_password.png) no-repeat 2px;
+        }
+
+        /*提交按钮的样式*/
+        .ui-dialog-submit {
+            width: 100%;
+            height: 50px;
+            background: #3b7ae3;
+            border: none;
+            font-size: 16px;
+            color: #fff;
+            outline: none;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            line-height: 50px;
+        }
+
+            .ui-dialog-submit:hover {
+                background: #3f81b0;
+            }
+
+
+        .ui-mask {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            position: absolute;
+            top: 0px;
+            height: 0px;
+            z-index: 8000;
+            opacity: 0.4;
+            filter: Alpha(opacity=40);
+        }
+
+        .link {
+            text-align: right;
+            line-height: 20px;
+            padding-right: 40px;
+        }
+
+        input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 1000px white inset !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="ui-dialog" id="dialog">
+
+        <div class="ui-dialog-title" id="dialogTitle">
+            登录通行证
+            <a href="javascript:hideDialog();" class="ui-dialog-title-closebutton"></a>
+        </div>
+        <div class="ui-dialog-content">
+
+
+            <div class="ui-dialog-pt15 ui-dialog-l40">
+                <input type="text" placeholder="手机/邮箱/用户名" class="ui-dialog-input ui-dialog-input-username">
+            </div>
+            <div class="ui-dialog-pt15 ui-dialog-l40">
+                <input type="password" placeholder="密码" class="ui-dialog-input ui-dialog-input-password">
+            </div>
+            <div class=" ui-dialog-l40 ">
+                <a href="#">忘记密码</a>
+            </div>
+            <div>
+
+                <a href="#" class="ui-dialog-submit">登录</a>
+
+            </div>
+            <div class="ui-dialog-l40">
+                <a href="#">立即注册</a>
+            </div>
+        </div>
+    </div>
+    <div class="link">
+        <a href="javascript:showDialog();">登录</a>
+    </div>
+
+    @*<script type="text/javascript">
+            function g(id) {
+                return document.getElementById(id);
+            }
+
+            function autoCenter(el) {
+                var bodyW = document.documentElement.clientWidth;
+                var bodyH = document.documentElement.clientHeight;
+
+                var elw = el.offsetWidth;
+                var elh = el.offsetHeight;
+
+                el.style.left = (bodyW - elw) / 2 + 'px';
+                el.style.top = (bodyH - elh) / 3 + 'px';
+            }
+
+            //全屏
+            function fillToBody(el) {
+                el.style.width = document.documentElement.clientWidth;
+                el.style.height = document.documentElement.clientHeight;
+            }
+
+            autoCenter(g('dialog'));
+
+
+            var mouseOffsetX = 0;
+            var mouseOffsetY = 0;
+            var isDraging = false;
+            g('dialogTitle').addEventListener('mousedown', function (e) {
+                var e = e || window.event;
+                mouseOffsetX = e.pageX - g('dialog').offsetLeft;
+                mouseOffsetY = e.pageY - g('dialog').offsetTop;
+                isDraging = true;
+            });
+            document.onmousemove = function (e) {
+                var e = e || window.event;
+                var mouseX = e.pageX;
+                var mouseY = e.pageY;
+                var moveX = 0;
+                var moveY = 0;
+                if (isDraging === true) {
+                    moveX = mouseX - mouseOffsetX;
+                    moveY = mouseY - mouseOffsetY;
+
+                    var pageWidth = document.documentElement.clientWidth;
+                    var pageHeight = document.documentElement.clientHeight;
+
+                    var dialogWidth = g('dialog').offsetWidth;
+                    var dialogHeight = g('dialog').offsetHeight;
+
+                    var maxX = pageWidth - dialogWidth;
+                    var maxY = pageHeight - dialogHeight;
+
+                    moveX = Math.min(maxX, Math.max(0, moveX));
+                    moveY = Math.min(maxY, Math.max(0, moveY));
+                    g('dialog').style.left = moveX + 'px';
+                    g('dialog').style.top = moveY + 'px';
+                }
+            }
+
+            document.onmouseup = function () {
+                isDraging = false;
+            }
+        </script>*@
+    <script type="text/javascript">
+        (function () {//立即执行的函数，不影响全局变量空间！
+            var EricsDragableDialog = function (dialogid, titleid) {
+                dialogid = dialogid || 'ui-dialog';
+                titleid = titleid || 'ui-dialog-title';
+                this.dialogEl = document.getElementsByClassName(dialogid)[0];//弹窗主体元素
+                this.dialogTitleEl = document.getElementsByClassName(titleid)[0];//弹窗里的标题元素
+                this.mouseOffsetX = 0;
+                this.mouseOffsetY = 0;
+                this.pageWidth = document.documentElement.clientWidth;
+                this.pageHeight = document.documentElement.clientHeight;
+                this.isDraging = false;
+                var self = this;
+                this.autoCenter(this.dialogEl);
+
+                this.dialogTitleEl.addEventListener('mousedown', function (e) {
+                    var e = e || window.event;
+                    self.mouseOffsetX = e.pageX - self.dialogEl.offsetLeft;
+                    self.mouseOffsetY = e.pageY - self.dialogEl.offsetTop;
+                    self.isDraging = true;
+                });
+
+                document.addEventListener('mouseup', function (e) {
+                    self.isDraging = false;
+                });
+
+                document.addEventListener('mousemove', function (e) {
+                    var e = e || window.event;
+                    var mouseX = e.pageX;
+                    var mouseY = e.pageY;
+                    var moveX = 0;
+                    var moveY = 0;
+                    if (self.isDraging === true) {
+                        moveX = mouseX - self.mouseOffsetX;
+                        moveY = mouseY - self.mouseOffsetY;
+
+                        var dialogWidth = self.dialogEl.offsetWidth;
+                        var dialogHeight = self.dialogEl.offsetHeight;
+
+                        var maxX = self.pageWidth - dialogWidth;
+                        var maxY = self.pageHeight - dialogHeight;
+
+                        moveX = Math.min(maxX, Math.max(0, moveX));
+                        moveY = Math.min(maxY, Math.max(0, moveY));
+                        self.dialogEl.style.left = moveX + 'px';
+                        self.dialogEl.style.top = moveY + 'px';
+                    }
+                });
+                
+                window.addEventListener('resize', function (e) {
+                    var newpageWidth = document.documentElement.clientWidth;
+                    var newpageHeight = document.documentElement.clientHeight;
+
+                    moveX = (parseFloat(self.dialogEl.style.left) / self.pageWidth) * newpageWidth;
+                    moveY = (parseFloat(self.dialogEl.style.top) / self.pageHeight) * newpageHeight;
+
+                    var dialogWidth = self.dialogEl.offsetWidth;
+                    var dialogHeight = self.dialogEl.offsetHeight;
+
+                    self.pageWidth = newpageWidth;
+                    self.pageHeight = newpageHeight;
+
+                    var maxX = self.pageWidth - dialogWidth;
+                    var maxY = self.pageHeight - dialogHeight;
+
+                    moveX = Math.min(maxX, Math.max(0, moveX));
+                    moveY = Math.min(maxY, Math.max(0, moveY));
+                    self.dialogEl.style.left = moveX + 'px';
+                    self.dialogEl.style.top = moveY + 'px';
+                });
+            }
+            EricsDragableDialog.prototype.autoCenter = function (el) {
+                var bodyW = this.pageWidth;
+                var bodyH = this.pageHeight;
+
+                var elw = el.offsetWidth;
+                var elh = el.offsetHeight;
+
+                el.style.left = (bodyW - elw) / 2 + 'px';
+                el.style.top = (bodyH - elh) / 3 + 'px';
+            }
+            var dialog = new EricsDragableDialog();
+        })();
+
+    </script>
+</body>
+</html>

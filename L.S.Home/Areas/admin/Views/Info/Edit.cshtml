@@ -1,4 +1,4 @@
-﻿@model Info
+﻿@model InfoViewModel
 @{
     ViewBag.Title = "资讯编辑";
 }
@@ -84,7 +84,7 @@
     @Html.AntiForgeryToken()
     <input type="hidden" value="@Model.ID" name="ID" />
     <input type="hidden" value="@Model.AddBy" name="AddBy" />
-    <input type="hidden" value="@Model.AddByName" name="AddByName" />
+    @*<input type="hidden" value="@Model.AddByName" name="AddByName" />*@
     <input type="hidden" value="@Model.AddDate" name="AddDate" />
 
     <div class="form-horizontal">
@@ -93,6 +93,24 @@
             <label for="Name" class="control-label">标题</label>
             <div class="controls">
                 <input type="text" maxlength="20" name="Name" placeholder="标题" validate min="2" max="20" value="@Model.Name">
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>
+        @*<div class="control-group">
+            <label for="Name" class="control-label">分类</label>
+            <div class="controls">
+                @Html.DropDownList("CategoryID", ViewBag.InfoCategoryTypeList as IEnumerable<SelectListItem>, "--请选择分类--" )
+                <span class="ls-msg help-inline"></span>
+            </div>
+        </div>*@
+        <div class="control-group">
+            <label class="control-label">分类</label>
+            <div class="controls">
+                <span class="treetext" id="CategoryName">@Model.CategoryName</span>
+                <a class="btn" url="@Url.Action("GetCategoryTree", "Async", new { Area = "" ,selectNodeID=Model.CategoryID,cateTypeID= "InfoCategoryType" })"
+                   onclick="var url=$(this).attr('url');LS.admin.myfn.dialogeopencategorytree({id:'CategoryID',name:'CategoryName',toggledisplay:true,multiple:false},url);">请选择</a>
+                <a class="btn clearselectedtree" onclick="$(this).siblings('.treevalue').val(''); $(this).siblings('.treetext').text('');">清空</a>
+                <input class="treevalue" type="hidden" name="CategoryID" id="CategoryID" value="@Model.CategoryID" />
                 <span class="ls-msg help-inline"></span>
             </div>
         </div>
@@ -126,7 +144,14 @@
                         }
                 }
                 }
-                <span class="little-remind">（如果不选择图标，将会取内容里第一张图片作为此项保存）</span>
+                <span class="little-remind">@*（如果不选择图标，将会取内容里第一张图片作为此项保存）*@</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="Introduction" class="control-label">简介/导读</label>
+            <div class="controls">
+                <textarea name="Introduction" maxlength="200" style="width: 38%;" id="Introduction" placeholder="简介/导读" validate max="200" cols="100" rows="5">@Model.Introduction</textarea><br />（此项如果不填写，将会从内容中取前200字符串作为简介保存）
+                <span class="ls-msg help-inline"></span>
             </div>
         </div>
         <div class="control-group">
@@ -152,8 +177,7 @@
         </div>
         <div class="control-group">
             <div class="controls">
-                <label class="checkbox">
-                    @*<input type="checkbox" name="IsAvailable" value="true" checked="checked">启用*@
+                <label class="checkbox">                    
                     @Html.CheckBox("IsAvailable", Model.IsAvailable)启用
                 </label>
             </div>

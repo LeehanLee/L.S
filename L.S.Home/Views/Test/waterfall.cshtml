@@ -1,0 +1,184 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+    <title>waterfall</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #waterboxcontainer {
+            margin: 0 auto;
+            position: relative;
+            /*column-width:400px;
+            -moz-column-width:400px;*/
+        }
+
+        .box {
+            padding: 5px;
+            float: left;
+        }
+
+            .box .pic {
+                box-shadow: 0 0 5px #888888;
+            }
+
+                .box .pic img {
+                    width: 200px;
+                    /*display: block;*/
+                    padding: 10px;
+                }
+    </style>
+</head>
+<body>
+    <div id="waterboxcontainer">
+        @for (int i = 1; i < 53; i++)
+        {
+            <div class="box">
+                <div class="pic">
+                    <img src="/Content/Images/testimgs/@(i).jpg" />
+                </div>
+            </div>
+        }
+    </div>
+    <script type="text/javascript">
+
+        var WaterFall = function (mid, bcls) {
+            this.mid = mid || 'waterboxcontainer';
+            this.bcls = bcls || 'box';
+            var self = this;
+            this.container = document.getElementById(this.mid);
+            this.boxes = this.container.querySelectorAll("." + this.bcls);
+            this.boxW = this.boxes[0].offsetWidth;
+            this.loadingimgs = new Array();
+            this.currentimgsrc = "";
+            this.boxHeightArr = new Array();
+
+            var pageW = document.documentElement.clientWidth;
+            this.cols = Math.floor(pageW / this.boxW);
+            var containerW = this.cols * this.boxW;
+            this.container.style.width = containerW + 'px';
+
+            this.init();
+
+            this.makeloadimgs();
+
+            window.addEventListener("scroll", function () {
+                if (self.checkIfNeedLoadImgs()) {
+                    self.loadImgs();
+                }
+            });
+        }
+        WaterFall.prototype.init = function () {
+            
+            for (var i = 0; i < this.boxes.length; i++) {
+                if (i < this.cols) {
+                    this.boxHeightArr.push(this.boxes[i].offsetHeight);
+                    var self = this;
+                    this.boxes[i].addEventListener("mousemove", function (e) {                        
+                        self.detailboximg(this, e);
+                    });
+                    this.boxes[i].addEventListener("mouseout", function (e) {
+                        var img = self.container.querySelector('.detailimg');
+                        img.style.display = 'none';
+                    });
+                } else {
+                    this.waterfallbox(this.boxes[i]);
+                }
+            }
+        }
+        WaterFall.prototype.makeloadimgs = function () {
+            for (var i = 110; i <= 157; i++) {
+                //this.loadingimgs.push('/Content/Images/testimgs/' + i + '.jpg');//这样只是保存一个图片地址，当前没有加载，是在建立dom元素的时候才加载的，会有问题，因为加载会需要一点点时间，但是追加dom很快，图片还没加载好，获取到的高度是不正常的
+                var img = new Image();
+                img.src = '/Content/Images/testimgs/' + i + '.jpg';//所以这里采用预先加载的方式，差不多可以认为在这里的时间就已经开始加载这张图片了，再到后面追加图片到页面上时不会再有网络请求图片的时间
+                this.loadingimgs.push(img);
+            }
+        }
+
+        WaterFall.prototype.checkIfNeedLoadImgs = function () {
+            //var lastbox = this.boxes[this.boxes.length - 1];
+            //var lastboxH = lastbox.offsetTop + Math.floor(lastbox.offsetHeight / 2);
+            var lastboxH = Math.max.apply(null, this.boxHeightArr) - 100;
+            var scrolltop = document.body.scrollTop || document.documentElement.scrollTop;
+            var height = document.body.clientHeight || document.documentElement.clientHeight;
+            return lastboxH < scrolltop + height ? true : false;
+        }
+        WaterFall.prototype.loadImgs = function () {
+            var self = this;
+            for (var i = 0; i < this.loadingimgs.length; i++) {
+                var img = document.createElement('img');
+                img.src = this.loadingimgs[i].src;
+
+                var obox = document.createElement('div');
+                obox.className = this.bcls;
+                this.container.appendChild(obox);
+                var opic = document.createElement('div');
+                opic.className = 'pic';
+                obox.appendChild(opic);
+
+                opic.appendChild(img);
+                self.waterfallbox(obox);
+            }
+        }
+        WaterFall.prototype.waterfallbox = function (box) {
+            var minH = Math.min.apply(null, this.boxHeightArr);
+            box.style.position = 'absolute';
+            box.style.top = minH + 'px';
+            var index = this.boxHeightArr.indexOf(minH);
+            var offsetleft = index * this.boxW;
+            box.style.left = offsetleft + 'px';
+            this.boxHeightArr[index] += box.clientHeight;
+            var self = this;
+            box.addEventListener("mousemove", function (e) {
+                e = e || window.even;
+                self.detailboximg(this, e);
+            });
+            box.addEventListener("mouseout", function (e) {
+                var img = self.container.querySelector('.detailimg');
+                img.style.display = 'none';
+                console.log('onmouseout ');
+            });
+        }
+        WaterFall.prototype.detailboximg = function (box, e) {
+            var img = box.querySelector('img');
+            var detailimg = this.container.querySelector('.detailimg');
+            if (detailimg == null) {
+                detailimg = document.createElement('img');
+                detailimg.src = img.src;
+                detailimg.className = 'detailimg';
+                this.container.appendChild(detailimg);
+            } else {
+                if (this.currentimgsrc != img.src) {
+                    detailimg.src = img.src;
+
+                    this.currentimgsrc = img.src;
+                }
+            }
+            detailimg.style.maxWidth = 900 + 'px';
+            detailimg.style.position = 'fixed';
+            detailimg.style.display = 'block';
+            detailimg.style.left = e.clientX + 'px';//(e.pageX) + 'px';
+            detailimg.style.top = e.clientY + 'px';// (e.pageY - window.scrollY) + 'px';
+            detailimg.style.zIndex = 100010;
+            //detailimg.addEventListener('mousemove', function () {
+            //    this.style.left = (e.pageX) + 'px';
+            //    this.style.top = (e.pageY - window.scrollY) + 'px';
+            //});
+        }
+
+        window.onload = function () {
+            var waterfall = new WaterFall();
+        }
+    </script>
+</body>
+</html>

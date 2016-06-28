@@ -147,6 +147,14 @@ namespace L.S.Common
             }
             return list;
         }
+
+        /// <summary>
+        /// 删除需要删除的图片文件
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="successCount"></param>
+        /// <param name="notExistCount"></param>
+        /// <param name="msg"></param>
         public static void RemoveFiles(string data, out int successCount, out int notExistCount, out string msg)
         {
             msg = "";
