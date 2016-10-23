@@ -108,5 +108,26 @@ namespace L.S.Home.Controllers
             return View();
         }
         #endregion
+
+        private class Cuser
+        {
+            public string name { get; set; }
+            public int id { get; set; }     
+        }
+        public ActionResult apitest(int page = 1, int pagesize = 10)
+        {
+            Random r = new Random();
+            int t = 0;
+            t = r.Next(100000);
+            t = (int)(t / 10000);
+            List<Cuser> list = new List<Cuser>();
+            for (int i = 1; i <= pagesize; i++)
+            {
+                Cuser c = new Cuser() { name = "cusers" + i + "-" + page, id = i };
+                list.Add(c);
+            }
+            Thread.Sleep(t * 1000);
+            return Json(new { t = t, list = list }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -179,6 +179,15 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="html\HtmlPage1.html" />
+    <Content Include="html\marquee.html" />
+    <Content Include="html\menu.html" />
+    <Content Include="html\scroll.html" />
+    <Content Include="html\slogin\ie-emulation-modes-warning.js" />
+    <Content Include="html\slogin\ie10-viewport-bug-workaround.js" />
+    <Content Include="html\slogin\login.html" />
+    <Content Include="html\slogin\login.js" />
+    <Content Include="html\slogin\signin.css" />
     <Content Include="plugin\bootstrap3\css\bootstrap-theme.css" />
     <Content Include="plugin\bootstrap3\css\bootstrap-theme.min.css" />
     <Content Include="plugin\bootstrap3\css\bootstrap.css" />
